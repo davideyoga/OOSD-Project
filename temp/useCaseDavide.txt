@@ -1,6 +1,6 @@
 Scelta gioco
 
-utente base
+utente base, moderatore, amministatore
 
 permette ad un utente di scegliere un gioco tra quelli disponibili nel catalogo 
 
@@ -12,7 +12,7 @@ accesso ad un gioco
 
 Gameplay
 
-utente base 
+utente base, moderatore, amministatore
 
 l'utente interagisce con gioco scelto 
 
@@ -24,7 +24,7 @@ utente conclude la sessione di gioco
 
 Valutezione/Recensione
 
-utente base 
+utente base, moderatore, amministatore
 
 permette all'utente di esprimere una opinione su un gioco a catalogo associando un voto e una descrizione
 
