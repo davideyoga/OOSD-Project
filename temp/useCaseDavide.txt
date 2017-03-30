@@ -1,0 +1,33 @@
+Scelta gioco
+
+utente base
+
+permette ad un utente di scegliere un gioco tra quelli disponibili nel catalogo 
+
+accesso dell'utente nel cataloco giochi
+
+accesso ad un gioco 
+
+
+
+Gameplay
+
+utente base 
+
+l'utente interagisce con gioco scelto 
+
+scelta di un gioco da parte di un utente nel catalogo giochi 
+
+utente conclude la sessione di gioco 
+
+
+
+Valutezione/Recensione
+
+utente base 
+
+permette all'utente di esprimere una opinione su un gioco a catalogo associando un voto e una descrizione
+
+pressione del tasto recensisci gioco nel catalogo giochi
+
+recensione correttamente registrata nel sistema, l'utente torna nel cataloco giochi 
