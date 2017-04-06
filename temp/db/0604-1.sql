@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 06, 2017 at 02:39 PM
+-- Generation Time: Apr 06, 2017 at 04:32 PM
 -- Server version: 5.6.33
 -- PHP Version: 7.0.12
 
@@ -112,19 +112,21 @@ CREATE TABLE `service` (
 
 CREATE TABLE `user` (
   `id` int(10) UNSIGNED NOT NULL,
+  `username` varchar(128) NOT NULL,
   `name` varchar(128) NOT NULL,
   `surname` varchar(128) NOT NULL,
   `email` varchar(128) NOT NULL,
   `password` varchar(40) NOT NULL,
-  `exp` int(10) UNSIGNED NOT NULL
+  `exp` int(10) UNSIGNED NOT NULL,
+  `avatar` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `name`, `surname`, `email`, `password`, `exp`) VALUES
-(1, 'Admin', 'GamingPlatform', 'admin@gamingplatform.it', 'd033e22ae348aeb5660fc2140aec35850c4da997', 0);
+INSERT INTO `user` (`id`, `username`, `name`, `surname`, `email`, `password`, `exp`, `avatar`) VALUES
+(1, '', 'Admin', 'GamingPlatform', 'admin@gamingplatform.it', 'd033e22ae348aeb5660fc2140aec35850c4da997', 0, '');
 
 -- --------------------------------------------------------
 
@@ -136,8 +138,7 @@ CREATE TABLE `usergame` (
   `id` int(10) NOT NULL,
   `id_user` int(10) UNSIGNED NOT NULL,
   `id_game` int(10) UNSIGNED NOT NULL,
-  `date` date NOT NULL,
-  `time` time NOT NULL
+  `date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -161,8 +162,7 @@ CREATE TABLE `userlevel` (
   `id` int(11) NOT NULL,
   `id_user` int(10) UNSIGNED NOT NULL,
   `id_level` int(10) UNSIGNED NOT NULL,
-  `date` date NOT NULL,
-  `time` time NOT NULL
+  `date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -216,7 +216,9 @@ ALTER TABLE `service`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `avatar` (`avatar`);
 
 --
 -- Indexes for table `usergame`
