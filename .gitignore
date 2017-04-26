@@ -8,9 +8,11 @@
 *.war
 *.ear
 
+.settings/
 idea/
 out/
 *.iml
+WebContent/
 
 *.classpath
 *.project
@@ -27,3 +29,4 @@ hs_err_pid*
 
 
 /bin/
+/build/
