@@ -1,4 +1,4 @@
-package com.company;
+package gamingplatform.model;
 
 /**
  * Created by GregBug on 22/04/2017.
@@ -6,9 +6,9 @@ package com.company;
 // Classe
 public class Group {
 
-    int id;
-    String name;
-    String description;
+    private int id;
+    private String name;
+    private String description;
 
     // Costruttore
     public Group(int id, String name, String description) {

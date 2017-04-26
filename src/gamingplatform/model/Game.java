@@ -1,4 +1,6 @@
- public class Game{
+package gamingplatform.model;
+
+public class Game{
 
       //Attributes
       private int id;
@@ -7,7 +9,16 @@
       private String image;
       private String description;
 
-      //Getter and Setter
+        public Game(int id, String name, int exp, String image, String description) {
+            this.id = id;
+            this.name = name;
+            this.exp = exp;
+            this.image = image;
+            this.description = description;
+        }
+
+
+         //Getter and Setter
 
 
          public int getId() {

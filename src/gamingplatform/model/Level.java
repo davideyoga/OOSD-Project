@@ -1,3 +1,5 @@
+package gamingplatform.model;
+
 public class Level{
 
     //Attributes
@@ -6,6 +8,15 @@ public class Level{
     private String trophy;
     private String icon;
     private int exp;
+
+    public Level(int id, int name, String trophy, String icon, int exp) {
+        this.id = id;
+        this.name = name;
+        this.trophy = trophy;
+        this.icon = icon;
+        this.exp = exp;
+    }
+
 
     //Getter and Setter
 

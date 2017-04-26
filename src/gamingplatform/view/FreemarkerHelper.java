@@ -1,43 +1,58 @@
 package gamingplatform.view;
 
-
-import freemarker.ext.beans.BeansWrapper;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import freemarker.template.Version;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import freemarker.template.*;
 
 
 public class FreemarkerHelper {
 
-    public static void process(String template_name, Map data, HttpServletResponse response, ServletContext servlet_context) throws IOException{
 
-        response.setContentType("text/html;charset=ISO-8859-1");
+    public static void process(String template_name, Map<String, Object> data, HttpServletResponse response, ServletContext servlet_context) {
 
-        String path="/template";
+        //path alla cartella contenente i template
+        String path = "/template";
+        //aggiungo path come prefisso per l'importazione di css e js
+        data.put("context", path);
 
-        Configuration cfg = new Configuration(new Version("2.3.26"));
+        //setto il tipo del contenuto di ritorno
+        response.setContentType("text/html; charset=UTF-8");
 
-        cfg.setServletContextForTemplateLoading(servlet_context, path);
+        //ottengo oggetto cfg dal singleton
+        Configuration cfg = FreemarkerCfg.INSTANCE.init(servlet_context, path);
 
-        Template template = cfg.getTemplate(template_name);
+        //creo oggetto template
+        Template template;
 
-        PrintWriter out = response.getWriter();
+        PrintWriter out = null;
 
-        data.put("context",path);
+        try {
 
-        try{
+            template = cfg.getTemplate(template_name);
+
+            //ottengo lo stream della risposta
+            out = response.getWriter();
+
+            //processo la template con la Map
             template.process(data, out);
 
-        } catch (TemplateException ex) {
-            System.out.println("Templating exception: "+ex.getMessage());
-        } finally{
+        } catch (TemplateException | IOException ex) {
+
+            //log dei dettagli dell'eccezione
+            Logger logger = Logger.getAnonymousLogger();
+            logger.log(Level.SEVERE, "Templating exception: " + ex.getMessage(), ex);
+
+        } finally {
+
+            //provo a comletare il processamento a prescindere
+            assert out != null;
+
             out.flush();
             out.close();
         }
@@ -45,3 +60,5 @@ public class FreemarkerHelper {
     }
 
 }
+
+

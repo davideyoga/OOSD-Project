@@ -1,17 +1,17 @@
-package com.company;
+package gamingplatform.model;
 
 /**
  * Created by GregBug on 22/04/2017.
  */
 // Classe
-public class service {
+public class Service {
 
-    int id;
-    String name;
-    String description;
+    private int id;
+    private String name;
+    private String description;
 
     // Costruttore
-    public service(int id, String name, String description) {
+    public Service(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;

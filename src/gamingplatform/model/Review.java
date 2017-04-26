@@ -1,19 +1,19 @@
-package com.company;
+package gamingplatform.model;
 
 /**
  * Created by GregBug on 22/04/2017.
  */
 // Classe
-public class review {
+public class Review {
 
-    int id_user;
-    int id_game;
-    String title;
-    String body;
-    int vote;
+    private int id_user;
+    private int id_game;
+    private String title;
+    private String body;
+    private int vote;
 
     // Costruttore
-    public review(int id_user, int id_game, String title, String body, int vote) {
+    public Review(int id_user, int id_game, String title, String body, int vote) {
         this.id_user = id_user;
         this.id_game = id_game;
         this.title = title;

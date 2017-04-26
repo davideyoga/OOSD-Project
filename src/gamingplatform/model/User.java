@@ -1,3 +1,5 @@
+package gamingplatform.model;
+
 public class User{
 
     //Attributes
@@ -10,6 +12,16 @@ public class User{
     private int exp;
     private String avatar;
 
+    public User(int id, String username, String name, String surname, String email, String password, int exp, String avatar) {
+        this.id = id;
+        this.username = username;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+        this.exp = exp;
+        this.avatar = avatar;
+    }
 
     //Getter and Setter
 
