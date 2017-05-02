@@ -62,19 +62,6 @@ public class SessionManager {
         }
     }
 
-    //TODO spostare dentro SecurityLayer
-    /**
-     * aggiorna i valori di gruppi/servizi a cui appartiene l'utente e li carica in sessione
-     *
-     * @param request richiesta servlet
-     */
-
-    public static void updateAuth(HttpServletRequest request, HttpServletResponse response) {
-
-        HttpSession session = verifySession(request, response);
-        //TODO update permessi
-    }
-
 
     /**
      * verifica la validità della sessione
@@ -83,7 +70,7 @@ public class SessionManager {
      * @param response risposta servlet
      * @return la sessione, se valida oppure null
      */
-    private static HttpSession verifySession(HttpServletRequest request, HttpServletResponse response) {
+    public static HttpSession verifySession(HttpServletRequest request, HttpServletResponse response) {
 
         HttpSession session = request.getSession(false);
 

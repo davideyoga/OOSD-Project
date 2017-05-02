@@ -11,6 +11,8 @@ import java.util.Map;
 
 import gamingplatform.view.FreemarkerHelper;
 
+import static java.util.Objects.isNull;
+
 public class Login extends HttpServlet {
 
 
@@ -29,11 +31,15 @@ public class Login extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username=request.getParameter("username");
+        String password=request.getParameter("password");
+        data.put("message","KO-login");
 
-        //TODO procedura di login
+        if(SecurityLayer.login(username,password)){
+            data.put("message","OK-login");
+        }
 
-        //process template
-        FreemarkerHelper.process("login.ftl", data, response, getServletContext());
+        doGet(request,response);
 
     }
 }
