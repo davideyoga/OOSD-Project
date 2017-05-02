@@ -1,8 +1,7 @@
 package gamingplatform.model;
 
-/**
- * Created by GregBug on 22/04/2017.
- */
+import gamingplatform.dao.data.DaoDataMySQLImpl;
+
 // Classe
 public class Group {
 
@@ -15,6 +14,12 @@ public class Group {
         this.id = id;
         this.name = name;
         this.description = description;
+    }
+
+    public Group( DaoDataMySQLImpl d){
+        this.id = 0;
+        this.name = null;
+        this.description = null;
     }
 
     // *** Metodi Getter ***

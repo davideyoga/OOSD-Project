@@ -23,6 +23,17 @@ public class User{
         this.avatar = avatar;
     }
 
+    public User(){
+        this.id = 0;
+        this.username = null;
+        this.name = null;
+        this.surname =null;
+        this.email = null;
+        this.password = null;
+        this.exp = 0;
+        this.avatar = null;
+    }
+
     //Getter and Setter
 
         public int getId() {
