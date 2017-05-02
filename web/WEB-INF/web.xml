@@ -27,6 +27,36 @@
     </servlet-mapping>
     <!-- fine servlet index -->
 
+    <!-- servlet login -->
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>gamingplatform.controller.Login</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/login.ftl</url-pattern>
+        <url-pattern>/login</url-pattern>
+        <url-pattern>/login.php</url-pattern>
+        <url-pattern>/login.html</url-pattern>
+    </servlet-mapping>
+    <!-- fine servlet login -->
+
+    <!-- servlet signup -->
+    <servlet>
+        <servlet-name>Signup</servlet-name>
+        <servlet-class>gamingplatform.controller.Signup</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Signup</servlet-name>
+        <url-pattern>/signup.ftl</url-pattern>
+        <url-pattern>/signup</url-pattern>
+        <url-pattern>/signup.php</url-pattern>
+        <url-pattern>/signup.html</url-pattern>
+    </servlet-mapping>
+    <!-- fine servlet signup -->
+
 
     <!-- FreemarkerServlet settings: -->
     <servlet>

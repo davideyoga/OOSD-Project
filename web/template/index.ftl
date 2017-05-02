@@ -28,7 +28,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			</div>
 		</div>
 
-	<#include "scrollingjs.ftl">
+	<#include "tailjs.ftl">
 
 	</body>
 </html>

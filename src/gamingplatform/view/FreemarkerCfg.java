@@ -11,8 +11,7 @@ public enum FreemarkerCfg {
 
     private Configuration cfg = null;
 
-    FreemarkerCfg() {
-    }
+    FreemarkerCfg() {}
 
     public Configuration init(ServletContext servlet_context, String path) {
 
@@ -27,7 +26,8 @@ public enum FreemarkerCfg {
             cfg.setServletContextForTemplateLoading(servlet_context, path);
 
             // definisce come gli errori devono essere mostrati
-            // durante il  *development* è consigliato TemplateExceptionHandler.HTML_DEBUG_HANDLER
+            // durante il  *development* è consigliato TemplateExceptionHandler.HTML_DEBUG_HANDLER,
+            // in fase di deploy usare RETHROW_HANDLER
             cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
 
             // non logga eccezioni dentro FreeMarker che sarebbero comunque rilanciate

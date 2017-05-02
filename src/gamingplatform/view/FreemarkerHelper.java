@@ -14,6 +14,13 @@ import freemarker.template.*;
 public class FreemarkerHelper {
 
 
+    /**
+     * prepara l'ambiente di Freemarker e processa della template
+     * @param template_name nome della template
+     * @param data Map contenente i dati da iniettare nella template
+     * @param response risposta servlet
+     * @param servlet_context contesto della servlet
+     */
     public static void process(String template_name, Map<String, Object> data, HttpServletResponse response, ServletContext servlet_context) {
 
         //path alla cartella contenente i template

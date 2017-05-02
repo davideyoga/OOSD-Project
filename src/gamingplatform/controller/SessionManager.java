@@ -19,7 +19,7 @@ public class SessionManager {
      * tramite Session.<attribute>
      *
      * @param request richiesta servlet
-     * @param user    oggetto user da inserire in sessione
+     * @param user oggetto user da inserire in sessione
      * @return la sessione creata
      */
 
@@ -62,6 +62,7 @@ public class SessionManager {
         }
     }
 
+    //TODO spostare dentro SecurityLayer
     /**
      * aggiorna i valori di gruppi/servizi a cui appartiene l'utente e li carica in sessione
      *

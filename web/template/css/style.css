@@ -217,12 +217,12 @@ nav.top1.navbar.navbar-default.navbar-static-top {
 }
 h1 a.navbar-brand {
 	color: #fff !important;
-	font-size: 30px;
+	font-size: 25px;
 	font-weight: 500;
     padding: 20px 0px;
     background: #d95459;
     text-align: center;
-	width:248px;
+	width:250px;
 	height: 60px;
 	
 }
@@ -1387,7 +1387,7 @@ label.control-label {
 .login-mail i{
 	color: #999;
 }
-.login-mail input[type="text"],.login-mail input[type="password"]{
+.login-mail input[type="text"],.login-mail input[type="password"], .login-mail input[type="email"]{
 	border: none;
 	outline:none;
 	font-size: 0.9em;
@@ -1407,7 +1407,7 @@ label.control-label {
     background: none;	
 }
 .login-do a{
-	    font-size: 0.9em;
+	    font-size: 1em;
     padding: 0.5em 1em;
     color: #fff;
     display: block;
@@ -1420,6 +1420,12 @@ label.control-label {
     margin: 0.7em 0;
     font-family: 'Muli-Regular';
 }
+
+.personalizedP{
+    margin-bottom:6px !important;
+    margin-top:5px !important;
+}
+
 .checkbox1 {
 	margin-bottom: 4px;
 	padding-left: 27px;
@@ -2122,7 +2128,8 @@ canvas#polarArea,canvas#radar,canvas#doughnut {
     height: 265px !important;
 }
 .login-mail input[type="text"],
- .login-mail input[type="password"] {
+.login-mail input[type="password"],
+.login-mail input[type="email"] {
     width: 88%;
 }
 }
