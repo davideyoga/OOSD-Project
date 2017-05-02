@@ -91,10 +91,6 @@ function hideURLbar() {
                 $('#message').css({'background-color': '#dff0d8', 'color': '#3c763d', 'border-color': '#d6e9c6'});
                 message = '<strong>Success!</strong><br><br>The book has been added to your cart.';
                 break;
-            case "OK-add-wish":
-                $('#message').css({'background-color': '#dff0d8', 'color': '#3c763d', 'border-color': '#d6e9c6'});
-                message = '<strong>Success!</strong><br><br>he book has been added to your wishlist.';
-                break;
             case "OK-logout":
                 $('#message').css({'background-color': '#dff0d8', 'color': '#3c763d', 'border-color': '#d6e9c6'});
                 message = '<strong>Success!</strong><br><br>You are now logged out.';
@@ -107,21 +103,9 @@ function hideURLbar() {
                 $('#message').css({'background-color': '#dff0d8', 'color': '#3c763d', 'border-color': '#d6e9c6'});
                 message = '<strong>Success!</strong><br><br>You are now logged in.';
                 break;
-            case "KO-order-canc":
+            case "KO-login":
                 $('#message').css({'background-color': '#f2dede', 'color': '#a94442', 'border-color': '#ebccd1'});
-                message = '<strong>Warning!</strong><br><br>You can\'t cancel orders that have already been processed.';
-                break;
-            case "OK-order-canc":
-                $('#message').css({'background-color': '#dff0d8', 'color': '#3c763d', 'border-color': '#d6e9c6'});
-                message = '<strong>Success!</strong><br><br>The order has been canceled.';
-                break;
-            case "OK-order":
-                $('#message').css({'background-color': '#dff0d8', 'color': '#3c763d', 'border-color': '#d6e9c6'});
-                message = '<strong>Success!</strong><br><br>Your order has been added.';
-                break;
-            case "KO-wrong-card-data":
-                $('#message').css({'background-color': '#f2dede', 'color': '#a94442', 'border-color': '#ebccd1'});
-                message = '<strong>Warning!</strong><br><br>The card you inserted is not valid.';
+                message = '<strong>Warning!</strong><br><br>The username/password combination is wrong.';
                 break;
             case "KO-bad-old-psw":
                 $('#message').css({'background-color': '#f2dede', 'color': '#a94442', 'border-color': '#ebccd1'});

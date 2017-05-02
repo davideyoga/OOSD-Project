@@ -21,7 +21,6 @@ public class Signup extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-
         //process template
         FreemarkerHelper.process("signup.ftl", data, response, getServletContext());
 

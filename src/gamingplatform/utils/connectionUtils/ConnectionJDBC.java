@@ -6,11 +6,11 @@ import java.sql.SQLException;
 
 public class ConnectionJDBC{
 	
-	static String host = "localhost";
+	private static String host = "localhost";
 	
-	static String user = "user";
+	private static String user = "user";
 	
-	static String password = "password";
+	private static String password = "password";
 	
 	
 	public static Connection getConnection() throws SQLException{
@@ -18,11 +18,6 @@ public class ConnectionJDBC{
 		Connection connection = DriverManager.getConnection(host, user, password);
 		
 		return connection;
-		
 	}
-	
-	
-	
-	
-	
+
 }

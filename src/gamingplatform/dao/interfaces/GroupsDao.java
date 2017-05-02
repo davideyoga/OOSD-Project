@@ -4,7 +4,7 @@ import gamingplatform.dao.data.DaoData;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.model.Group;
 
-public interface GroupDao extends DaoData{
+public interface GroupsDao extends DaoData{
 	
 	public Group getGroup( int keyGroup) throws DaoException;
 	

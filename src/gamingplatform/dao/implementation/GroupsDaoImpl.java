@@ -9,16 +9,16 @@ import javax.sql.DataSource;
 
 import gamingplatform.dao.data.DaoDataMySQLImpl;
 import gamingplatform.dao.exception.DaoException;
-import gamingplatform.dao.interfaces.GroupDao;
+import gamingplatform.dao.interfaces.GroupsDao;
 import gamingplatform.model.Group;
 
-public class GroupDaoImpl extends DaoDataMySQLImpl implements GroupDao{
+public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 	
 	private PreparedStatement selectGroupById, insertGroup, deleteGroupById, selectGroupByUserId ;
 	
 	
 	//costruttore
-	public GroupDaoImpl(DataSource datasource) {
+	public GroupsDaoImpl(DataSource datasource) {
 		super(datasource);
 	}
 	

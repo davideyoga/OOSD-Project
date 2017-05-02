@@ -2,7 +2,6 @@ package gamingplatform.dao.data;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-
 import javax.sql.DataSource;
 
 import gamingplatform.dao.exception.DaoException;
