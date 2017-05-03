@@ -14,6 +14,7 @@ public class User{
     private int exp;
     private String avatar;
 
+    /*
     public User(int id, String username, String name, String surname, String email, String password, int exp, String avatar) {
         this.id = id;
         this.username = username;
@@ -24,6 +25,7 @@ public class User{
         this.exp = exp;
         this.avatar = avatar;
     }
+    */
 
     public User(DaoDataMySQLImpl d){
         this.id = 0;

@@ -17,5 +17,7 @@ public interface UserDao extends DaoData{
 	User getUser( int keyUser) throws DaoException;
 	
 	void destroy() throws DaoException;
+
+	User getUserByUsernamePassword(String username, String password) throws DaoException;
 	
 }

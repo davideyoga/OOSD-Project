@@ -42,9 +42,6 @@
             </div>
 
             </#if>
-
-                ${pippo.username}
-
                 <!--
                 <div class="col-md-3">
                     <div class="gallery-img">

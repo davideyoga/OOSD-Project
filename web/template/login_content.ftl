@@ -2,18 +2,18 @@
     <h1><a href="index">GamingPlatform </a></h1>
     <div class="login-bottom">
         <h2>Login</h2>
-        <form>
+        <form method="POST" action="login">
             <div class="col-md-6">
                 <div class="login-mail">
-                    <input type="email" placeholder="Email" required="">
+                    <input type="text" placeholder="Username" name="username" required="">
                     <i class="fa fa-envelope"></i>
                 </div>
                 <div class="login-mail">
-                    <input type="password" placeholder="Password" required="">
+                    <input type="password" placeholder="Password" name="password" required="">
                     <i class="fa fa-lock"></i>
                 </div>
                 <a class="news-letter " href="#">
-                    <label class="checkbox1"><input type="checkbox" name="checkbox"><i> </i>Forget Password</label>
+                    <label class="checkbox1"><input type="checkbox" name="checkbox"><i> </i>Forgot Password</label>
                 </a>
 
 

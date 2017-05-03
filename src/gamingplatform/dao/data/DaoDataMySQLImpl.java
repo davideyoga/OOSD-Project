@@ -56,7 +56,6 @@ public class DaoDataMySQLImpl implements DaoData{
 	@Override
 	public void close() throws Exception {
 		destroy();
-		
 	}
 
 	

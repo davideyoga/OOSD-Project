@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,31 +34,20 @@ public class Index extends HttpServlet {
     //container dati che sarà processato da freemarker
     private Map<String, Object> data = new HashMap<>();
 
-
-    private void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UserDao userDao = new UserDaoImpl(ds);
         try {
+            User user=null;
             userDao.init();
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-
-        User user=null;
-        try {
             user = userDao.getUser(1);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-
-        data.put("pippo",user);
-
-        try {
+            data.put("pippo",user);
             userDao.destroy();
-        } catch (DaoException e) {
-            e.printStackTrace();
+
+        }catch(DaoException e){
+            System.out.println("error");
         }
+
         //test
         /*
         List<Game> games=new ArrayList<>(5);
@@ -81,16 +71,6 @@ public class Index extends HttpServlet {
         //end test
 
         FreemarkerHelper.process("index.ftl", data, response, getServletContext());
-
     }
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        process(request, response);
-    }
-
-    @Override
-    protected  void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        process(request, response);
-    }
 }

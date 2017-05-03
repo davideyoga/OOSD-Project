@@ -32,7 +32,7 @@ public class Signup extends HttpServlet {
         String name=request.getParameter("name");
         String surname=request.getParameter("surname");
         String email=request.getParameter("email");
-        String password=SecurityLayer.Sha1Encrypt( request.getParameter("password"));
+        String password=SecurityLayer.sha1Encrypt( request.getParameter("password"));
         String avatar= "";
         if(request.getParameter("avatar")!=null){
             avatar=request.getParameter("avatar");
