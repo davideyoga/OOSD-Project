@@ -72,9 +72,11 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			
 			ResultSet rs = this.selectGroupsByUserId.executeQuery();
 			
+			/*
 			group.setId(rs.getInt("id"));
 			group.setName("name");
 			group.setDescription("description");
+			*/
 			
 		}catch (SQLException e) {
 			throw new DaoException("Error get group User", e);
