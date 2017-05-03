@@ -64,7 +64,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 	@Override
 	public List<Group> getGroupsByUserId(int keyUser) throws DaoException {
 		
-		List<Group> lista=new ArrayList<Group>();
+		List<Group> listGroup = new ArrayList<Group>();
 		
 		try{
 			
@@ -72,21 +72,28 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			
 			ResultSet rs = this.selectGroupsByUserId.executeQuery();
 			
-			/*
-			group.setId(rs.getInt("id"));
-			group.setName("name");
-			group.setDescription("description");
-			*/
+			//rs ritorna un insieme di tuple rappresentanti i gruppi acuoi appartiene l'utente 
+			//scorro rs ed aggiungo alla lista il gruppo
+			while( rs.next() ){
+				
+				Group group = new Group(this);
+				 
+				group.setId(rs.getInt("id"));
+				group.setName("name");
+				group.setDescription("description");
+				
+				listGroup.add(group);
+			}
 			
 		}catch (SQLException e) {
 			throw new DaoException("Error get group User", e);
 		}
 		
-		return lista;
+		return listGroup;
 	}
 
 	@Override
-	public void deleteGroupById() {
+	public void deleteGroupById( int keyGroup ) {
 		// TODO Auto-generated method stub
 		
 	}
