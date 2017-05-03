@@ -9,6 +9,8 @@ import javax.servlet.http.HttpSession;
 
 import gamingplatform.model.User;
 
+import static java.util.Objects.isNull;
+
 public class SessionManager {
 
     //durata validità sessione in minuti
@@ -118,6 +120,17 @@ public class SessionManager {
 
         //se non ci sono errori torno la sessione
         return session;
+    }
+
+
+    public static String popMessage(HttpServletRequest request){
+        String message=null;
+        HttpSession session=SessionManager.verifySession(request);
+        if(!isNull(session)){
+            message = (String)session.getAttribute("message");
+            session.removeAttribute("message");
+        }
+        return message;
     }
 }
 

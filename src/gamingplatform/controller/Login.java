@@ -35,6 +35,7 @@ public class Login extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         //process template
+        data.put("message",SessionManager.popMessage(request));
         FreemarkerHelper.process("login.ftl", data, response, getServletContext());
 
     }
@@ -42,15 +43,14 @@ public class Login extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+
         String username=request.getParameter("username");
         String password=request.getParameter("password");
 
 
         if (isNull(username) || isNull(password) || username.equals("") || password.equals("")){
             data.put("message","KO-login");
-            System.out.println("primo KO");
-
-            doGet(request,response);
         }
 
 
@@ -59,23 +59,29 @@ public class Login extends HttpServlet {
         try {
             userDao.init();
             User user=userDao.getUserByUsernamePassword(username, SecurityLayer.sha1Encrypt(password));
+
+            System.out.println(user.getId()+" "+user.getEmail());
             if(user.getId()==0 || isNull(user)){
-                System.out.println("secondo KO");
-                data.put("message","KO-login");
+
+                data.put("message", "KO-login");
+                FreemarkerHelper.process("login.ftl", data, response, getServletContext());
+                return;
             }else{
+
                 HttpSession session=SessionManager.initSession(request, user);
-                data.put("message","OK-login");
-                data.put("user",session.getAttribute("user"));
+                session.setAttribute("message","OK-login");
+                response.sendRedirect("index");
             }
-            doGet(request,response);
 
 
         } catch (DaoException e) {
             e.printStackTrace();
+            response.sendRedirect("index");
+
         }
 
 
-        //user.getUserByUsernamePassword
-
+        //process template
+        FreemarkerHelper.process("login.ftl", data, response, getServletContext());
     }
 }

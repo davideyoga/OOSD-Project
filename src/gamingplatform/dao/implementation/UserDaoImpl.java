@@ -42,7 +42,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			this.selectUserById = connection.prepareStatement("SELECT * FROM user WHERE id=?");
 			this.deleteUserById = connection.prepareStatement("DELETE FROM user WHERE id=?");
 			this.updateUserById = connection.prepareStatement("UPDATE user SET username=?,name=?,surname=?,email=?, password=?, exp=?, avatar=?");
-			this.getUserByUsernamePassword = connection.prepareStatement("SELECT * FROM user WHERE username=? AND password = ?");
+			this.getUserByUsernamePassword = connection.prepareStatement("SELECT * FROM user WHERE username=? AND password =?");
 
 		} catch (SQLException e) {
 			throw new DaoException("Error initializing user dao", e);
@@ -171,13 +171,14 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 		User user = new User(this);
 
 		try {
-			this.getUserByUsernamePassword.setString(1, "'"+username+"'");
-			this.getUserByUsernamePassword.setString(2, "'"+password+"'");
+			this.getUserByUsernamePassword.setString(1, username);
+			this.getUserByUsernamePassword.setString(2, password);
 
 			ResultSet rs = this.getUserByUsernamePassword.executeQuery(); //eseguo la query
 
 			while(rs.next()){
-				user.setUsername( rs.getString("username") );
+				user.setId(rs.getInt("id"));
+				user.setUsername(rs.getString("username") );
 				user.setName(rs.getString("name"));
 				user.setSurname(rs.getString("surname"));
 				user.setEmail(rs.getString("email"));
@@ -185,7 +186,6 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 				user.setExp(rs.getInt("exp"));
 				user.setAvatar(rs.getString("avatar"));
 			}
-
 
 		} catch (SQLException e) {
 			throw new DaoException("Error dao user get user ", e);

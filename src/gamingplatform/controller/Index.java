@@ -36,40 +36,9 @@ public class Index extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserDao userDao = new UserDaoImpl(ds);
-        try {
-            User user=null;
-            userDao.init();
-            user = userDao.getUser(1);
-            data.put("pippo",user);
-            userDao.destroy();
 
-        }catch(DaoException e){
-            System.out.println("error");
-        }
 
-        //test
-        /*
-        List<Game> games=new ArrayList<>(5);
-        games.add(new Game(1,"game 1",1, "ga1.jpg", "lalalala"));
-        games.add(new Game(2,"game 2",2, "ga2.jpg", "lalalala"));
-        games.add(new Game(3,"game 3",3, "ga3.jpg", "lalalala"));
-        games.add(new Game(4,"game 4",4, "ga4.jpg", "lalalala"));
-        games.add(new Game(5,"game 5",5, "ga5.jpg", "lalalala"));
-
-        //ai fini di test controllo se la sessione è valida, altrimenti la creo con un utente fantoccio
-        if (isNull(SessionManager.verifySession(request))){
-
-            User user = new User(1,"valent0ne",null,null,null,null,0,"wo.jpg");
-
-            //inserisco in data l'user che è attualmente in sessione
-            data.put("user",SessionManager.initSession(request, user).getAttribute("user"));
-        }
-
-        data.put("games",games);
-        */
-        //end test
-
+        data.put("message",SessionManager.popMessage(request));
         FreemarkerHelper.process("index.ftl", data, response, getServletContext());
     }
 
