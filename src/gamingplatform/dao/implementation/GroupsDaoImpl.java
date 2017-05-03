@@ -29,9 +29,12 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 		try {
 			super.init(); // connection initialization
 			
-			this.selectGroupById = connection.prepareStatement("SELECT * FROM groups WHERE ID=?");
-			this.insertGroup = connection.prepareStatement("INSERT INTO article (title,text,authorID,issueID,page) VALUES(?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-			this.selectGroupsByUserId = connection.prepareStatement("SELECT groups.id, groups.name, groups.description FROM user LEFT JOIN usergroups ON user.id = usergroups.id_user LEFT JOIN groups ON usergroups.id_groups=groups.id WHERE user.id=?");
+			this.selectGroupById = connection.prepareStatement("SELECT * FROM groups WHERE id=?");
+			this.insertGroup = connection.prepareStatement("INSERT INTO groups (name,description) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
+			this.selectGroupsByUserId = connection.prepareStatement("SELECT groups.id, groups.name, groups.description FROM user "
+																													+ "LEFT JOIN usergroups ON user.id = usergroups.id_user"
+																													+ " LEFT JOIN groups ON usergroups.id_groups=groups.id "
+																													+ "WHERE user.id=?");
 			
 			
 		} catch (SQLException e) {
