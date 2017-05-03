@@ -1,22 +1,18 @@
 package gamingplatform.model;
 
+import gamingplatform.dao.data.DaoData;
 import gamingplatform.dao.data.DaoDataMySQLImpl;
 
 // Classe
 public class Group {
 
+    //Attributi
     private int id;
     private String name;
     private String description;
 
     // Costruttore
-    public Group(int id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-    }
-
-    public Group( DaoDataMySQLImpl d){
+    public Group( DaoData d){
         this.id = 0;
         this.name = null;
         this.description = null;

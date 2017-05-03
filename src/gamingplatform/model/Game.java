@@ -1,5 +1,7 @@
 package gamingplatform.model;
 
+import gamingplatform.dao.data.DaoData;
+
 public class Game{
 
       //Attributes
@@ -9,7 +11,7 @@ public class Game{
       private String image;
       private String description;
 
-        public Game(int id, String name, int exp, String image, String description) {
+        public Game(DaoData dd) {
             this.id = id;
             this.name = name;
             this.exp = exp;

@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -14,7 +16,7 @@ import gamingplatform.model.Group;
 
 public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 	
-	private PreparedStatement selectGroupById, insertGroup, deleteGroupById, selectGroupByUserId ;
+	private PreparedStatement selectGroupById, insertGroup, deleteGroupById, selectGroupsByUserId ;
 	
 	
 	//costruttore
@@ -29,7 +31,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			
 			this.selectGroupById = connection.prepareStatement("SELECT * FROM groups WHERE ID=?");
 			this.insertGroup = connection.prepareStatement("INSERT INTO article (title,text,authorID,issueID,page) VALUES(?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-			this.selectGroupByUserId = connection.prepareStatement("SELECT groups.id, groups.name, groups.description FROM user LEFT JOIN usergroups ON user.id = usergroups.id_user LEFT JOIN groups ON usergroups.id_groups=groups.id WHERE user.id=?");
+			this.selectGroupsByUserId = connection.prepareStatement("SELECT groups.id, groups.name, groups.description FROM user LEFT JOIN usergroups ON user.id = usergroups.id_user LEFT JOIN groups ON usergroups.id_groups=groups.id WHERE user.id=?");
 			
 			
 		} catch (SQLException e) {
@@ -60,15 +62,15 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 	 * @throws DaoException
 	 */
 	@Override
-	public Group getGroupByUserId(int keyUser) throws DaoException {
+	public List<Group> getGroupsByUserId(int keyUser) throws DaoException {
 		
-		Group group = new Group(this);
+		List<Group> lista=new ArrayList<Group>();
 		
 		try{
 			
-			this.selectGroupByUserId.setInt( 1, keyUser);
+			this.selectGroupsByUserId.setInt( 1, keyUser);
 			
-			ResultSet rs = this.selectGroupByUserId.executeQuery();
+			ResultSet rs = this.selectGroupsByUserId.executeQuery();
 			
 			group.setId(rs.getInt("id"));
 			group.setName("name");
@@ -78,7 +80,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			throw new DaoException("Error get group User", e);
 		}
 		
-		return group;
+		return lista;
 	}
 
 	@Override
