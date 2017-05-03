@@ -226,6 +226,38 @@ h1 a.navbar-brand {
 	height: 60px;
 	
 }
+
+.div_message_top{
+    font-size: 13px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    cursor: pointer;
+    color: #4444dd;
+    opacity: 1;
+    position: absolute;
+    z-index: 9999;
+    width: 280px;
+    height: 100px;
+    border-radius: 3px;
+    background-color: #88ddff;
+    border:1px solid transparent;
+    right: 30px;
+    top:30px;
+    padding: 10px;
+}
+
+
+.div_message_top_success{
+    background-color: #dff0d8;
+    color: #3c763d;
+    border-color: #d6e9c6;
+}
+
+.div_message_top_warning{
+    background-color: #f2dede;
+    color: #a94442;
+    border-color: #ebccd1;
+}
+
 .navbar-default .navbar-brand:hover {
     color: #fff;
     background-color: #d95459;
@@ -398,6 +430,7 @@ nav.navbar.navbar-static-top {
 }
 .drop-men {
     float: right;
+    margin-right:1%;
 }
 .dropdown-at {
     padding: 0 !important;
@@ -940,7 +973,7 @@ i.fa.fa-twitter {
 }
 /*--gallery--*/
 .gallery {
-    padding: 1em;
+    padding: 1.09em;
     min-height: 850px;
 }
 .col-md {
@@ -2472,7 +2505,7 @@ label.hor-form{
 }
 @media (max-width: 600px){
 .full-left {
-    width: 43%;
+    width: 46%;
 }
 }
 @media(max-width:480px){

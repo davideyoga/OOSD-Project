@@ -1,5 +1,7 @@
 package gamingplatform.model;
 
+import gamingplatform.dao.data.DaoDataMySQLImpl;
+
 public class User{
 
     //Attributes
@@ -23,7 +25,7 @@ public class User{
         this.avatar = avatar;
     }
 
-    public User(){
+    public User(DaoDataMySQLImpl d){
         this.id = 0;
         this.username = null;
         this.name = null;

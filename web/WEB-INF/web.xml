@@ -6,6 +6,13 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
+    <resource-ref>
+        <res-ref-name>jdbc/gamingplatform</res-ref-name> 
+        <res-type>javax.sql.DataSource</res-type> 
+        <res-auth>Container</res-auth> 
+        <res-sharing-scope>Shareable</res-sharing-scope>
+    </resource-ref>
+
     <display-name>GamingPlatform</display-name>
 
     <welcome-file-list>
@@ -147,8 +154,6 @@
     </servlet-mapping>
 
     <!-- End FreemarkerServlet settings: -->
-
-
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>

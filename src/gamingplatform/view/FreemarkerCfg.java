@@ -2,7 +2,9 @@ package gamingplatform.view;
 
 import javax.servlet.ServletContext;
 
-import freemarker.template.*;
+import freemarker.template.Configuration;
+import freemarker.template.TemplateExceptionHandler;
+import freemarker.template.Version;
 
 
 public enum FreemarkerCfg {

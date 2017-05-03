@@ -24,7 +24,7 @@
             <label class="hvr-shutter-in-horizontal login-sub">
                 <input type="submit" value="Submit">
             </label>
-            <p class="personalizedP">Already register</p>
+            <p class="personalizedP">Already registered?</p>
             <a href="login_content.ftl" class="hvr-shutter-in-horizontal">Login</a>
         </div>
         <div class="clearfix"> </div>

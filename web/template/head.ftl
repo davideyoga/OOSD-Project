@@ -84,64 +84,56 @@ function hideURLbar() {
             var messageText = '${messageTxt}';
         </#if>
 
-        $("body").prepend("<div id='message' style='font-size: 13px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); cursor: pointer; color: #4444dd; opacity: 1; position: absolute;z-index: 9999; width: 280px; height: 100px; border-radius: 3px; background-color: #88ddff; border:1px solid transparent; right: 30px; top:30px; padding: 10px;'><div>");
+        $("body").prepend("<div id='message' class='div_message_top'><div>");
         var message;
         switch ('${message}') {
-            case "OK-add-cart":
-                $('#message').css({'background-color': '#dff0d8', 'color': '#3c763d', 'border-color': '#d6e9c6'});
-                message = '<strong>Success!</strong><br><br>The book has been added to your cart.';
-                break;
             case "OK-logout":
-                $('#message').css({'background-color': '#dff0d8', 'color': '#3c763d', 'border-color': '#d6e9c6'});
+                $('#message').addClass("div_message_top_success");
                 message = '<strong>Success!</strong><br><br>You are now logged out.';
                 break;
             case "OK-signup":
-                $('#message').css({'background-color': '#dff0d8', 'color': '#3c763d', 'border-color': '#d6e9c6'});
+                $('#message').addClass("div_message_top_success");
                 message = '<strong>Success!</strong><br><br>You can now login with the email/password you provided.';
                 break;
             case "OK-login":
-                $('#message').css({'background-color': '#dff0d8', 'color': '#3c763d', 'border-color': '#d6e9c6'});
+                $('#message').addClass("div_message_top_success");
                 message = '<strong>Success!</strong><br><br>You are now logged in.';
                 break;
-            case "KO-login":
-                $('#message').css({'background-color': '#f2dede', 'color': '#a94442', 'border-color': '#ebccd1'});
-                message = '<strong>Warning!</strong><br><br>The username/password combination is wrong.';
-                break;
-            case "KO-bad-old-psw":
-                $('#message').css({'background-color': '#f2dede', 'color': '#a94442', 'border-color': '#ebccd1'});
-                message = '<strong>Warning!</strong><br><br>The old password you inserted is wrong, try again.';
-                break;
-            case "KO-not-logged":
-                $('#message').css({'background-color': '#f2dede', 'color': '#a94442', 'border-color': '#ebccd1'});
-                message = '<strong>Warning!</strong><br><br>We need you to be registered and logged in to proceed with your request.';
-                break;
             case "OK-review-add":
-                $('#message').css({'background-color': '#dff0d8', 'color': '#3c763d', 'border-color': '#d6e9c6'});
+                $('#message').addClass("div_message_top_warning");
                 message = '<strong>Success!</strong><br><br>Your review has been added.';
                 break;
             case "OK-recover":
-                $('#message').css({'background-color': '#dff0d8', 'color': '#3c763d', 'border-color': '#d6e9c6'});
+                $('#message').addClass("div_message_top_warning");
                 message = '<strong>Success!</strong><br><br>A temporary password has been sent to your email address.';
                 break;
             case "OK-message":
-                $('#message').css({'background-color': '#dff0d8', 'color': '#3c763d', 'border-color': '#d6e9c6'});
+                $('#message').addClass("div_message_top_success");
                 message = '<strong>Success!</strong><br><br>The message has been sent successfully.';
                 break;
             case "OK":
-                $('#message').css({'background-color': '#dff0d8', 'color': '#3c763d', 'border-color': '#d6e9c6'});
+                $('#message').addClass("div_message_top_success");
                 message = '<strong>Success!</strong><br><br>Your request has been completed successfully.';
                 break;
-            case "empty":
-                $('#message').css({'background-color': '#fcf8e3', 'color': '#8a6d3b', 'border-color': '#faebcc'});
-                message = '<strong>Warning!</strong><br><br>The are no items matching your request.';
+            case "KO-login":
+                $('#message').addClass("div_message_top_warning");
+                message = '<strong>Warning!</strong><br><br>The username/password combination is wrong.';
+                break;
+            case "KO-bad-old-psw":
+                $('#message').addClass("div_message_top_warning");
+                message = '<strong>Warning!</strong><br><br>The old password you inserted is wrong, try again.';
+                break;
+            case "KO-not-logged":
+                $('#message').addClass("div_message_top_warning");
+                message = '<strong>Warning!</strong><br><br>We need you to be registered and logged in to proceed with your request.';
                 break;
             case "error":
             case "KO":
-                $('#message').css({'background-color': '#f2dede', 'color': '#a94442', 'border-color': '#ebccd1'});
+                $('#message').addClass("div_message_top_warning");
                 message = '<strong>Warning!</strong><br><br>There was a problem with your request.';
                 break;
             default:
-                $('#message').css({'background-color': '#f2dede', 'color': '#a94442', 'border-color': '#ebccd1'});
+                $('#message').addClass("div_message_top_warning");
                 message = '<strong>Warning!</strong><br><br>' + messageText;
                 break;
         }

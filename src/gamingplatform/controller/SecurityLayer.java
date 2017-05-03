@@ -1,19 +1,23 @@
 package gamingplatform.controller;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
+
 import gamingplatform.controller.SessionManager;
+import gamingplatform.dao.implementation.UserDaoImpl;
+import gamingplatform.dao.interfaces.UserDao;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static java.util.Objects.isNull;
 
-/**
- * Created by vale9 on 02/05/2017.
- */
+
 public class SecurityLayer {
+
 
     public static boolean checkAuth(){
         //TODO
@@ -45,15 +49,8 @@ public class SecurityLayer {
 
     public static void updateAuth(HttpServletRequest request, HttpServletResponse response) {
 
-        HttpSession session = SessionManager.verifySession(request, response);
+        HttpSession session = SessionManager.verifySession(request);
         //TODO update permessi
-    }
-
-    public static boolean login(String username, String password){
-        if (isNull(username) || isNull(password)){
-            return false;
-        }
-        return true;
     }
 
 

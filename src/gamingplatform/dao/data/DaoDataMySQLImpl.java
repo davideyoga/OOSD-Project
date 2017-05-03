@@ -2,6 +2,8 @@ package gamingplatform.dao.data;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import gamingplatform.dao.exception.DaoException;
@@ -27,9 +29,11 @@ public class DaoDataMySQLImpl implements DaoData{
 	public void init() throws DaoException {
         
 		try {
-        	//database connection 
-            connection = datasource.getConnection();
-        } catch (SQLException e) {
+
+			InitialContext ctx = new InitialContext();
+			DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/gamingplatform");
+			connection = ds.getConnection();
+        } catch (SQLException | NamingException e) {
             throw new DaoException("Error: db connection failed", e);
         }
 		

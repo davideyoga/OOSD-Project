@@ -39,8 +39,8 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			super.init(); // connection initialization
 			
 			this.insertUser = connection.prepareStatement("INSERT INTO user (username,name,surname,email,password,exp,avatar) VALUES(?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-			this.selectUserById = connection.prepareStatement("SELECT * FROM user WHERE ID=?");
-			this.deleteUserById = connection.prepareStatement("DELETE FROM user WHERE ID=?");
+			this.selectUserById = connection.prepareStatement("SELECT * FROM user WHERE id=?");
+			this.deleteUserById = connection.prepareStatement("DELETE FROM user WHERE id=?");
 			this.updateUserById = connection.prepareStatement("UPDATE user SET username=?,name=?,surname=?,email=?, password=?, exp=?, avatar=?");
 			
 		} catch (SQLException e) {
@@ -136,10 +136,11 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 	@Override
 	public User getUser(int keyUser) throws DaoException {
 		
-		User user = new User();
+		User user = new User(this);
 		
 		try {
-			this.selectUserById.setInt(1, keyUser); //inserisco nella query la chiave dell'utente 
+			this.selectUserById.setInt(1, keyUser); //inserisco nella query la chiave dell'utente
+
 			ResultSet rs = this.selectUserById.executeQuery(); //eseguo la query 
 			
 			user.setUsername( rs.getString("username") );

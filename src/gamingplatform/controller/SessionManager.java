@@ -67,10 +67,9 @@ public class SessionManager {
      * verifica la validità della sessione
      *
      * @param request  richiesta servlet
-     * @param response risposta servlet
      * @return la sessione, se valida oppure null
      */
-    public static HttpSession verifySession(HttpServletRequest request, HttpServletResponse response) {
+    public static HttpSession verifySession(HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
 
@@ -110,10 +109,10 @@ public class SessionManager {
         } catch (SecurityException ex) {
             //distruggo la sessione e setto header 401 nella risposta html
             destroySession(request);
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             //loggo l'errore
             Logger logger = Logger.getAnonymousLogger();
-            logger.log(Level.WARNING, "SecurityException: " + ex.getMessage(), ex);
+            logger.log(Level.WARNING, "SecurityException: " + ex.getMessage());
+
             return null;
         }
 
