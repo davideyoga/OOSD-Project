@@ -3,7 +3,7 @@
         <ul class="nav" id="side-menu">
 
             <li>
-                <a href="index.ftl" class=" hvr-bounce-to-right"><i class="fa fa-dashboard nav_icon "></i><span class="nav-label">Dashboards</span> </a>
+                <a href="index" class=" hvr-bounce-to-right"><i class="fa fa-dashboard nav_icon "></i><span class="nav-label">Home page</span> </a>
             </li>
 
             <li>
@@ -44,13 +44,14 @@
                 </ul>
             </li>
 
-            <li>
-                <a href="#" class=" hvr-bounce-to-right"><i class="fa fa-cog nav_icon"></i> <span class="nav-label">Settings</span><span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li><a href="login" class=" hvr-bounce-to-right"><i class="fa fa-sign-in nav_icon"></i>Signin</a></li>
-                    <li><a href="signup.ftl" class=" hvr-bounce-to-right"><i class="fa fa-sign-in nav_icon"></i>Singup</a></li>
-                </ul>
-            </li>
+
+
+            <#if user??>
+                <li>
+                    <a href="logout" class=" hvr-bounce-to-right"><i class="fa fa-dashboard nav_icon "></i><span class="nav-label">LogOut</span> </a>
+                </li>
+            </#if>
+
         </ul>
     </div>
 </div>

@@ -401,11 +401,19 @@ a.dropdown-toggle.dropdown-at {
     margin-left: 3%;
    margin-top: 1.3em;
 }
+
+.full-right {
+    float: right;
+    width: 100%;
+    margin-right: 3%;
+    margin-top: 0.85em;
+}
+
 .full-left button{
     background: none;
     border: none;
     outline: none;
-        color: #B3AEAE;
+    color: #B3AEAE;
     font-size: 0.9em;
 }
 nav.navbar.navbar-static-top {

@@ -64,6 +64,21 @@
     </servlet-mapping>
     <!-- fine servlet signup -->
 
+    <!-- servlet logout -->
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>gamingplatform.controller.Logout</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/logout.ftl</url-pattern>
+        <url-pattern>/logout</url-pattern>
+        <url-pattern>/logout.php</url-pattern>
+        <url-pattern>/logout.html</url-pattern>
+    </servlet-mapping>
+    <!-- fine servlet logout -->
+
 
     <!-- FreemarkerServlet settings: -->
     <servlet>

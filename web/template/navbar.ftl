@@ -109,7 +109,13 @@
 
                 <#else>
 
-                    <!-- TODO button per login /registrazione -->
+                <div class="full-right">
+                    <p>
+                        <a href="signup"><button type="button" class="btn btn-primary">Signup</button></a>
+                        <a href="login"><button type="button" class="btn btn-success warning_2">Login</button></a>
+
+                    </p>
+                </div>
 
                 </#if>
 

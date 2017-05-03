@@ -3,6 +3,7 @@ package gamingplatform.controller;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -11,7 +12,10 @@ import gamingplatform.model.User;
 
 import static java.util.Objects.isNull;
 
-public class SessionManager {
+/**
+ * classe package-private atta alla gestione delle sessioni e di tutto quello che le riguarda
+ */
+class SessionManager {
 
     //durata validità sessione in minuti
     private static final int SESSION_EXPIRE_TIME = 60*3;
@@ -25,7 +29,7 @@ public class SessionManager {
      * @return la sessione creata
      */
 
-    public static HttpSession initSession(HttpServletRequest request, User user) {
+    static HttpSession initSession(HttpServletRequest request, User user) {
 
         //se esiste la elimino
         destroySession(request);
@@ -55,7 +59,7 @@ public class SessionManager {
      * @param request richiesta servlet
      */
 
-    public static void destroySession(HttpServletRequest request) {
+    static void destroySession(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
 
         //se la sessione esiste la elimino
@@ -71,19 +75,19 @@ public class SessionManager {
      * @param request  richiesta servlet
      * @return la sessione, se valida oppure null
      */
-    public static HttpSession verifySession(HttpServletRequest request) {
+    static HttpSession verifySession(HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
 
         try {
             //se la sessione non è attiva
-            if (session == null) {
+            if (isNull(session)) {
                 throw new SecurityException("session is null");
             }
 
             //controllo che ci sia l'user in sessione
             User user = (User) session.getAttribute("user");
-            if (user == null  /*TODO check sull'id dell'user per verificarne la validità*/) {
+            if (isNull(user)) {
 
                 throw new SecurityException("session is not valid (user not in session)");
 
@@ -122,8 +126,23 @@ public class SessionManager {
         return session;
     }
 
+    /**
+     * crea la sessione se non esiste e la riempie con il message
+     * @param request richiesta servlet
+     * @param message messaggio da inserire
+     */
+    static void pushMessage(HttpServletRequest request, String message){
+        HttpSession session=request.getSession(true);
+        session.removeAttribute("message");
+        session.setAttribute("message", message);
+    }
 
-    public static String popMessage(HttpServletRequest request){
+    /**
+     * preleva il messaggio dalla sessione, eliminandolo dalla stessa (pop)
+     * @param request richiesta servlet
+     * @ il messaggio in sessione se c'è, oppure null
+     */
+    static String popMessage(HttpServletRequest request){
         String message=null;
         HttpSession session=SessionManager.verifySession(request);
         if(!isNull(session)){
@@ -131,6 +150,24 @@ public class SessionManager {
             session.removeAttribute("message");
         }
         return message;
+    }
+
+
+    /**
+     * recupera l'utente in sessione se la sessione è valida
+     * @param request richiesta servlet
+     * @return l'user se esiste e se la sessione è valuda, null altrimenti
+     */
+    static User getUser(HttpServletRequest request){
+        User user=null;
+
+        try {
+            user = (User) verifySession(request).getAttribute("user");
+        }catch(NullPointerException e){
+            destroySession(request);
+        }
+
+        return user;
     }
 }
 
