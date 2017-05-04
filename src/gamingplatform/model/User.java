@@ -1,6 +1,6 @@
 package gamingplatform.model;
 
-import gamingplatform.dao.data.DaoDataMySQLImpl;
+import gamingplatform.dao.data.DaoData;
 
 public class User{
 
@@ -14,20 +14,8 @@ public class User{
     private int exp;
     private String avatar;
 
-    /*
-    public User(int id, String username, String name, String surname, String email, String password, int exp, String avatar) {
-        this.id = id;
-        this.username = username;
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.password = password;
-        this.exp = exp;
-        this.avatar = avatar;
-    }
-    */
 
-    public User(DaoDataMySQLImpl d){
+    public User(DaoData d){
         this.id = 0;
         this.username = null;
         this.name = null;
