@@ -21,8 +21,11 @@ import gamingplatform.model.User;
 
 public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 	
-	private PreparedStatement insertUser, selectUserById, getUserByUsernamePassword;
-	private PreparedStatement deleteUserById, updateUserById;
+	private PreparedStatement	insertUser,
+								selectUserById,
+								getUserByUsernamePassword,
+								deleteUserById,
+								updateUserById;
 
 	
 	public UserDaoImpl(DataSource datasource) {
