@@ -12,6 +12,8 @@ public interface ServiceDao extends DaoData{
 
     public List<Service> getServices() throws DaoException;
 
+    public List<Service> getServicesByUserId (int idUser) throws DaoException;
+
     public void insertService(String name, String description) throws DaoException;
 
     public void deleteServiceById(int idService) throws DaoException;

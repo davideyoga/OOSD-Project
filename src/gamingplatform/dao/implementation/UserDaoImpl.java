@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -37,7 +39,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 		try {
 			super.init(); // connection initialization
 			
-			this.insertUser = connection.prepareStatement("INSERT INTO user VALUES(?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+			this.insertUser = connection.prepareStatement("INSERT INTO user VALUES(NULL,?,?,?,?,?,?,?)");
 			this.selectUserById = connection.prepareStatement("SELECT * FROM user WHERE id=?");
 			this.deleteUserById = connection.prepareStatement("DELETE FROM user WHERE id=?");
 			this.updateUserById = connection.prepareStatement("UPDATE user SET username=?,name=?,surname=?,email=?, password=?, exp=?, avatar=?");
@@ -49,14 +51,14 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 	}
 	
 	/**
-	 * per per inserire un utente nel database
+	 * per inserire un utente nel database
 	 * @throws gamingplatform.dao.exception.DaoException
 	 */
 	@Override
 	public void insertUser(String username,String name, String surname,String email, String password,int exp, String avatar) throws DaoException {
 		
 			try {
-				
+
 				this.insertUser.setString(1,username);
 				this.insertUser.setString(2,name);
 				this.insertUser.setString(3,surname);
@@ -64,8 +66,8 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 				this.insertUser.setString(5,password);
 				this.insertUser.setInt(6,exp);
 				this.insertUser.setString( 7,avatar);
-				
-				this.insertUser.executeQuery();
+
+				this.insertUser.executeUpdate();
 				
 				
 			} catch (SQLException e) {

@@ -63,31 +63,33 @@ public class Signup extends HttpServlet {
            username.equals("") || name.equals("") || surname.equals("") || email.equals("") || password.equals("")){
 
             Logger.getAnonymousLogger().log(Level.WARNING,"[Signup] Parametri POST non validi ");
-            SecurityLayer.abort("signup.tlp",data,"KO-signup",request,response,getServletContext());
+            SecurityLayer.abort("signup.ftl",data,"KO-signup",response,getServletContext());
             return;
         }
         //provo ad effettuare l'upload del file
-        String avatarName = FileManager.fileUpload(avatar,"avatars");
+        String avatarName = FileManager.fileUpload(avatar,"avatars", getServletContext());
         if(isNull(avatarName)){
 
             Logger.getAnonymousLogger().log(Level.WARNING,"[Signup] Upload file fallito");
-            SecurityLayer.abort("signup.tpl",data,"KO-signup", request,response,getServletContext());
+            SecurityLayer.abort("signup.ftl",data,"KO-signup",response,getServletContext());
             return;
         }
 
         UserDao userDao = new UserDaoImpl(ds);
         try{
+            userDao.init();
             //provo ad inserire l'utente
             userDao.insertUser(username, name, surname, email, password, 0, avatarName);
+            userDao.destroy();
         }catch(DaoException e){
             //in caso di errori nell'inserimento dell'utente
             Logger.getAnonymousLogger().log(Level.WARNING,"[Signup] Inserimento utente fallito "+e.getMessage());
-            SecurityLayer.abort("signup.tpl",data,"KO-KO-signup", request,response,getServletContext());
+            SecurityLayer.abort("signup.ftl",data,"KO-signup",response,getServletContext());
             return;
         }
 
         //se arrivo quì ho inserito l'user con successo
-        SecurityLayer.redirect("index","OK-signup",response,request);
+        SecurityLayer.redirect("login","OK-signup",response,request);
 
     }
 

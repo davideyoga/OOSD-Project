@@ -127,6 +127,10 @@ function hideURLbar() {
                 $('#message').addClass("div_message_top_warning");
                 message = '<strong>Warning!</strong><br><br>We need you to be registered and logged in to proceed with your request.';
                 break;
+            case "KO-signup":
+                $('#message').addClass("div_message_top_warning");
+                message = '<strong>Success!</strong><br><br>Your signup request has failed.';
+                break;
             case "error":
             case "KO":
                 $('#message').addClass("div_message_top_warning");

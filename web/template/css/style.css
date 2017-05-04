@@ -1428,7 +1428,7 @@ label.control-label {
 .login-mail i{
 	color: #999;
 }
-.login-mail input[type="text"],.login-mail input[type="password"], .login-mail input[type="email"]{
+.login-mail input[type="text"],.login-mail input[type="password"], .login-mail input[type="email"],.login-mail input[type="file"]{
 	border: none;
 	outline:none;
 	font-size: 0.9em;
@@ -2157,22 +2157,26 @@ tr.table-row {
     padding: 2.75em 2.15em;
 }
 }
-@media(max-width:1280px){
-.middle-content {
-    padding: 3.35em 2.15em;
-}
-canvas#bar1 ,canvas#line1{
- width: 428px !important;
-} 
-canvas#polarArea,canvas#radar,canvas#doughnut {
-    width: 265px !important;
-    height: 265px !important;
-}
-.login-mail input[type="text"],
-.login-mail input[type="password"],
-.login-mail input[type="email"] {
-    width: 88%;
-}
+@media(max-width:1280px) {
+    .middle-content {
+        padding: 3.35em 2.15em;
+    }
+
+    canvas#bar1, canvas#line1 {
+        width: 428px !important;
+    }
+
+    canvas#polarArea, canvas#radar, canvas#doughnut {
+        width: 265px !important;
+        height: 265px !important;
+    }
+
+    .login-mail input[type="text"],
+    .login-mail input[type="password"],
+    .login-mail input[type="email"],
+    .login-mail input[type="file"] {
+        width: 88%;
+    }
 }
 @media(max-width:1024px){
 .top-content {

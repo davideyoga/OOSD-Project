@@ -2,6 +2,7 @@
     <h1><a href="index">GamingPlatform</a></h1>
     <div class="login-bottom">
         <h2>Signup</h2>
+        <form method="POST" enctype="multipart/form-data">
         <div class="col-md-6">
             <div class="login-mail">
                 <input type="text" placeholder="Name" name="name" required="">
@@ -27,10 +28,11 @@
                 <input type="password" id="password2" placeholder="Repeat password" required="">
                 <i class="fa fa-lock"></i>
             </div>
+            <h6 style="color:silver; margin-bottom:10px; margin-top:-10px;">Upload an avatar, if you do not choose an avatar the default one will be used (only .jpg and .png allowed)</h6>
             <div class="login-mail">
-                <input type="file" placeholder="Avatar (.jpg only), leave blank to use the default one" name="avatar">
-                <i class="fa fa-file-photo-o"></i>
+                <input type="file" name="avatar">
             </div>
+
 
         </div>
         <div class="col-md-6 login-do">
@@ -40,6 +42,8 @@
             <p class="personalizedP">Already registered?</p>
             <a href="login" class="hvr-shutter-in-horizontal">Login</a>
         </div>
+        </form>
+
         <div class="clearfix"> </div>
     </div>
 </div>

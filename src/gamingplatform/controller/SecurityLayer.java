@@ -63,11 +63,10 @@ class SecurityLayer {
      * @param tpl template da elaborare da freemarker
      * @param data map con i dati da elaborare da freemarker
      * @param message messaggio da notificare all'user
-     * @param request richiesta servlet
      * @param response risposta servlet
      * @param svc servlet context
      */
-    static void abort(String tpl, Map<String, Object> data, String message, HttpServletRequest request, HttpServletResponse response, ServletContext svc){
+    static void abort(String tpl, Map<String, Object> data, String message, HttpServletResponse response, ServletContext svc){
 
         data.put("message", message);
         FreemarkerHelper.process(tpl, data, response, svc);
@@ -84,7 +83,7 @@ class SecurityLayer {
     static void redirect(String redirect, String message, HttpServletResponse response, HttpServletRequest request){
         SessionManager.pushMessage(request, message);
         try {
-            response.sendRedirect("index");
+            response.sendRedirect(redirect);
         } catch (IOException e) {
             Logger.getAnonymousLogger().log(Level.WARNING, "Redirect fallito "+e.getMessage());
         }

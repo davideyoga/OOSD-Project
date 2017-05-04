@@ -99,8 +99,8 @@
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle dropdown-at" data-toggle="dropdown"><span
-                                class=" name-caret">${user.username}<i class="caret"></i></span><img
-                                src="${context}/avatars/${user.avatar}"></a>
+                                class=" name-caret">${user.username}<i class="caret"></i></span>
+                            <img style="width:60px; height: 60px;" src="${context}/avatars/${user.avatar}"></a>
                         <ul class="dropdown-menu " role="menu">
                             <li><a href="inbox.ftl"><i class="fa fa-user"></i>Profile</a></li>
                             <li><a href="profile.ftl"><i class="fa fa-cogs"></i>Edit Profile</a></li>

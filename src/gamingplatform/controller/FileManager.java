@@ -6,6 +6,7 @@ import gamingplatform.model.User;
 import org.apache.commons.io.FileUtils;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.servlet.http.Part;
 import javax.sql.DataSource;
 import java.io.File;
@@ -27,14 +28,15 @@ class FileManager {
      * @param directory directory in cui verrà salvto il file
      * @return il nome del file salvato, oppure null su errore
      */
-    static String fileUpload(Part filePart, String directory){
+    static String fileUpload(Part filePart, String directory, ServletContext svc){
 
         String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
 
         //se non è un .jpg oppure un .png
-        if(!fileName.substring(fileName.length()-4).equals(".jpg") ||
-           !fileName.substring(fileName.length()-4).equals(".png")){
+        if(!(fileName.substring(fileName.length()-4).equals(".jpg") ||
+             fileName.substring(fileName.length()-4).equals(".png"))){
 
+            Logger.getAnonymousLogger().log(Level.WARNING,"[FileManager] fileUpload fallito, formato non corretto: "+fileName+" - formato: "+fileName.substring(fileName.length()-4));
             return null;
         }
 
@@ -43,7 +45,7 @@ class FileManager {
             fileName = System.currentTimeMillis()+fileName;
             InputStream fileContent = filePart.getInputStream();
             //salvo il file nella directory specificata
-            File targetFile = new File("/template/"+directory+fileName);
+            File targetFile = new File(svc.getRealPath("template/"+directory+"/"+fileName));
             FileUtils.copyInputStreamToFile(fileContent, targetFile);
         } catch (IOException e) {
             Logger.getAnonymousLogger().log(Level.WARNING,"[FileManager] fileUpload IOException "+e.getMessage());

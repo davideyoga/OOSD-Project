@@ -184,11 +184,10 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
 
     public List<Service> getServicesByUserId(int idUser) throws DaoException{
 
+        List<Service> lista=new ArrayList<>();
         try{
             this.selectServicesByUserId.setInt(1,idUser);
             ResultSet rs=this.selectServicesByUserId.executeQuery();
-
-            List<Service> lista=new ArrayList<>();
 
             while (rs.next()){
                 Service s=new Service(this);

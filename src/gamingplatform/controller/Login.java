@@ -77,7 +77,7 @@ public class Login extends HttpServlet {
             //in caso di dati POST non validi
             //notifico l'errore e abort rimanendo sulla stessa pagina
             Logger.getAnonymousLogger().log(Level.WARNING, "[Login] attributi post non validi, abort ");
-            SecurityLayer.abort("login.ftl",data,"KO",request,response,getServletContext());
+            SecurityLayer.abort("login.ftl",data,"KO",response,getServletContext());
             return;
         }
 
@@ -91,10 +91,12 @@ public class Login extends HttpServlet {
             //query di select user dati username e password
             User user=userDao.getUserByUsernamePassword(username, SecurityLayer.sha1Encrypt(password));
 
+            userDao.destroy();
+
             if(user.getId()==0 || isNull(user)){
                 //credenziali non valide, abort con notifica di errore, rimanendo sulla stessa pagina
                 Logger.getAnonymousLogger().log(Level.WARNING, "[Login] credenziali non valide, abort");
-                SecurityLayer.abort("login.ftl",data,"KO-login",request,response,getServletContext());
+                SecurityLayer.abort("login.ftl",data,"KO-login",response,getServletContext());
                 return;
             }else{
                 //credenziali corrette, inizializzazione della sessione e redirect a index

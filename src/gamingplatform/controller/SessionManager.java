@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
-import javax.servlet.HttpConstraintElement;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -178,11 +176,17 @@ class SessionManager {
      */
     static String popMessage(HttpServletRequest request){
         String message=null;
-        HttpSession session=SessionManager.verifySession(request);
-        if(!isNull(session)){
+
+        try{
+            HttpSession session=request.getSession(false);
             message = (String)session.getAttribute("message");
             session.removeAttribute("message");
+
+        }catch(NullPointerException e){
+            Logger.getAnonymousLogger().log(Level.INFO,"nessun messaggio in sessione ");
+
         }
+
         return message;
     }
 
@@ -196,18 +200,18 @@ class SessionManager {
         User user=null;
 
         try {
-            user = (User) verifySession(request).getAttribute("user");
+            user = (User) request.getSession().getAttribute("user");
         }catch(NullPointerException e){
-            destroySession(request);
             Logger.getAnonymousLogger().log(Level.WARNING,"non posso recuperare l'user dalla sessione, sessione distrutta "+e.getMessage());
         }
 
         return user;
     }
 
+    //TODO correggi controllo utente loggato
     static void redirectIfLogged(HttpServletRequest request, HttpServletResponse response){
         //selesiste già una sessione valida redirect a index senza messaggi
-        HttpSession session = SessionManager.verifySession(request);
+        HttpSession session = verifySession(request);
         if(!isNull(session)){
             Logger.getAnonymousLogger().log(Level.INFO, "utente già loggato, redirect alla home");
             try {
