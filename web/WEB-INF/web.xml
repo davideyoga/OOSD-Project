@@ -79,6 +79,11 @@
     </servlet-mapping>
     <!-- fine servlet logout -->
 
+    <error-page>
+        <error-code>404</error-code>
+        <location>/template/404.html</location>
+    </error-page>
+
 
     <!-- FreemarkerServlet settings: -->
     <servlet>

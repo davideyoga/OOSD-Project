@@ -75,7 +75,7 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
 
 
         }catch (SQLException e){
-            throw new DaoException("Error initializing group dao", e);
+            throw new DaoException("Error initializing GameDao", e);
         }
     }
 
@@ -84,13 +84,13 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
 
     /**
      * Metodo che seleziona un gioco dato l'id
-     * @param keyGame è l'id del gioco che si vuole visualizzare
+     * @param idGame è l'id del gioco che si vuole visualizzare
      * @return il gioco desiderato
      */
-    public Game getGameById(int keyGame) throws DaoException{
+    public Game getGameById(int idGame) throws DaoException{
         Game g=new Game(this);
         try{
-            this.selectGameById.setInt(1,keyGame);
+            this.selectGameById.setInt(1,idGame);
             ResultSet rs=this.selectGameById.executeQuery();
             while(rs.next()){
                 g.setId(rs.getInt("id"));
@@ -169,15 +169,18 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
 
     /**
      * Metodo di inserimento di un nuovo elemento nella tabella game del DataBase
-     * @param game è il gioco da dover inserire
+     * @param name è il nome del gioco da dover inserire
+     * @param exp sono i punti esperienza che si posssono guadagnare giocandoci
+     * @param image  è l'immagine di presentazione del gioco
+     * @param description è la descrizione del gioco
      * @throws DaoException lancia eccezione in caso di errore
      */
-    public void insertGame(Game game) throws DaoException{
+    public void insertGame(String name, int exp, String image, String description) throws DaoException{
         try{
-            this.insertGame.setString(1,game.getName());
-            this.insertGame.setInt(2,game.getExp());
-            this.insertGame.setString(3,game.getImage());
-            this.insertGame.setString(4,game.getDescription());
+            this.insertGame.setString(1,name);
+            this.insertGame.setInt(2,exp);
+            this.insertGame.setString(3,image);
+            this.insertGame.setString(4,description);
             this.insertGame.executeQuery();
 
         } catch (SQLException e){
@@ -191,12 +194,12 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
 
     /**
      * Metodo che permette la cancellazione di un gioco dalla tabella game dato l'id
-     * @param keygame è l'id del gioco da cancellare
+     * @param idGame è l'id del gioco da cancellare
      * @throws DaoException lancia eccezione in caso di errore
      */
-    public void deleteGameById(int keygame) throws DaoException{
+    public void deleteGameById(int idGame) throws DaoException{
         try{
-            this.deleteGameById.setInt(1,keygame);
+            this.deleteGameById.setInt(1,idGame);
             this.deleteGameById.executeQuery();
         }catch (SQLException e){
             throw new DaoException("Error query deleteGameById", e);
@@ -240,11 +243,32 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
             this.updateGame.setInt(2,exp);
             this.updateGame.setString(3,image);
             this.updateGame.setString(4,description);
-            this.updateGame.setInt(5,exp);
+            this.updateGame.setInt(5,id);
             this.updateGame.executeQuery();
         }catch (SQLException e){
             throw new DaoException("Error query updateGame", e);
 
         }
+    }
+
+    public void destroy() throws DaoException{
+
+        //chiudo le quary precompilate
+        try {
+            this.selectGameById.close();
+            this.selectGameByName.close();
+            this.insertGame.close();
+            this.deleteGameById.close();
+            this.deleteGameByName.close();
+            this.selectGames.close();
+            this.updateGame.close();
+
+
+        } catch (SQLException e) {
+            throw new DaoException("Error destroy GameDao", e);
+        }
+
+        //chiudo la connessione
+        super.destroy();
     }
 }

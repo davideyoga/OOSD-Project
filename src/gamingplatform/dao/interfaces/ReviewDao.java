@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ReviewDao extends DaoData{
 
-    public Review getReview( int keyUser, int keyGame) throws DaoException;
+    public Review getReview( int idUser, int idGame) throws DaoException;
 
     public List<Review> getReviews() throws DaoException;
 
@@ -16,11 +16,11 @@ public interface ReviewDao extends DaoData{
 
     public List<Review> getReviewsByGame() throws DaoException;
 
-    public void insertReview(Review r) throws DaoException;
+    public void insertReview(int idUser, int idGame, String title, String body,int vote) throws DaoException;
 
-    public void deleteReview(int keyUser, int keyGame) throws DaoException;
+    public void deleteReview(int idUser, int idGame) throws DaoException;
 
-    public void updateReview(int id_user, int id_game, String title, String body, int vote) throws DaoException;
+    public void updateReview(int idUser, int idGame, String title, String body, int vote) throws DaoException;
 
 
 

@@ -8,16 +8,16 @@ import gamingplatform.model.User;
 
 public interface UserDao extends DaoData{	
 	
-	void insertUser( User user) throws DaoException;
+	public void insertUser( String username,String name, String surname,String email, String password,int exp, String avatar) throws DaoException;
 	
-	void deleteUserByKey( int keyUser ) throws DaoException;
+	public void deleteUserByKey( int idUser ) throws DaoException;
 	
-	void updateUser( User user) throws DaoException;
+	public void updateUser(String username,String name, String surname,String email, String password,int exp, String avatar) throws DaoException;
 	
-	User getUser( int keyUser) throws DaoException;
+	public User getUser( int idUser) throws DaoException;
 	
-	void destroy() throws DaoException;
+	public void destroy() throws DaoException;
 
-	User getUserByUsernamePassword(String username, String password) throws DaoException;
+	public User getUserByUsernamePassword(String username, String password) throws DaoException;
 	
 }

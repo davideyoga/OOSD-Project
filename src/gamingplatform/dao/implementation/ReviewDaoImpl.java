@@ -85,15 +85,15 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
 
     /**
      * Metodo che seleziona una review dati id_user e id_game
-     * @param keyUser è l'id dell'utente che ha fatto la recensione
-     * @param keyGame è l'id del gioco recensito
+     * @param idUser è l'id dell'utente che ha fatto la recensione
+     * @param idGame è l'id del gioco recensito
      * @return la rewiew desiderata
      */
-    public Review getReview(int keyUser,int keyGame) throws DaoException{
+    public Review getReview(int idUser,int idGame) throws DaoException{
         Review r=new Review(this);
         try{
-            this.selectReview.setInt(1,keyUser);
-            this.selectReview.setInt(2,keyGame);
+            this.selectReview.setInt(1,idUser);
+            this.selectReview.setInt(2,idGame);
             ResultSet rs=this.selectReview.executeQuery();
             while(rs.next()){
                 r.setIdUser(rs.getInt("id_user"));
@@ -201,20 +201,22 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
     }
 
 
-
-
     /**
      * Metodo di inserimento di un nuovo elemento nella tabella review del DataBase
-     * @param review è la review da dover inserire
+     * @param idUser identificativo dell'user autore della recensione
+     * @param idGame identificativo del gioco recensito
+     * @param title titolo della recensione
+     * @param body corpo della recensione
+     * @param vote voto assegnato al gioco
      * @throws DaoException lancia eccezione in caso di errore
      */
-    public void insertReview(Review review) throws DaoException{
+    public void insertReview(int idUser, int idGame, String title, String body,int vote) throws DaoException{
         try{
-            this.insertReview.setInt(1,review.getIdUser());
-            this.insertReview.setInt(2,review.getIdGame());
-            this.insertReview.setString(3,review.getTitle());
-            this.insertReview.setString(4,review.getBody());
-            this.insertReview.setInt(5,review.getVote());
+            this.insertReview.setInt(1,idUser);
+            this.insertReview.setInt(2,idGame);
+            this.insertReview.setString(3,title);
+            this.insertReview.setString(4,body);
+            this.insertReview.setInt(5,vote);
             this.insertReview.executeQuery();
 
         } catch (SQLException e){
@@ -228,14 +230,14 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
 
     /**
      * Metodo che permette la cancellazione di un gioco dalla tabella game dato id_user e id_game
-     * @param keyUser è l'id dello user autore della recensione
-     * @param keyGame è l'id del gioco recensito
+     * @param idUser è l'id dello user autore della recensione
+     * @param idGame è l'id del gioco recensito
      * @throws DaoException lancia eccezione in caso di errore
      */
-    public void deleteReview(int keyUser, int keyGame) throws DaoException{
+    public void deleteReview(int idUser, int idGame) throws DaoException{
         try{
-            this.deleteReview.setInt(1,keyUser);
-            this.deleteReview.setInt(1,keyGame);
+            this.deleteReview.setInt(1,idUser);
+            this.deleteReview.setInt(1,idGame);
             this.deleteReview.executeQuery();
         }catch (SQLException e){
             throw new DaoException("Error query deleteReview", e);
@@ -247,24 +249,45 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
 
     /**
      * Metodo che permette la modifica di una review
-     * @param id_user è l'id dell'user autore della review
-     * @param id_game è l'id del gioco recensito
+     * @param idUser è l'id dell'user autore della review
+     * @param idGame è l'id del gioco recensito
      * @param title è il titolo della recensione
      * @param body  è il corpo della recensione
      * @param vote è il voto assegnato al gioco
      * @throws DaoException lancia eccezione in caso di errore
      */
-    public void updateReview(int id_user, int id_game, String title, String body, int vote) throws DaoException{
+    public void updateReview(int idUser, int idGame, String title, String body, int vote) throws DaoException{
         try{
             this.updateReview.setString(1,title);
             this.updateReview.setString(2,body);
             this.updateReview.setInt(3,vote);
-            this.updateReview.setInt(4,id_user);
-            this.updateReview.setInt(5,id_game);
+            this.updateReview.setInt(4,idUser);
+            this.updateReview.setInt(5,idGame);
             this.updateReview.executeQuery();
         }catch (SQLException e){
             throw new DaoException("Error query updateReview", e);
 
         }
+    }
+
+
+    public void destroy() throws DaoException{
+
+        //chiudo le quary precompilate
+        try {
+            this.selectReview.close();
+            this.insertReview.close();
+            this.deleteReview.close();
+            this.selectReviews.close();
+            this.selectReviewsByUser.close();
+            this.selectReviewsByGame.close();
+            this.updateReview.close();
+
+        } catch (SQLException e) {
+            throw new DaoException("Error destroy ReviewDao", e);
+        }
+
+        //chiudo la connessione
+        super.destroy();
     }
 }

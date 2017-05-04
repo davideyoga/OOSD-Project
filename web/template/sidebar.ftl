@@ -6,7 +6,32 @@
                 <a href="index" class=" hvr-bounce-to-right"><i class="fa fa-dashboard nav_icon "></i><span class="nav-label">Home page</span> </a>
             </li>
 
+        <#if user??>
             <li>
+                <a href="profile" class=" hvr-bounce-to-right"><i class="fa fa-user nav_icon "></i><span class="nav-label">Profile</span> </a>
+            </li>
+            <li>
+                <a href="logout" class=" hvr-bounce-to-right"><i class="fa fa-dashboard nav_icon "></i><span class="nav-label">LogOut</span> </a>
+            </li>
+
+            <#if services??>
+
+                    <#list services as service>
+                        <li>
+                            <a href="#" class=" hvr-bounce-to-right"><i class="fa fa-sliders nav_icon"></i> <span class="nav-label">${service.name?cap_first}</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li><a href="${service.name}?mode=a" class=" hvr-bounce-to-right"> <i class="fa fa-plus-square-o nav_icon"></i>Add ${service.name?cap_first}</a></li>
+                                <li><a href="${service.name}?mode=r" class=" hvr-bounce-to-right"> <i class="fa fa-bar-chart nav_icon"></i>Report ${service.name?cap_first}</a></li>
+                                <li><a href="${service.name}?mode=e" class=" hvr-bounce-to-right"> <i class="fa fa-edit nav_icon"></i>Edit ${service.name?cap_first}</a></li>
+                            </ul>
+                        </li>
+                    </#list>
+
+            </#if>
+
+        </#if>
+
+            <!--
                 <a href="#" class=" hvr-bounce-to-right"><i class="fa fa-indent nav_icon"></i> <span class="nav-label">Menu Levels</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li><a href="graphs.html" class=" hvr-bounce-to-right"> <i class="fa fa-area-chart nav_icon"></i>Graphs</a></li>
@@ -15,8 +40,7 @@
 
                     <li><a href="typography.html" class=" hvr-bounce-to-right"><i class="fa fa-file-text-o nav_icon"></i>Typography</a></li>
 
-                </ul>
-            </li>
+
             <li>
                 <a href="inbox.html" class=" hvr-bounce-to-right"><i class="fa fa-inbox nav_icon"></i> <span class="nav-label">Inbox</span> </a>
             </li>
@@ -42,15 +66,8 @@
                     <li><a href="forms.html" class=" hvr-bounce-to-right"><i class="fa fa-align-left nav_icon"></i>Basic forms</a></li>
                     <li><a href="validation.html" class=" hvr-bounce-to-right"><i class="fa fa-check-square-o nav_icon"></i>Validation</a></li>
                 </ul>
-            </li>
+            </li>-->
 
-
-
-            <#if user??>
-                <li>
-                    <a href="logout" class=" hvr-bounce-to-right"><i class="fa fa-dashboard nav_icon "></i><span class="nav-label">LogOut</span> </a>
-                </li>
-            </#if>
 
         </ul>
     </div>

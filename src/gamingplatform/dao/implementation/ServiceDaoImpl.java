@@ -19,10 +19,10 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
 
     //Variabili di appoggio per preparare le query
     private PreparedStatement selectServiceById,
-            selectServices,
-            insertService,
-            deleteServiceById,
-            updateService;
+                              selectServices,
+                              insertService,
+                              deleteServiceById,
+                              updateService;
 
 
     //Costruttore
@@ -69,13 +69,13 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
 
     /**
      * Metodo che seleziona un servizio dato l'id
-     * @param keyService è l'id del servizio che si vuole visualizzare
+     * @param idService è l'id del servizio che si vuole visualizzare
      * @return il gioco desiderato
      */
-    public Service getServiceById(int keyService) throws DaoException{
+    public Service getServiceById(int idService) throws DaoException{
        Service s=new Service(this);
         try{
-            this.selectServiceById.setInt(1,keyService);
+            this.selectServiceById.setInt(1,idService);
             ResultSet rs=this.selectServiceById.executeQuery();
             while(rs.next()){
                 s.setId(rs.getInt("id"));
@@ -118,16 +118,16 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
     }
 
 
-
     /**
      * Metodo di inserimento di un nuovo elemento nella tabella service del DataBase
-     * @param s è il servizio da dover inserire
-     * @throws DaoException lancia eccezione in caso di errore
+     * @param name è il nome del servizio
+     * @param description la descrizione del servizio
+     * @throws DaoException
      */
-    public void insertService(Service s) throws DaoException{
+    public void insertService(String name, String description) throws DaoException{
         try{
-            this.insertService.setString(1,s.getName());
-            this.insertService.setString(2,s.getDescription());
+            this.insertService.setString(1,name);
+            this.insertService.setString(2,description);
             this.insertService.executeQuery();
 
         } catch (SQLException e){
@@ -140,12 +140,12 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
 
     /**
      * Metodo che permette la cancellazione di un servizio dalla tabella service dato l'id
-     * @param keyService è l'id del servizio da cancellare
+     * @param idService è l'id del servizio da cancellare
      * @throws DaoException lancia eccezione in caso di errore
      */
-    public void deleteServiceById(int keyService) throws DaoException{
+    public void deleteServiceById(int idService) throws DaoException{
         try{
-            this.deleteServiceById.setInt(1,keyService);
+            this.deleteServiceById.setInt(1,idService);
             this.deleteServiceById.executeQuery();
         }catch (SQLException e){
             throw new DaoException("Error query deleteServiceById", e);
@@ -170,4 +170,23 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
         }
     }
 
+
+
+    public void destroy() throws DaoException{
+
+        //chiudo le quary precompilate
+        try {
+            this.selectServiceById.close();
+            this.selectServices.close();
+            this.insertService.close();
+            this.deleteServiceById.close();
+            this.updateService.close();
+
+        } catch (SQLException e) {
+            throw new DaoException("Error destroy ServiceDao", e);
+        }
+
+        //chiudo la connessione
+        super.destroy();
+    }
 }
