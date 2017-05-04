@@ -1,5 +1,7 @@
 package gamingplatform.model;
 
+import gamingplatform.dao.data.DaoData;
+
 /**
  * Created by GregBug on 22/04/2017.
  */
@@ -11,10 +13,10 @@ public class Service {
     private String description;
 
     // Costruttore
-    public Service(int id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
+    public Service(DaoData d) {
+        this.id = 0;
+        this.name =null;
+        this.description = null;
     }
 
     // *** Metodi Setter ***
