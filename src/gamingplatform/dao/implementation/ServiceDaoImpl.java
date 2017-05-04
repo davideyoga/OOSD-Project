@@ -22,7 +22,8 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
                               selectServices,
                               insertService,
                               deleteServiceById,
-                              updateService;
+                              updateService,
+                              selectServicesByUserId;
 
 
     //Costruttore
@@ -59,6 +60,15 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
                     "                                       SET name=?" + //L'ID NON LO PUOI MODIFICARE
                     "                                           description=?" +
                     "                                       WHERE id=?");
+
+            //query che mi restituisce i servizi a cui un utente ha autorizzazione ad accedere
+            selectServicesByUserId=connection.prepareStatement("SELECT service.id, service.name, service.description" +
+                    "                                                FROM user " +
+                    "                                                LEFT JOIN usergroups ON usergroups.id_user=user.id" +
+                    "                                                LEFT JOIN groups ON groups.id=usergroups.id_groups" +
+                    "                                                LEFT JOIN groupsservice ON groupsservice.id_groups=groups.id" +
+                    "                                                LEFT JOIN service ON groupsservice.id_service=service.id" +
+                    "                                                WHERE USER.id=? ORDER BY service.name");
 
         }catch (SQLException e){
             throw new DaoException("Error initializing group dao", e);
@@ -168,6 +178,31 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
         }catch (SQLException e){
             throw new DaoException("Error query updateService", e);
         }
+    }
+
+
+
+    public List<Service> getServicesByUserId(int idUser) throws DaoException{
+
+        try{
+            this.selectServicesByUserId.setInt(1,idUser);
+            ResultSet rs=this.selectServicesByUserId.executeQuery();
+
+            List<Service> lista=new ArrayList<>();
+
+            while (rs.next()){
+                Service s=new Service(this);
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setDescription(rs.getString("description"));
+                 lista.add(s);
+            }
+
+        }catch(Exception e){
+            throw new DaoException("Error query getServiceByUserId", e);
+
+        }
+        return lista;
     }
 
 
