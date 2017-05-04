@@ -39,8 +39,7 @@ class SecurityLayer {
             sha1 = DatatypeConverter.printHexBinary(msdDigest.digest());
             sha1=sha1.toLowerCase();
         } catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
-            Logger logger = Logger.getAnonymousLogger();
-            logger.log(Level.SEVERE, "SecurityException: " + e.getMessage());
+            Logger.getAnonymousLogger().log(Level.WARNING, "SecurityException: " + e.getMessage());
         }
         return sha1;
     }
@@ -87,7 +86,7 @@ class SecurityLayer {
         try {
             response.sendRedirect("index");
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().log(Level.WARNING, "Redirect fallito "+e.getMessage());
         }
 
     }

@@ -1,24 +1,43 @@
 package gamingplatform.controller;
 
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
+import javax.servlet.HttpConstraintElement;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
 
+import gamingplatform.dao.exception.DaoException;
+import gamingplatform.dao.implementation.GroupsDaoImpl;
+import gamingplatform.dao.implementation.ServiceDaoImpl;
+import gamingplatform.dao.interfaces.GroupsDao;
+import gamingplatform.dao.interfaces.ServiceDao;
+import gamingplatform.model.Group;
+import gamingplatform.model.Service;
 import gamingplatform.model.User;
 
 import static java.util.Objects.isNull;
+
+
+
 
 /**
  * classe package-private atta alla gestione delle sessioni e di tutto quello che le riguarda
  */
 class SessionManager {
 
+    @Resource(name = "jdbc/gamingplatform")
+    private static DataSource ds;
+
     //durata validità sessione in minuti
     private static final int SESSION_EXPIRE_TIME = 60*3;
+
 
     /**
      * inizializza la sessione, eliminandola se esiste, tramite i template freemarker si accede alla sessione
@@ -44,11 +63,27 @@ class SessionManager {
 
         //carico i gruppi a cui l'utente appartiene
 
-        //TODO caricare in sessione i gruppi a cui appartiene l'utente
+        try{
+            GroupsDao groupsDao = new GroupsDaoImpl(ds);
+            groupsDao.init();
+            List<Group> groups = groupsDao.getGroupsByUserId(user.getId());
+            groupsDao.destroy();
+            session.setAttribute("groups",groups);
+        }catch (DaoException e){
+            Logger.getAnonymousLogger().log(Level.INFO, "DaoException: user non appartenente a nessun gruppo, oppure query fallita "+e.getMessage());
+        }
 
         //carico l'elenco dei servizi a cui ha accesso l'utente
 
-        //TODO caricare in sessione i servizi a cui l'utente ha accesso
+        try{
+            ServiceDao serviceDao = new ServiceDaoImpl(ds);
+            serviceDao.init();
+            List<Service> services = serviceDao.getServicesByUserId(user.getId());
+            serviceDao.destroy();
+            session.setAttribute("services",services);
+        }catch (DaoException e){
+            Logger.getAnonymousLogger().log(Level.INFO, "DaoException: user non appartenente a nessun gruppo, oppure query fallita "+e.getMessage());
+        }
 
         return session;
     }
@@ -82,27 +117,27 @@ class SessionManager {
         try {
             //se la sessione non è attiva
             if (isNull(session)) {
-                throw new SecurityException("session is null");
+                throw new SecurityException("session è null");
             }
 
             //controllo che ci sia l'user in sessione
             User user = (User) session.getAttribute("user");
             if (isNull(user)) {
 
-                throw new SecurityException("session is not valid (user not in session)");
+                throw new SecurityException("session non valida (user non in session)");
 
                 //controllo l'indirizzo ip del client, controllo se c'è e poi se corrisponde effettivamente a
                 //quello del client
             } else if ((session.getAttribute("ip_address") == null) ||
                     !(session.getAttribute("ip_address")).equals(request.getRemoteHost())) {
 
-                throw new SecurityException("session is not valid (ip does not match)");
+                throw new SecurityException("session non valida (ip non matcha)");
             } else {
                 Calendar now = Calendar.getInstance();
                 Calendar start = (Calendar) session.getAttribute("session_start");
 
                 if (start == null) {
-                    throw new SecurityException("session is not valid (session_start is null)");
+                    throw new SecurityException("session non valida (session_start è null)");
                 }
 
                 long sessionAgeInMinutes = ((now.getTimeInMillis() - start.getTimeInMillis()) / 1000) / 30;
@@ -116,8 +151,7 @@ class SessionManager {
             //distruggo la sessione e setto header 401 nella risposta html
             destroySession(request);
             //loggo l'errore
-            Logger logger = Logger.getAnonymousLogger();
-            logger.log(Level.WARNING, "SecurityException: " + ex.getMessage());
+            Logger.getAnonymousLogger().log(Level.INFO, "SecurityException: " + ex.getMessage());
 
             return null;
         }
@@ -165,9 +199,23 @@ class SessionManager {
             user = (User) verifySession(request).getAttribute("user");
         }catch(NullPointerException e){
             destroySession(request);
+            Logger.getAnonymousLogger().log(Level.WARNING,"non posso recuperare l'user dalla sessione, sessione distrutta "+e.getMessage());
         }
 
         return user;
+    }
+
+    static void redirectIfLogged(HttpServletRequest request, HttpServletResponse response){
+        //selesiste già una sessione valida redirect a index senza messaggi
+        HttpSession session = SessionManager.verifySession(request);
+        if(!isNull(session)){
+            Logger.getAnonymousLogger().log(Level.INFO, "utente già loggato, redirect alla home");
+            try {
+                response.sendRedirect("index");
+            } catch (IOException e) {
+                Logger.getAnonymousLogger().log(Level.INFO, "[SessionManager] sendRedirect IOException "+e.getMessage());
+            }
+        }
     }
 }
 

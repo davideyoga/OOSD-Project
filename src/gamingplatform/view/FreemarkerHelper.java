@@ -52,8 +52,7 @@ public class FreemarkerHelper {
         } catch (TemplateException | IOException ex) {
 
             //log dei dettagli dell'eccezione
-            Logger logger = Logger.getAnonymousLogger();
-            logger.log(Level.SEVERE, "Templating exception: " + ex.getMessage(), ex);
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Templating exception: " + ex.getMessage());
 
         } finally {
 
