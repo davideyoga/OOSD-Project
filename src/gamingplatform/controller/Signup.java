@@ -42,8 +42,6 @@ public class Signup extends HttpServlet {
 
         SessionManager.redirectIfLogged(request,response);
 
-
-
         //process template
         FreemarkerHelper.process("signup.ftl", data, response, getServletContext());
 
@@ -69,7 +67,7 @@ public class Signup extends HttpServlet {
             return;
         }
         //provo ad effettuare l'upload del file
-        String avatarName = FileManager.fileUpload(avatar,"avatar");
+        String avatarName = FileManager.fileUpload(avatar,"avatars");
         if(isNull(avatarName)){
 
             Logger.getAnonymousLogger().log(Level.WARNING,"[Signup] Upload file fallito");
