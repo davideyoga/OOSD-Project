@@ -4,7 +4,6 @@ import gamingplatform.dao.data.DaoData;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.model.Group;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface GroupsDao extends DaoData{

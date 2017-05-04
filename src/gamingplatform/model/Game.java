@@ -11,13 +11,13 @@ public class Game{
       private String image;
       private String description;
 
-        public Game(DaoData dd) {
-            this.id = id;
-            this.name = name;
-            this.exp = exp;
-            this.image = image;
-            this.description = description;
-        }
+      public Game(DaoData d) {
+          this.id = 0;
+          this.name = null;
+          this.exp = 0;
+          this.image = null;
+          this.description = null;
+      }
 
 
          //Getter and Setter
