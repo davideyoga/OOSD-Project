@@ -15,6 +15,8 @@ import gamingplatform.dao.interfaces.UserDao;
 import gamingplatform.model.Group;
 import gamingplatform.model.User;
 
+import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
+import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
 
 
 public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
@@ -59,13 +61,13 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 		
 			try {
 
-				this.insertUser.setString(1,username);
-				this.insertUser.setString(2,name);
-				this.insertUser.setString(3,surname);
-				this.insertUser.setString(4,email);
+				this.insertUser.setString(1,addSlashes(username));
+				this.insertUser.setString(2,addSlashes(name));
+				this.insertUser.setString(3,addSlashes(surname));
+				this.insertUser.setString(4,addSlashes(email));
 				this.insertUser.setString(5,password);
 				this.insertUser.setInt(6,exp);
-				this.insertUser.setString( 7,avatar);
+				this.insertUser.setString( 7,addSlashes(avatar));
 
 				this.insertUser.executeUpdate();
 				
@@ -105,13 +107,13 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 		
 		try{
 			
-			this.updateUserById.setString(1,username);
-			this.updateUserById.setString(2,name);
-			this.updateUserById.setString(3, surname);
-			this.updateUserById.setString(4, email);
+			this.updateUserById.setString(1, addSlashes(username));
+			this.updateUserById.setString(2, addSlashes(name));
+			this.updateUserById.setString(3, addSlashes(surname));
+			this.updateUserById.setString(4, addSlashes(email));
 			this.updateUserById.setString(5, password);
-			this.updateUserById.setInt(6,exp);
-			this.updateUserById.setString(7, avatar);
+			this.updateUserById.setInt(6, exp);
+			this.updateUserById.setString(7, addSlashes(avatar));
 			
 			this.updateUserById.executeUpdate();
 			
@@ -137,15 +139,14 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			ResultSet rs = this.selectUserById.executeQuery(); //eseguo la query
 
 			while(rs.next()){
-				user.setUsername( rs.getString("username") );
-				user.setName(rs.getString("name"));
-				user.setSurname(rs.getString("surname"));
-				user.setEmail(rs.getString("email"));
+				user.setUsername(stripSlashes(rs.getString("username")));
+				user.setName(stripSlashes(rs.getString("name")));
+				user.setSurname(stripSlashes(rs.getString("surname")));
+				user.setEmail(stripSlashes(rs.getString("email")));
 				user.setPassword(rs.getString("password"));
 				user.setExp(rs.getInt("exp"));
-				user.setAvatar(rs.getString("avatar"));
+				user.setAvatar(stripSlashes(rs.getString("avatar")));
 			}
-
 
 		} catch (SQLException e) {
 			throw new DaoException("Error dao user get user ", e);
@@ -164,20 +165,20 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 		User user = new User(this);
 
 		try {
-			this.getUserByUsernamePassword.setString(1, username);
-			this.getUserByUsernamePassword.setString(2, password);
+			this.getUserByUsernamePassword.setString(1, addSlashes(username));
+			this.getUserByUsernamePassword.setString(2, addSlashes(password));
 
 			ResultSet rs = this.getUserByUsernamePassword.executeQuery(); //eseguo la query
 
 			while(rs.next()){
 				user.setId(rs.getInt("id"));
-				user.setUsername(rs.getString("username") );
-				user.setName(rs.getString("name"));
-				user.setSurname(rs.getString("surname"));
-				user.setEmail(rs.getString("email"));
+				user.setUsername(stripSlashes(rs.getString("username")));
+				user.setName(stripSlashes(rs.getString("name")));
+				user.setSurname(stripSlashes(rs.getString("surname")));
+				user.setEmail(stripSlashes(rs.getString("email")));
 				user.setPassword(rs.getString("password"));
 				user.setExp(rs.getInt("exp"));
-				user.setAvatar(rs.getString("avatar"));
+				user.setAvatar(stripSlashes(rs.getString("avatar")));
 			}
 
 		} catch (SQLException e) {

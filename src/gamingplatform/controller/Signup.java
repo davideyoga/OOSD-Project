@@ -13,13 +13,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import gamingplatform.controller.utils.FileManager;
-import gamingplatform.controller.utils.SecurityLayer;
-import gamingplatform.controller.utils.SessionManager;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.UserDaoImpl;
 import gamingplatform.dao.interfaces.UserDao;
-import gamingplatform.view.FreemarkerHelper;
 
+import static gamingplatform.controller.utils.FileManager.fileUpload;
+import static gamingplatform.controller.utils.SecurityLayer.*;
+import static gamingplatform.controller.utils.SessionManager.popMessage;
+import static gamingplatform.controller.utils.SessionManager.redirectIfLogged;
+import static gamingplatform.view.FreemarkerHelper.process;
 import static java.util.Objects.isNull;
 
 @MultipartConfig(
@@ -39,12 +41,12 @@ public class Signup extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        data.put("message", SessionManager.popMessage(request));
+        data.put("message", popMessage(request));
 
-        SessionManager.redirectIfLogged(request,response);
+        redirectIfLogged(request,response);
 
         //process template
-        FreemarkerHelper.process("signup.ftl", data, response, getServletContext());
+        process("signup.ftl", data, response, getServletContext());
 
     }
 
@@ -52,11 +54,11 @@ public class Signup extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 
         //prelevo parametri POST
-        String username=request.getParameter("username");
-        String name=request.getParameter("name");
-        String surname=request.getParameter("surname");
-        String email=request.getParameter("email");
-        String password= SecurityLayer.sha1Encrypt( request.getParameter("password"));
+        String username = request.getParameter("username");
+        String name = request.getParameter("name");
+        String surname = request.getParameter("surname");
+        String email = request.getParameter("email");
+        String password = sha1Encrypt( request.getParameter("password"));
         Part avatar = request.getPart("avatar"); // recupera <input type="file" name="avatar">
 
         //se i parametri in input non sono validi
@@ -64,15 +66,15 @@ public class Signup extends HttpServlet {
            username.equals("") || name.equals("") || surname.equals("") || email.equals("") || password.equals("")){
 
             Logger.getAnonymousLogger().log(Level.WARNING,"[Signup] Parametri POST non validi ");
-            SecurityLayer.abort("signup.ftl",data,"KO-signup",response,getServletContext());
+            abort("signup.ftl",data,"KO-signup",response,getServletContext());
             return;
         }
         //provo ad effettuare l'upload del file
-        String avatarName = FileManager.fileUpload(avatar,"avatars", getServletContext());
+        String avatarName = fileUpload(avatar,"avatars", getServletContext());
         if(isNull(avatarName)){
 
             Logger.getAnonymousLogger().log(Level.WARNING,"[Signup] Upload file fallito");
-            SecurityLayer.abort("signup.ftl",data,"KO-signup",response,getServletContext());
+            abort("signup.ftl",data,"KO-signup",response,getServletContext());
             return;
         }
 
@@ -85,12 +87,12 @@ public class Signup extends HttpServlet {
         }catch(DaoException e){
             //in caso di errori nell'inserimento dell'utente
             Logger.getAnonymousLogger().log(Level.WARNING,"[Signup] Inserimento utente fallito "+e.getMessage());
-            SecurityLayer.abort("signup.ftl",data,"KO-signup",response,getServletContext());
+            abort("signup.ftl",data,"KO-signup",response,getServletContext());
             return;
         }
 
         //se arrivo quì ho inserito l'user con successo
-        SecurityLayer.redirect("login","OK-signup",response,request);
+        redirect("login","OK-signup",response,request);
 
     }
 

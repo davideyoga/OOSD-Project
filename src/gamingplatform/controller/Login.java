@@ -15,13 +15,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import gamingplatform.controller.utils.SecurityLayer;
-import gamingplatform.controller.utils.SessionManager;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.UserDaoImpl;
 import gamingplatform.dao.interfaces.UserDao;
 import gamingplatform.model.User;
-import gamingplatform.view.FreemarkerHelper;
 
+import static gamingplatform.controller.utils.SecurityLayer.abort;
+import static gamingplatform.controller.utils.SecurityLayer.redirect;
+import static gamingplatform.controller.utils.SessionManager.*;
+import static gamingplatform.view.FreemarkerHelper.process;
 import static java.util.Objects.isNull;
 
 public class Login extends HttpServlet {
@@ -47,12 +49,12 @@ public class Login extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         //pop dell'eventuale messaggio in sessione
-        data.put("message", SessionManager.popMessage(request));
+        data.put("message", popMessage(request));
 
-        SessionManager.redirectIfLogged(request,response);
+        redirectIfLogged(request,response);
 
         //process template
-        FreemarkerHelper.process("login.ftl", data, response, getServletContext());
+        process("login.ftl", data, response, getServletContext());
 
     }
 
@@ -70,8 +72,8 @@ public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         //prelevo parametri POST
-        String username=request.getParameter("username");
-        String password=request.getParameter("password");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
 
 
 
@@ -79,7 +81,7 @@ public class Login extends HttpServlet {
             //in caso di dati POST non validi
             //notifico l'errore e abort rimanendo sulla stessa pagina
             Logger.getAnonymousLogger().log(Level.WARNING, "[Login] attributi post non validi, abort ");
-            SecurityLayer.abort("login.ftl",data,"KO",response,getServletContext());
+            abort("login.ftl",data,"KO",response,getServletContext());
             return;
         }
 
@@ -93,18 +95,19 @@ public class Login extends HttpServlet {
             //query di select user dati username e password
             User user=userDao.getUserByUsernamePassword(username, SecurityLayer.sha1Encrypt(password));
 
+            //distruggo connessione
             userDao.destroy();
 
             if(user.getId()==0 || isNull(user)){
                 //credenziali non valide, abort con notifica di errore, rimanendo sulla stessa pagina
                 Logger.getAnonymousLogger().log(Level.WARNING, "[Login] credenziali non valide, abort");
-                SecurityLayer.abort("login.ftl",data,"KO-login",response,getServletContext());
+                abort("login.ftl",data,"KO-login",response,getServletContext());
                 return;
             }else{
                 //credenziali corrette, inizializzazione della sessione e redirect a index
                 //inserisco il messaggio di ok in sessione così sarà mostrato dalla servlet di index
-                HttpSession session=SessionManager.initSession(request, user);
-                SessionManager.pushMessage(request,"OK-login");
+                initSession(request, user);
+                pushMessage(request,"OK-login");
                 response.sendRedirect("index");
             }
 
@@ -114,11 +117,11 @@ public class Login extends HttpServlet {
             // log dell'eccezione
             // redirect a index con messaggio di errore
             Logger.getAnonymousLogger().log(Level.WARNING, "[Login] DaoException, redirect alla home "+e.getMessage());
-            SecurityLayer.redirect("index","KO",response,request);
+            redirect("index","KO",response,request);
         }
 
 
         //in ogni caso process template
-        FreemarkerHelper.process("login.ftl", data, response, getServletContext());
+        process("login.ftl", data, response, getServletContext());
     }
 }
