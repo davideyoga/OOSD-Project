@@ -1,8 +1,5 @@
-package gamingplatform.controller;
+package gamingplatform.controller.utils;
 
-import gamingplatform.dao.implementation.UserDaoImpl;
-import gamingplatform.dao.interfaces.UserDao;
-import gamingplatform.model.User;
 import org.apache.commons.io.FileUtils;
 
 import javax.annotation.Resource;
@@ -16,7 +13,9 @@ import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class FileManager {
+import static java.util.Objects.isNull;
+
+public class FileManager {
 
     @Resource(name = "jdbc/gamingplatform")
     private static DataSource ds;
@@ -28,9 +27,13 @@ class FileManager {
      * @param directory directory in cui verrà salvto il file
      * @return il nome del file salvato, oppure null su errore
      */
-    static String fileUpload(Part filePart, String directory, ServletContext svc){
+    public static String fileUpload(Part filePart, String directory, ServletContext svc){
 
         String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+
+        if(isNull(fileName) || fileName.equals("")){
+            return "default.png";
+        }
 
         //se non è un .jpg oppure un .png
         if(!(fileName.substring(fileName.length()-4).equals(".jpg") ||

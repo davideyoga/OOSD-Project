@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import gamingplatform.controller.utils.SecurityLayer;
+import gamingplatform.controller.utils.SessionManager;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.UserDaoImpl;
 import gamingplatform.dao.interfaces.UserDao;
@@ -45,7 +47,7 @@ public class Login extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         //pop dell'eventuale messaggio in sessione
-        data.put("message",SessionManager.popMessage(request));
+        data.put("message", SessionManager.popMessage(request));
 
         SessionManager.redirectIfLogged(request,response);
 

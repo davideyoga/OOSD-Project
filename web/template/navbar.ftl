@@ -14,11 +14,12 @@
             <section class="full-top">
                 <button id="toggle"><i class="fa fa-arrows-alt"></i></button>
             </section>
+            <!--
             <form class=" navbar-left-right">
-                <input type="text" value="Search..." onfocus="this.value = '';"
-                       onblur="if (this.value == '') {this.value = 'Search...';}">
+                <input type="text" value="Search..." placeholder="Search...">
                 <input type="submit" value="" class="fa fa-search">
             </form>
+            -->
             <div class="clearfix"></div>
         </div>
 
@@ -97,13 +98,15 @@
                 <#if user??>
 
 
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle dropdown-at" data-toggle="dropdown"><span
-                                class=" name-caret">${user.username}<i class="caret"></i></span>
-                            <img style="width:60px; height: 60px;" src="${context}/avatars/${user.avatar}"></a>
+                    <li class="dropdown" style="padding-top:5px;">
+                        <a href="#" class="dropdown-toggle dropdown-at" data-toggle="dropdown">
+                            <span class=" name-caret" style="margin-top:5px;">${user.username}<i class="caret"></i></span>
+                            <img style="width:50px; height: 50px;" src="${context}/avatars/${user.avatar}"></a>
                         <ul class="dropdown-menu " role="menu">
-                            <li><a href="inbox.ftl"><i class="fa fa-user"></i>Profile</a></li>
-                            <li><a href="profile.ftl"><i class="fa fa-cogs"></i>Edit Profile</a></li>
+                            <li><a href="inbox"><i class="fa fa-user"></i>&nbspProfile</a></li>
+                            <li><a href="profile"><i class="fa fa-cogs"></i>Edit Profile</a></li>
+                            <li><a href="logout"><i class="fa fa-arrow-circle-o-left"></i>&nbspLogOut</a></li>
+
                         </ul>
                     </li>
 
@@ -111,8 +114,8 @@
 
                 <div class="full-right">
                     <p>
-                        <a href="signup"><button type="button" class="btn btn-primary">Signup</button></a>
-                        <a href="login"><button type="button" class="btn btn-success warning_2">Login</button></a>
+                        <a href="signup"><button type="button" class="btn btn-primary my_btn_red">Signup</button></a>
+                        <a href="login"><button type="button" class="btn btn-success warning_2 my_btn_green">Login</button></a>
 
                     </p>
                 </div>

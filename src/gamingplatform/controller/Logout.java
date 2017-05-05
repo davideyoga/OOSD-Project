@@ -1,5 +1,8 @@
 package gamingplatform.controller;
 
+import gamingplatform.controller.utils.SecurityLayer;
+import gamingplatform.controller.utils.SessionManager;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

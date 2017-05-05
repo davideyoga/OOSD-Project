@@ -6,14 +6,15 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.*;
 import javax.sql.DataSource;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import gamingplatform.controller.utils.FileManager;
+import gamingplatform.controller.utils.SecurityLayer;
+import gamingplatform.controller.utils.SessionManager;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.UserDaoImpl;
 import gamingplatform.dao.interfaces.UserDao;
@@ -38,7 +39,7 @@ public class Signup extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        data.put("message",SessionManager.popMessage(request));
+        data.put("message", SessionManager.popMessage(request));
 
         SessionManager.redirectIfLogged(request,response);
 
@@ -55,7 +56,7 @@ public class Signup extends HttpServlet {
         String name=request.getParameter("name");
         String surname=request.getParameter("surname");
         String email=request.getParameter("email");
-        String password=SecurityLayer.sha1Encrypt( request.getParameter("password"));
+        String password= SecurityLayer.sha1Encrypt( request.getParameter("password"));
         Part avatar = request.getPart("avatar"); // recupera <input type="file" name="avatar">
 
         //se i parametri in input non sono validi

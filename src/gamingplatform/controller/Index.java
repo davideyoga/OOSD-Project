@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import gamingplatform.controller.utils.SessionManager;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.GameDaoImpl;
 import gamingplatform.dao.interfaces.GameDao;
@@ -35,7 +36,7 @@ public class Index extends HttpServlet {
         //nel dettaglio inserisco un elemento "message" dentro la Map che andrà a processare freemarker
         //prendendolo dalla sessione tramite SessionManager.pop che appunto ritorna il messaggio in sessione, se c'è
         //oppure null
-        data.put("message",SessionManager.popMessage(request));
+        data.put("message", SessionManager.popMessage(request));
 
         //carico l'user nella Map prelevandolo dalla sessione se verificata
         data.put("user",SessionManager.getUser(request));

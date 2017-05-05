@@ -20,7 +20,7 @@
             </div>
             <div class="col-md-6 login-do">
                 <label class="hvr-shutter-in-horizontal login-sub">
-                    <input type="submit" value="login">
+                    <input type="submit" value="Login">
                 </label>
                 <p class="personalizedP">Do not have an account?</p>
                 <a href="signup" class="hvr-shutter-in-horizontal">Signup</a>

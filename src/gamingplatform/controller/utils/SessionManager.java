@@ -1,4 +1,4 @@
-package gamingplatform.controller;
+package gamingplatform.controller.utils;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -28,7 +28,7 @@ import static java.util.Objects.isNull;
 /**
  * classe package-private atta alla gestione delle sessioni e di tutto quello che le riguarda
  */
-class SessionManager {
+public class SessionManager {
 
     @Resource(name = "jdbc/gamingplatform")
     private static DataSource ds;
@@ -46,7 +46,7 @@ class SessionManager {
      * @return la sessione creata
      */
 
-    static HttpSession initSession(HttpServletRequest request, User user) {
+    public static HttpSession initSession(HttpServletRequest request, User user) {
 
         //se esiste la elimino
         destroySession(request);
@@ -92,7 +92,7 @@ class SessionManager {
      * @param request richiesta servlet
      */
 
-    static void destroySession(HttpServletRequest request) {
+    public static void destroySession(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
 
         //se la sessione esiste la elimino
@@ -108,7 +108,7 @@ class SessionManager {
      * @param request  richiesta servlet
      * @return la sessione, se valida oppure null
      */
-    static HttpSession verifySession(HttpServletRequest request) {
+    public static HttpSession verifySession(HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
 
@@ -163,7 +163,7 @@ class SessionManager {
      * @param request richiesta servlet
      * @param message messaggio da inserire
      */
-    static void pushMessage(HttpServletRequest request, String message){
+    public static void pushMessage(HttpServletRequest request, String message){
         HttpSession session=request.getSession(true);
         session.removeAttribute("message");
         session.setAttribute("message", message);
@@ -174,7 +174,7 @@ class SessionManager {
      * @param request richiesta servlet
      * @ il messaggio in sessione se c'è, oppure null
      */
-    static String popMessage(HttpServletRequest request){
+    public static String popMessage(HttpServletRequest request){
         String message=null;
 
         try{
@@ -196,20 +196,19 @@ class SessionManager {
      * @param request richiesta servlet
      * @return l'user se esiste e se la sessione è valuda, null altrimenti
      */
-    static User getUser(HttpServletRequest request){
+    public static User getUser(HttpServletRequest request){
         User user=null;
 
         try {
             user = (User) request.getSession().getAttribute("user");
         }catch(NullPointerException e){
-            Logger.getAnonymousLogger().log(Level.WARNING,"non posso recuperare l'user dalla sessione, sessione distrutta "+e.getMessage());
+            Logger.getAnonymousLogger().log(Level.WARNING,"non posso recuperare l'user dalla sessione "+e.getMessage());
         }
 
         return user;
     }
 
-    //TODO correggi controllo utente loggato
-    static void redirectIfLogged(HttpServletRequest request, HttpServletResponse response){
+    public static void redirectIfLogged(HttpServletRequest request, HttpServletResponse response){
         //selesiste già una sessione valida redirect a index senza messaggi
         HttpSession session = verifySession(request);
         if(!isNull(session)){

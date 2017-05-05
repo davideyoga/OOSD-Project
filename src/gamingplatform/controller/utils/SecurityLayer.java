@@ -1,6 +1,5 @@
-package gamingplatform.controller;
+package gamingplatform.controller.utils;
 
-import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-class SecurityLayer {
+public class SecurityLayer {
 
 
     public static boolean checkAuth(){
@@ -31,7 +30,7 @@ class SecurityLayer {
      * @param x stringa da codificare
      * @return sha1(x) oppure null
      */
-    static String sha1Encrypt(String x) {
+    public static String sha1Encrypt(String x) {
         String sha1 = null;
         try {
             MessageDigest msdDigest = MessageDigest.getInstance("SHA-1");
@@ -51,7 +50,7 @@ class SecurityLayer {
      * @param request richiesta servlet
      */
 
-    static void updateAuth(HttpServletRequest request, HttpServletResponse response) {
+    public static void updateAuth(HttpServletRequest request, HttpServletResponse response) {
 
         HttpSession session = SessionManager.verifySession(request);
         //TODO update permessi
@@ -66,7 +65,7 @@ class SecurityLayer {
      * @param response risposta servlet
      * @param svc servlet context
      */
-    static void abort(String tpl, Map<String, Object> data, String message, HttpServletResponse response, ServletContext svc){
+    public static void abort(String tpl, Map<String, Object> data, String message, HttpServletResponse response, ServletContext svc){
 
         data.put("message", message);
         FreemarkerHelper.process(tpl, data, response, svc);
@@ -80,7 +79,7 @@ class SecurityLayer {
      * @param response risposta servlet
      * @param request richiesta servlet
      */
-    static void redirect(String redirect, String message, HttpServletResponse response, HttpServletRequest request){
+    public static void redirect(String redirect, String message, HttpServletResponse response, HttpServletRequest request){
         SessionManager.pushMessage(request, message);
         try {
             response.sendRedirect(redirect);

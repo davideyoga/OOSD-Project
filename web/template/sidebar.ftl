@@ -3,7 +3,7 @@
         <ul class="nav" id="side-menu">
 
             <li>
-                <a href="index" class=" hvr-bounce-to-right"><i class="fa fa-dashboard nav_icon "></i><span class="nav-label">Home page</span> </a>
+                <a href="index" class=" hvr-bounce-to-right"><i class="fa fa-home nav_icon "></i><span class="nav-label">Home page</span> </a>
             </li>
 
         <#if user??>
@@ -11,7 +11,7 @@
                 <a href="profile" class=" hvr-bounce-to-right"><i class="fa fa-user nav_icon "></i><span class="nav-label">Profile</span> </a>
             </li>
             <li>
-                <a href="logout" class=" hvr-bounce-to-right"><i class="fa fa-dashboard nav_icon "></i><span class="nav-label">LogOut</span> </a>
+                <a href="logout" class=" hvr-bounce-to-right"><i class="fa fa-arrow-circle-o-left nav_icon "></i><span class="nav-label">LogOut</span> </a>
             </li>
 
             <#if services??>
