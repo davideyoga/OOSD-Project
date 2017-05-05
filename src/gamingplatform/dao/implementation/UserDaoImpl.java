@@ -88,7 +88,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 		if( idUser > 0 ){
 			try {		
 				this.deleteUserById.setInt(1, idUser);
-				this.deleteUserById.executeQuery();
+				this.deleteUserById.executeUpdate();
 				
 			} catch (SQLException e) {
 				throw new DaoException("Error dao delete user", e);

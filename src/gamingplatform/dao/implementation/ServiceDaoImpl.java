@@ -49,15 +49,15 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
 
             //query di inserimento di una nuova tupla nella tabella game
             insertService=connection.prepareStatement("INSERT INTO service " +
-                    "                                              VALUES name=?," +
-                    "                                                     description=?");
+                    "                                              VALUES (name=?," +
+                    "                                                     description=?)");
 
             //query di eliminazione di un gioco con id dato
             deleteServiceById=connection.prepareStatement("DELETE FROM service WHERE id=?");
 
             //query di update di un dato gioco
             updateService=connection.prepareStatement("UPDATE service" +
-                    "                                       SET name=?" + //L'ID NON LO PUOI MODIFICARE
+                    "                                       SET name=?," + //L'ID NON LO PUOI MODIFICARE
                     "                                           description=?" +
                     "                                       WHERE id=?");
 
@@ -138,7 +138,7 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
         try{
             this.insertService.setString(1,name);
             this.insertService.setString(2,description);
-            this.insertService.executeQuery();
+            this.insertService.executeUpdate();
 
         } catch (SQLException e){
             throw new DaoException("Error query insertService", e);
@@ -156,7 +156,7 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
     public void deleteServiceById(int idService) throws DaoException{
         try{
             this.deleteServiceById.setInt(1,idService);
-            this.deleteServiceById.executeQuery();
+            this.deleteServiceById.executeUpdate();
         }catch (SQLException e){
             throw new DaoException("Error query deleteServiceById", e);
 
@@ -175,6 +175,7 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
         try{
             this.updateService.setString(1,name);
             this.updateService.setString(2,description);
+            this.updateService.executeUpdate();
         }catch (SQLException e){
             throw new DaoException("Error query updateService", e);
         }

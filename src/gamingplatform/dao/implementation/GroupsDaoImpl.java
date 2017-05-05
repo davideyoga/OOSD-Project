@@ -51,8 +51,9 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 
 			//Query che inserisce un nuovo gruppo nel DB
 			this.insertGroup = connection.prepareStatement("INSERT INTO groups"	 +
-					"											 VALUES name=?," +
-					"											 	    description=?", Statement.RETURN_GENERATED_KEYS);
+					"											 VALUES (NULL," +
+					"													 name=?," +
+					"											 	     description=?)", Statement.RETURN_GENERATED_KEYS);
 			//Query di cancellazione di un gruppo
 			this.deleteGroupById= connection.prepareStatement("DELETE FROM groups WHERE id=?");
 
@@ -65,11 +66,11 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 
 			//Query che restituisce i gruppi a cui appartiene un dato user
 			this.selectGroupsByUserId = connection.prepareStatement("SELECT groups.id, " +
-																		 	    "groups.usernamename, " +
+																		 	    "groups.name, " +
 																		        "groups.description" +
-																		 "FROM group " +
-																		 "LEFT JOIN usergroups ON group.id = usergroups.id_group" +
-																		 "WHERE usergroups.user.id=?");
+																		 " FROM groups " +
+																		 " LEFT JOIN usergroups ON groups.id = usergroups.id_groups" +
+																		 " WHERE usergroups.id_user=?");
 
 			//Query che restituisce gli user appartenenti a un dato gruppo
 			this.selectUsersByGroupId=connection.prepareStatement("SELECT user.id," +
@@ -161,7 +162,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 		try{
 			this.insertGroup.setString(1, name);
 			this.insertGroup.setString(2,description);
-			this.insertGroup.executeQuery();
+			this.insertGroup.executeUpdate();
 		}catch (Exception e){
 			throw new DaoException("Error query insertGroup", e);
 		}
@@ -177,7 +178,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 	public void deleteGroupById(int idGroup) throws DaoException{
 		try{
 			this.deleteGroupById.setInt(1,idGroup);
-			this.deleteGroupById.executeQuery();
+			this.deleteGroupById.executeUpdate();
 		}catch (Exception e){
 			throw new DaoException("Error query deleteGroupById", e);
 		}
@@ -196,7 +197,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			this.updateGroup.setString(1, name);
 			this.updateGroup.setString(2, description);
 			this.updateGroup.setInt(3, id);
-			this.insertGroup.executeQuery();
+			this.insertGroup.executeUpdate();
 		}catch (Exception e){
 			throw new DaoException("Error query updateGroup", e);
 		}
@@ -369,7 +370,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 		try{
 			this.removeUserFromGroup.setInt(1,idUser);
 			this.removeUserFromGroup.setInt(2,idGroup);
-			this.removeUserFromGroup.executeQuery();
+			this.removeUserFromGroup.executeUpdate();
 		}catch (Exception e){
 			throw new DaoException("Error query removeUserFromGroup", e);
 		}
@@ -386,7 +387,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 		try{
 			this.addUserToGroup.setInt(1,idUser);
 			this.addUserToGroup.setInt(2,idGroup);
-			this.addUserToGroup.executeQuery();
+			this.addUserToGroup.executeUpdate();
 		}catch (Exception e){
 			throw new DaoException("Error query addUserToGroup", e);
 		}
@@ -403,7 +404,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 		try{
 			this.removeServiceFromGroup.setInt(1,idGroup);
 			this.removeServiceFromGroup.setInt(2,idService);
-			this.removeServiceFromGroup.executeQuery();
+			this.removeServiceFromGroup.executeUpdate();
 		}catch (Exception e){
 			throw new DaoException("Error query removeServiceFromGroup", e);
 		}
@@ -420,7 +421,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 		try{
 			this.addServiceToGroup.setInt(1,idGroup);
 			this.addServiceToGroup.setInt(2,idService);
-			this.addServiceToGroup.executeQuery();
+			this.addServiceToGroup.executeUpdate();
 		}catch (Exception e){
 			throw new DaoException("Error query addServiceToGroup", e);
 		}

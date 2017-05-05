@@ -58,11 +58,11 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
 
             //query di inserimento di una nuova tupla nella tabella game
             insertReview=connection.prepareStatement("INSERT INTO review " +
-                    "                                           VALUES id_user=?," +
+                    "                                           VALUES (id_user=?," +
                     "                                                  id_game=?,"+
                     "                                                  title=?," +
                     "                                                  body=?," +
-                    "                                                  vote=?");
+                    "                                                  vote=?)");
 
             //query di eliminazione di un gioco con id dato
             deleteReview=connection.prepareStatement("DELETE FROM review WHERE id_user=? AND id_game=?");
@@ -217,7 +217,7 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
             this.insertReview.setString(3,title);
             this.insertReview.setString(4,body);
             this.insertReview.setInt(5,vote);
-            this.insertReview.executeQuery();
+            this.insertReview.executeUpdate();
 
         } catch (SQLException e){
             throw new DaoException("Error query insertReview", e);
@@ -238,7 +238,7 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
         try{
             this.deleteReview.setInt(1,idUser);
             this.deleteReview.setInt(1,idGame);
-            this.deleteReview.executeQuery();
+            this.deleteReview.executeUpdate();
         }catch (SQLException e){
             throw new DaoException("Error query deleteReview", e);
 
@@ -263,7 +263,7 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
             this.updateReview.setInt(3,vote);
             this.updateReview.setInt(4,idUser);
             this.updateReview.setInt(5,idGame);
-            this.updateReview.executeQuery();
+            this.updateReview.executeUpdate();
         }catch (SQLException e){
             throw new DaoException("Error query updateReview", e);
 
