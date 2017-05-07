@@ -168,6 +168,11 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 
 	}
 
+	@Override
+	public User getUser() {
+		return new User(this);
+	}
+
 	/**
 	 * per estrarre un utente dal database
 	 * @throws gamingplatform.dao.exception.DaoException

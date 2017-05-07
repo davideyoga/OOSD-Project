@@ -112,7 +112,7 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
     public List<Service> getServices() throws DaoException{
         List<Service> lista=new ArrayList<>();
         try{
-            ResultSet rs=this.selectServices.executeQuery();
+            ResultSet rs = this.selectServices.executeQuery();
 
             while(rs.next())
             {

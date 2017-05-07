@@ -17,7 +17,9 @@ public interface UserDao extends DaoData{
 	public void updateUser(String username,String name, String surname,String email, String password,int exp, String avatar) throws DaoException;
 
 	public void updateUser( User user ) throws DaoException;
-	
+
+	public User getUser();
+
 	public User getUser( int idUser) throws DaoException;
 	
 	public void destroy() throws DaoException;

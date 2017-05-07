@@ -9,12 +9,18 @@ import gamingplatform.model.Service;
 import java.util.List;
 
 public interface GroupsDao extends DaoData{
+
+	public Group getGroup();
 	
 	public Group getGroup( int idGroup) throws DaoException;
+
+	public void insertGroup( Group group ) throws DaoException;
 	
 	public void insertGroup(String name, String description) throws DaoException;
 
 	public void deleteGroupById( int idGroup) throws DaoException;
+
+	public void updateGroup( Group group ) throws DaoException;
 
 	public void updateGroup(int id, String name, String description) throws DaoException;
 

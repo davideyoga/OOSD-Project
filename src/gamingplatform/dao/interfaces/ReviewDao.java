@@ -8,17 +8,23 @@ import java.util.List;
 
 public interface ReviewDao extends DaoData{
 
+    public Review getReview();
+
     public Review getReview( int idUser, int idGame) throws DaoException;
 
     public List<Review> getReviews() throws DaoException;
 
-    public List<Review> getReviewsByUser() throws DaoException;
+    public List<Review> getReviewsByUser( int UserKey) throws DaoException;
 
-    public List<Review> getReviewsByGame() throws DaoException;
+    public List<Review> getReviewsByGame( int GameKey) throws DaoException;
+
+    public void insertReview(Review review);
 
     public void insertReview(int idUser, int idGame, String title, String body,int vote) throws DaoException;
 
     public void deleteReview(int idUser, int idGame) throws DaoException;
+
+    public void updateReview(Review review);
 
     public void updateReview(int idUser, int idGame, String title, String body, int vote) throws DaoException;
 
