@@ -41,21 +41,21 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
         try{
             super.init();//inizializzazione connessione
 
-            //query che mi restituisce il gioco con id dato
+            //query che mi restituisce un servizio dato l'id
             selectServiceById=connection.prepareStatement("SELECT * FROM service WHERE id=?");
 
-            //query che mi restituisce lista di giochi
+            //query che mi restituisce lista di servizi
             selectServices=connection.prepareStatement("SELECT * FROM service");
 
-            //query di inserimento di una nuova tupla nella tabella game
+            //query di inserimento di una nuova tupla nella tabella service
             insertService=connection.prepareStatement("INSERT INTO service " +
                     "                                              VALUES (name=?," +
                     "                                                     description=?)");
 
-            //query di eliminazione di un gioco con id dato
+            //query di eliminazione di un servizio
             deleteServiceById=connection.prepareStatement("DELETE FROM service WHERE id=?");
 
-            //query di update di un dato gioco
+            //query di update di un dato servizio
             updateService=connection.prepareStatement("UPDATE service" +
                     "                                       SET name=?," + //L'ID NON LO PUOI MODIFICARE
                     "                                           description=?" +

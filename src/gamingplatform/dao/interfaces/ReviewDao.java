@@ -12,9 +12,9 @@ public interface ReviewDao extends DaoData{
 
     public List<Review> getReviews() throws DaoException;
 
-    public List<Review> getReviewsByUser() throws DaoException;
+    public List<Review> getReviewsByUser(int idUser) throws DaoException;
 
-    public List<Review> getReviewsByGame() throws DaoException;
+    public List<Review> getReviewsByGame(int idGame) throws DaoException;
 
     public void insertReview(int idUser, int idGame, String title, String body,int vote) throws DaoException;
 

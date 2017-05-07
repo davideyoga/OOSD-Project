@@ -35,7 +35,7 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
 
 
     /**
-     * Metodo incui viene inizializzata la connessione e vengono preparate le query
+     * Metodo in cui viene inizializzata la connessione e vengono preparate le query
      * di insert, selct,delete e update
      * @throws DaoException eccezione che viene lanciata in caso di fallimento di
      * inizializzazione query
@@ -44,19 +44,19 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
         try{
             super.init();//inizializzazione connessione
 
-            //query che mi restituisce il gioco con id dato
+            //query che mi restituisce la review scritta da un user su un certo gioco
             selectReview=connection.prepareStatement("SELECT * FROM review WHERE id_user=? AND id_games=?");
 
-            //query che mi restituisce lista di giochi
+            //query che mi restituisce la lista delle review di tuuti i giochi
             selectReviews=connection.prepareStatement("SELECT * FROM review");
 
-            //query che mi restituisce lista di giochi
+            //query che mi restituisce la lista di reviews scritte da un dato utente
             selectReviewsByUser=connection.prepareStatement("SELECT * FROM review WHERE id_user=?");
 
-            //query che mi restituisce lista di giochi
+            //query che mi restituisce la lista di reviews scritte su un dato gioco
             selectReviewsByGame=connection.prepareStatement("SELECT * FROM review WHERE id_game=?");
 
-            //query di inserimento di una nuova tupla nella tabella game
+            //query di inserimento di una nuova tupla nella tabella review
             insertReview=connection.prepareStatement("INSERT INTO review " +
                     "                                           VALUES (id_user=?," +
                     "                                                  id_game=?,"+
@@ -64,10 +64,10 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
                     "                                                  body=?," +
                     "                                                  vote=?)");
 
-            //query di eliminazione di un gioco con id dato
+            //query di eliminazione di una review
             deleteReview=connection.prepareStatement("DELETE FROM review WHERE id_user=? AND id_game=?");
 
-            //query di update di un dato gioco
+            //query di update di una review
             updateReview=connection.prepareStatement(" UPDATE game" +
                     "                                      SET title=?" + //L'ID NON LO PUOI MODIFICARE
                     "                                          body=?" +
@@ -144,12 +144,15 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
 
     /**
      * Mestodo che restituisce la lista di reviews scritte da un dato user
+     * @param idUser è l'id dell'user autore delle recensioni
      * @return lista di reviews
      * @throws DaoException lancia eccezione in caso di errore
      */
-    public List<Review> getReviewsByUser() throws DaoException{
+    public List<Review> getReviewsByUser(int idUser) throws DaoException{
         List<Review> lista=new ArrayList<Review>();
         try{
+
+            selectReviewsByGame.setInt(1,idUser);
             ResultSet rs=this.selectReviewsByUser.executeQuery();
 
             while(rs.next())
@@ -174,12 +177,14 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
 
     /**
      * Mestodo che restituisce la lista di reviews relative a un dato gioco
+     * @param idGame è l'id del gioco recensito
      * @return lista di reviews
      * @throws DaoException lancia eccezione in caso di errore
      */
-    public List<Review> getReviewsByGame() throws DaoException{
+    public List<Review> getReviewsByGame(int idGame) throws DaoException{
         List<Review> lista=new ArrayList<Review>();
         try{
+            selectReviewsByGame.setInt(1,idGame);
             ResultSet rs=this.selectReviewsByGame.executeQuery();
 
             while(rs.next())
