@@ -29,7 +29,10 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
                               updateGame;
 
 
-    //Costruttore
+    /**
+     * Costruttore per inizializzare la connessione
+     * @param datasource e' la risorsa di connessione messa a disposizione del connection pooling
+     */
     public GameDaoImpl(DataSource datasource){
         super (datasource);
     }
@@ -83,7 +86,10 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
     }
 
 
-
+    @Override
+    public Game getGame() {
+        return new Game(this);
+    }
 
     /**
      * Metodo che seleziona un gioco dato l'id
@@ -109,9 +115,6 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
         return g;
     }
 
-
-
-
     /**
      * Metodo che seleziona un gioco dato il nome
      * @param nameGame è il nome del gioco che si vuole visualizzare
@@ -135,8 +138,6 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
         }
         return g;
     }
-
-
 
 
     /**
@@ -167,7 +168,26 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
         return lista;
     }
 
+    /**
+     * Metodo di inserimento di un nuovo elemento nella tabella game del DataBase
+     * @param game e' il gioco da inserire nel database
+     * @throws DaoException lancia eccezione in caso di errore
+     */
+    @Override
+    public void insertGame(Game game) throws DaoException {
+        try{
+            this.insertGame.setString(1,addSlashes(game.getName()));
+            this.insertGame.setInt(2,game.getExp());
+            this.insertGame.setString(3,addSlashes(game.getImage()));
+            this.insertGame.setString(4,addSlashes(game.getDescription()));
 
+            this.insertGame.executeUpdate();
+
+        } catch (SQLException e){
+            throw new DaoException("Error query insertGame", e);
+
+        }
+    }
 
 
     /**
@@ -229,7 +249,25 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
         }
     }
 
+    /**
+     * Metodo che permette la modifica di un daro gioco
+     * @param game e' il gioco a cui va fatto l'update
+     * @throws DaoException lancia eccezione in caso di errore
+     */
+    @Override
+    public void updateGame(Game game) throws DaoException {
+        try{
+            this.updateGame.setString(1,addSlashes(game.getName()));
+            this.updateGame.setInt(2,game.getExp());
+            this.updateGame.setString(3,addSlashes(game.getImage()));
+            this.updateGame.setString(4,addSlashes(game.getDescription()));
+            this.updateGame.setInt(5,game.getId());
+            this.updateGame.executeUpdate();
+        }catch (SQLException e){
+            throw new DaoException("Error query updateGame", e);
 
+        }
+    }
 
 
     /**
@@ -255,6 +293,10 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
         }
     }
 
+    /**
+     * Metodo che chiude la connessione e le query preparate
+     * @throws DaoException lancia eccezione in caso di errore
+     */
     public void destroy() throws DaoException{
 
         //chiudo le quary precompilate

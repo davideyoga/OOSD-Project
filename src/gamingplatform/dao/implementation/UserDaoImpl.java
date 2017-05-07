@@ -27,7 +27,10 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 	 						  deleteUserById,
 							  updateUserById;
 
-	
+	/**
+	 * Costruttore per inizializzare la connessione
+	 * @param datasource e' la risorsa di connessione messa a disposizione del connection pooling
+	 */
 	public UserDaoImpl(DataSource datasource) {
 		super(datasource);
 	}
@@ -250,6 +253,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			this.selectUserById.close();
 			this.deleteUserById.close();
 			this.updateUserById.close();
+			this.getUserByUsernamePassword.close();
 			
 		} catch (SQLException e) {
 			throw new DaoException("Error destroy dao user", e);

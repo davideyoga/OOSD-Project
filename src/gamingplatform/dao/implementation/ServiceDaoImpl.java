@@ -29,7 +29,10 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
                               selectServicesByUserId;
 
 
-    //Costruttore
+    /**
+     * Costruttore per inizializzare la connessione
+     * @param datasource e' la risorsa di connessione messa a disposizione del connection pooling
+     */
     public ServiceDaoImpl(DataSource datasource){
         super (datasource);
     }
@@ -71,25 +74,36 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
                     "                                                LEFT JOIN groups ON groups.id=usergroups.id_groups" +
                     "                                                LEFT JOIN groupsservice ON groupsservice.id_groups=groups.id" +
                     "                                                LEFT JOIN service ON groupsservice.id_service=service.id" +
-                    "                                                WHERE USER.id=? ORDER BY service.name");
+                    "                                                WHERE user.id=? ORDER BY service.name");
 
         }catch (SQLException e){
             throw new DaoException("Error initializing group dao", e);
         }
     }
 
-
+    /**
+     * Metodo che restituisce un servizio vuoto
+     * @return un servizio vuoto
+     */
+    @Override
+    public Service getService() {
+        return new Service(this);
+    }
 
     /**
      * Metodo che seleziona un servizio dato l'id
      * @param idService è l'id del servizio che si vuole visualizzare
-     * @return il gioco desiderato
+     * @return il servizio desiderato
      */
     public Service getServiceById(int idService) throws DaoException{
-       Service s = new Service(this);
+
+        Service s = new Service(this);
+
         try{
             this.selectServiceById.setInt(1,idService);
-            ResultSet rs=this.selectServiceById.executeQuery();
+
+            ResultSet rs = this.selectServiceById.executeQuery();
+
             while(rs.next()){
                 s.setId(rs.getInt("id"));
                 s.setName(stripSlashes(rs.getString("name")));
@@ -105,12 +119,12 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
 
 
     /**
-     * Mestodo che restituisce una lista di servizi
+     * Metodo che restituisce una lista di servizi
      * @return lista di servizi
      * @throws DaoException lancia eccezione in caso di errore
      */
     public List<Service> getServices() throws DaoException{
-        List<Service> lista=new ArrayList<>();
+        List<Service> lista = new ArrayList<>();
         try{
             ResultSet rs = this.selectServices.executeQuery();
 
@@ -166,6 +180,26 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
         }
     }
 
+    /**
+     * Metodo che permette l'update di un servizio dalla tabella service dato il servizio
+     * @param service è il servizio su cui effettuare l'update
+     * @throws DaoException lancia eccezione in caso di errore
+     */
+    @Override
+    public void updateSerivce(Service service) throws DaoException {
+
+
+        try{
+            this.updateService.setString(1,addSlashes(service.getName()));
+            this.updateService.setString(2,addSlashes(service.getDescription()));
+
+            this.updateService.executeUpdate();
+
+        }catch (SQLException e){
+            throw new DaoException("Error query updateService", e);
+        }
+    }
+
 
     /**
      * Metodo che permette la modifica di un servizio in service
@@ -186,7 +220,11 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
     }
 
 
-
+    /**
+     * Metodo che restituisce la lista di servizi
+     * @param idUser è l'identificativo dell'utente di cui si vogliono conoscere i serivizi a cui a accesso
+     * @throws DaoException lancia eccezione in caso di errore
+     */
     public List<Service> getServicesByUserId(int idUser) throws DaoException{
 
         List<Service> lista=new ArrayList<>();
@@ -211,7 +249,30 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
     }
 
 
+    /**
+     * Metodo che permette l'inserimento nel database di un servizio passato al metodo
+     * @param service e' il servizio da inserire
+     * @throws DaoException lancia eccezione in caso di errore
+     */
+    @Override
+    public void insertService(Service service) throws DaoException {
 
+        try{
+            this.insertService.setString(1,addSlashes(service.getName()));
+            this.insertService.setString(2,addSlashes(service.getDescription()));
+            this.insertService.executeUpdate();
+
+        } catch (SQLException e){
+            throw new DaoException("Error query insertService", e);
+
+        }
+
+    }
+
+    /**
+     * Metodo che chiude la connessione e le query preparate
+     * @throws DaoException lancia eccezione in caso di errore
+     */
     public void destroy() throws DaoException{
 
         //chiudo le quary precompilate
@@ -221,6 +282,7 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
             this.insertService.close();
             this.deleteServiceById.close();
             this.updateService.close();
+            this.selectServicesByUserId.close();
 
         } catch (SQLException e) {
             throw new DaoException("Error destroy ServiceDao", e);

@@ -34,14 +34,23 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 							  addUserToGroup,
 							  removeServiceFromGroup,
 							  addServiceToGroup;
-	
-	
-	//costruttore
+
+
+	/**
+	 * Costruttore per inizializzare la connessione
+	 * @param datasource e' la risorsa di connessione messa a disposizione del connection pooling
+	 */
 	public GroupsDaoImpl(DataSource datasource) {
 
 		super(datasource);
 	}
-	
+
+	/**
+	 * Metodo in cui viene inizializzata la connessione e vengono preparate le query
+	 * di insert, select,delete e update
+	 * @throws DaoException eccezione che viene lanciata in caso di fallimento di
+	 * inizializzazione query
+	 */
 	@Override
 	public void init() throws DaoException{
 		try {
@@ -127,6 +136,13 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 		}
 	}
 
+	/**
+	 * Metodo che restituisce un gruppo vuoto
+	 */
+	@Override
+	public Group getGroup() {
+		return new Group(this);
+	}
 
 	/**
 	 * Metodo che restituisce un gruppo dato il suo id
@@ -152,6 +168,22 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 		}
 		
 		return g;
+	}
+
+	/**
+	 * Metodo che permette l'inserimento di un gruppo nel DB
+	 * @param group e' il gruppo che viene inserito nel database
+	 * @throws DaoException lancia eccezione in caso di errore
+	 */
+	@Override
+	public void insertGroup(Group group) throws DaoException {
+		try{
+			this.insertGroup.setString(1, addSlashes(group.getName()));
+			this.insertGroup.setString(2,addSlashes(group.getDescription()));
+			this.insertGroup.executeUpdate();
+		}catch (Exception e){
+			throw new DaoException("Error query insertGroup", e);
+		}
 	}
 
 
@@ -184,6 +216,25 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			this.deleteGroupById.executeUpdate();
 		}catch (Exception e){
 			throw new DaoException("Error query deleteGroupById", e);
+		}
+	}
+
+	/**
+	 * Metodo che consente la modifica di un gruppo esistente nel DB
+	 * @param group e' il gruppo di cui viene fatto l'update
+	 * @throws DaoException lancia eccezione in caso di errore
+	 */
+	@Override
+	public void updateGroup(Group group) throws DaoException {
+		try{
+			this.updateGroup.setString(1, addSlashes(group.getName()));
+			this.updateGroup.setString(2, addSlashes(group.getDescription()));
+			this.updateGroup.setInt(3, group.getId());
+
+			this.insertGroup.executeUpdate();
+
+		}catch (Exception e){
+			throw new DaoException("Error query updateGroup", e);
 		}
 	}
 
@@ -434,7 +485,8 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 
 
 	/**
-	 *
+	 * Metodo che chiude la connessione e le query preparate
+	 * @throws DaoException lancia eccezione in caso di errore
 	 */
 	public void destroy() throws DaoException{
 		//chiudo le quary precompilate

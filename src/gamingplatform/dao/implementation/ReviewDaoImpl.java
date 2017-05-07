@@ -30,7 +30,10 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
                               updateReview;
 
 
-    //Costruttore
+    /**
+     * Costruttore per inizializzare la connessione
+     * @param datasource e' la risorsa di connessione messa a disposizione del connection pooling
+     */
     public ReviewDaoImpl(DataSource datasource){
         super (datasource);
     }
@@ -39,7 +42,7 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
 
     /**
      * Metodo in cui viene inizializzata la connessione e vengono preparate le query
-     * di insert, selct,delete e update
+     * di insert, select,delete e update
      * @throws DaoException eccezione che viene lanciata in caso di fallimento di
      * inizializzazione query
      */
@@ -83,8 +86,14 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
         }
     }
 
-
-
+    /**
+     * Metodo che restituisce una review vuota
+     * @return una review vuota
+     */
+    @Override
+    public Review getReview() {
+        return new Review(this);
+    }
 
     /**
      * Metodo che seleziona una review dati id_user e id_game
@@ -208,6 +217,26 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
         return lista;
     }
 
+    /**
+     * Metodo di inserimento di un nuovo elemento nella tabella review del DataBase
+     * @param review e' la review da inserire nel database
+     * @throws DaoException lancia eccezione in caso di errore
+     */
+    @Override
+    public void insertReview(Review review) throws DaoException {
+        try{
+            this.insertReview.setInt(1,review.getIdUser());
+            this.insertReview.setInt(2,review.getIdGame());
+            this.insertReview.setString(3,addSlashes(review.getTitle()));
+            this.insertReview.setString(4,addSlashes(review.getBody()));
+            this.insertReview.setInt(5,review.getVote());
+            this.insertReview.executeUpdate();
+
+        } catch (SQLException e){
+            throw new DaoException("Error query insertReview", e);
+        }
+    }
+
 
     /**
      * Metodo di inserimento di un nuovo elemento nella tabella review del DataBase
@@ -254,6 +283,27 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
     }
 
 
+    /**
+     * Metodo che permette la modifica di una review
+     * @param review e' la review di cui si deve effettuare l'update
+     * @throws DaoException lancia eccezione in caso di errore
+     */
+    @Override
+    public void updateReview(Review review) throws DaoException {
+
+        try{
+            this.updateReview.setString(1,addSlashes(review.getTitle()));
+            this.updateReview.setString(2,addSlashes(review.getBody()));
+            this.updateReview.setInt(3,review.getVote());
+            this.updateReview.setInt(4,review.getIdUser());
+            this.updateReview.setInt(5,review.getIdGame());
+            this.updateReview.executeUpdate();
+        }catch (SQLException e){
+            throw new DaoException("Error query updateReview", e);
+
+        }
+    }
+
 
     /**
      * Metodo che permette la modifica di una review
@@ -278,7 +328,10 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
         }
     }
 
-
+    /**
+     * Metodo che chiude la connessione e le query preparate
+     * @throws DaoException lancia eccezione in caso di errore
+     */
     public void destroy() throws DaoException{
 
         //chiudo le quary precompilate
