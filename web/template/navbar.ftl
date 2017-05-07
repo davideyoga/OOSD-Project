@@ -10,16 +10,13 @@
         <h1><a class="navbar-brand" href="index">GamingPlatform</a></h1>
     </div>
     <div class=" border-bottom">
-        <div class="full-left">
+        <div class="full-left" style="margin-left: 1.5em;">
             <section class="full-top">
                 <button id="toggle"><i class="fa fa-arrows-alt"></i></button>
             </section>
-            <!--
-            <form class=" navbar-left-right">
-                <input type="text" value="Search..." placeholder="Search...">
-                <input type="submit" value="" class="fa fa-search">
-            </form>
-            -->
+
+            <!--search was here-->
+
             <div class="clearfix"></div>
         </div>
 

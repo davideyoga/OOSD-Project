@@ -2,12 +2,31 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="keywords" content="Minimal Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template,
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design"/>
+<link rel="apple-touch-icon" sizes="57x57" href="${context}/icon/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="${context}/icon/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="${context}/icon/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="${context}/icon/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="${context}/icon/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="${context}/icon/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="${context}/icon/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="${context}/icon/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="${context}/icon/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="${context}/icon/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="${context}/icon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="${context}/icon/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="${context}/icon/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
 <script type="application/x-javascript"> addEventListener("load", function () {
     setTimeout(hideURLbar, 0);
 }, false);
 function hideURLbar() {
     window.scrollTo(0, 1);
 } </script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 <link href="${context}/css/bootstrap.min.css" rel='stylesheet' type='text/css'/>
 <!-- Custom Theme files -->
 <link href="${context}/css/style.css" rel='stylesheet' type='text/css'/>

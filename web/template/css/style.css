@@ -426,7 +426,7 @@ nav.navbar.navbar-static-top {
 	color:#B3AEAE;
 	font-size: 0.9em;	
 }
-.navbar-left-right input[type="submit"]{
+.navbar-left-right input[type="submit"], input[type="button"]{
 	background: url(../images/search.png) 0px 2px no-repeat;
 	width:16px;
 	height:16px;
@@ -971,7 +971,7 @@ i.fa.fa-twitter {
     font-size: 1.1em;
     text-align: center;
     padding: 1em;
-	font-family: 'Muli-Regular';
+    font-family: 'Muli-Regular';
 }
 .post-bottom-1 p label,.post-bottom-2 p label{
 	color: #000;
@@ -2491,6 +2491,12 @@ form.navbar-form.navbar-right {
 h1 a.navbar-brand {
     width: 152px;
 }
+
+.my_full-left{
+    width:100%;
+    float:left;
+}
+
 .full-left {
     width: 35%;
 }
@@ -2599,9 +2605,7 @@ div#home {
  .but_list h4, .but_list h5, .but_list h6 {
     margin-bottom: 1em;
 }
-.pagination {
-    margin: 10px 0;
-}
+
 /*--404--*/
 .four a {
     width: 25%;
@@ -2650,7 +2654,7 @@ div#home {
 }
 @media(max-width:414px){
 .full-left {
-    width: 45%;
+    width: 25%;
 }
 .drop-men {
     margin-right: 0;

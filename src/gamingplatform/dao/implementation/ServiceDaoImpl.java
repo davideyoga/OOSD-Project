@@ -55,15 +55,16 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
 
             //query di inserimento di una nuova tupla nella tabella service
             insertService=connection.prepareStatement("INSERT INTO service " +
-                    "                                              VALUES (name=?," +
-                    "                                                     description=?)");
+                    "                                              VALUES (NULL," +
+                    "                                                      name=?," +
+                    "                                                      description=?)");
 
             //query di eliminazione di un servizio
             deleteServiceById=connection.prepareStatement("DELETE FROM service WHERE id=?");
 
             //query di update di un dato servizio
             updateService=connection.prepareStatement("UPDATE service" +
-                    "                                       SET name=?," + //L'ID NON LO PUOI MODIFICARE
+                    "                                       SET name=?," +
                     "                                           description=?" +
                     "                                       WHERE id=?");
 
