@@ -14,6 +14,9 @@ import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.interfaces.GameDao;
 import gamingplatform.model.Game;
 
+import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
+import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
+
 public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
 
     //Variabili di appoggio per preparare le query
@@ -94,10 +97,10 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
             ResultSet rs=this.selectGameById.executeQuery();
             while(rs.next()){
                 g.setId(rs.getInt("id"));
-                g.setName(rs.getString("name"));
+                g.setName(stripSlashes(rs.getString("name")));
                 g.setExp(rs.getInt("exp"));
-                g.setImage(rs.getString("image"));
-                g.setDescription(rs.getString("description"));
+                g.setImage(stripSlashes(rs.getString("image")));
+                g.setDescription(stripSlashes(rs.getString("description")));
             }
         }catch (SQLException e){
             throw new DaoException("Error game getGameById", e);
@@ -121,10 +124,10 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
             ResultSet rs=this.selectGameByName.executeQuery();
             while(rs.next()){
                 g.setId(rs.getInt("id"));
-                g.setName(rs.getString("name"));
+                g.setName(stripSlashes(rs.getString("name")));
                 g.setExp(rs.getInt("exp"));
-                g.setImage(rs.getString("image"));
-                g.setDescription(rs.getString("description"));
+                g.setImage(stripSlashes(rs.getString("image")));
+                g.setDescription(stripSlashes(rs.getString("description")));
             }
         }catch (SQLException e){
             throw new DaoException("Error query getGameByName", e);
@@ -150,10 +153,10 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
             {
                 Game g=new Game(this);
                 g.setId(rs.getInt("id"));
-                g.setName(rs.getString("name"));
+                g.setName(stripSlashes(rs.getString("name")));
                 g.setExp(rs.getInt("exp"));
-                g.setImage(rs.getString("image"));
-                g.setDescription(rs.getString("description"));
+                g.setImage(stripSlashes(rs.getString("image")));
+                g.setDescription(stripSlashes(rs.getString("description")));
                 lista.add(g);
             }
         }catch (SQLException e){
@@ -177,10 +180,11 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
      */
     public void insertGame(String name, int exp, String image, String description) throws DaoException{
         try{
-            this.insertGame.setString(1,name);
+            this.insertGame.setString(1,addSlashes(name));
             this.insertGame.setInt(2,exp);
-            this.insertGame.setString(3,image);
-            this.insertGame.setString(4,description);
+            this.insertGame.setString(3,addSlashes(image));
+            this.insertGame.setString(4,addSlashes(description));
+
             this.insertGame.executeUpdate();
 
         } catch (SQLException e){
@@ -217,7 +221,7 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
      */
     public void deleteGameByName(String nameGame) throws DaoException{
         try{
-            this.deleteGameByName.setString(1,nameGame);
+            this.deleteGameByName.setString(1,addSlashes(nameGame));
             this.deleteGameByName.executeUpdate();
         }catch (SQLException e){
             throw new DaoException("Error query deleteGameByName", e);
@@ -239,10 +243,10 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
      */
     public void updateGame(int id,String name, int exp, String image, String description) throws DaoException{
         try{
-            this.updateGame.setString(1,name);
+            this.updateGame.setString(1,addSlashes(name));
             this.updateGame.setInt(2,exp);
-            this.updateGame.setString(3,image);
-            this.updateGame.setString(4,description);
+            this.updateGame.setString(3,addSlashes(image));
+            this.updateGame.setString(4,addSlashes(description));
             this.updateGame.setInt(5,id);
             this.updateGame.executeUpdate();
         }catch (SQLException e){
