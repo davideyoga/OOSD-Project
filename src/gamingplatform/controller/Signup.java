@@ -16,6 +16,7 @@ import gamingplatform.controller.utils.FileManager;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.UserDaoImpl;
 import gamingplatform.dao.interfaces.UserDao;
+import gamingplatform.model.User;
 
 import static gamingplatform.controller.utils.FileManager.fileUpload;
 import static gamingplatform.controller.utils.SecurityLayer.*;
@@ -82,7 +83,17 @@ public class Signup extends HttpServlet {
         try{
             userDao.init();
             //provo ad inserire l'utente
-            userDao.insertUser(username, name, surname, email, password, 0, avatarName);
+
+            User user=userDao.getUser();
+            user.setUsername(username);
+            user.setName(name);
+            user.setSurname(surname);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setExp(0);
+            user.setAvatar(avatarName);
+
+            userDao.insertUser(user);
             userDao.destroy();
         }catch(DaoException e){
             //in caso di errori nell'inserimento dell'utente

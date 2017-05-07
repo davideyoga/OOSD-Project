@@ -52,6 +52,7 @@ public class Index extends HttpServlet {
             game.destroy();
 
             data.put("games",games);
+
         }catch(DaoException e){
             Logger.getAnonymousLogger().log(Level.WARNING, "[Index] DaoException: nessun gioco nel db, oppure errore nella query "+e.getMessage());
         }
