@@ -80,7 +80,29 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 
 		
 	}
-	
+
+	@Override
+	public void insertUser(User user) throws DaoException {
+
+		try {
+
+			this.insertUser.setString(1,addSlashes(user.getUsername()));
+			this.insertUser.setString(2,addSlashes(user.getName()));
+			this.insertUser.setString(3,addSlashes(user.getSurname()));
+			this.insertUser.setString(4,addSlashes(user.getEmail()));
+			this.insertUser.setString(5,user.getPassword());
+			this.insertUser.setInt(6,user.getExp());
+			this.insertUser.setString( 7,addSlashes(user.getAvatar()));
+
+			this.insertUser.executeUpdate();
+
+
+		} catch (SQLException e) {
+			throw new DaoException("Error sql insertUser", e);
+		}
+
+	}
+
 	/**
 	 * per eliminare un utente dal database
 	 * @throws gamingplatform.dao.exception.DaoException
@@ -123,7 +145,29 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 		}
 		
 	}
-	
+
+	@Override
+	public void updateUser(User user) throws DaoException {
+
+		try{
+
+			this.updateUserById.setString(1, addSlashes(user.getUsername()));
+			this.updateUserById.setString(2, addSlashes(user.getName()));
+			this.updateUserById.setString(3, addSlashes(user.getSurname()));
+			this.updateUserById.setString(4, addSlashes(user.getEmail()));
+			this.updateUserById.setString(5, user.getPassword());
+			this.updateUserById.setInt(6, user.getExp());
+			this.updateUserById.setString(7, addSlashes(user.getAvatar()));
+
+			this.updateUserById.executeUpdate();
+
+		}catch (SQLException e) {
+
+			throw new DaoException("Error dao update user", e);
+		}
+
+	}
+
 	/**
 	 * per estrarre un utente dal database
 	 * @throws gamingplatform.dao.exception.DaoException

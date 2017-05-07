@@ -14,6 +14,9 @@ import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.interfaces.ServiceDao;
 import gamingplatform.model.Service;
 
+import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
+import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
+
 
 public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
 
@@ -83,14 +86,14 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
      * @return il gioco desiderato
      */
     public Service getServiceById(int idService) throws DaoException{
-       Service s=new Service(this);
+       Service s = new Service(this);
         try{
             this.selectServiceById.setInt(1,idService);
             ResultSet rs=this.selectServiceById.executeQuery();
             while(rs.next()){
                 s.setId(rs.getInt("id"));
-                s.setName(rs.getString("name"));
-                s.setDescription(rs.getString("description"));
+                s.setName(stripSlashes(rs.getString("name")));
+                s.setDescription(stripSlashes(rs.getString("description")));
             }
         }catch (SQLException e){
             throw new DaoException("Error game getServiceById", e);
@@ -115,8 +118,8 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
             {
                 Service s=new Service(this);
                 s.setId(rs.getInt("id"));
-                s.setName(rs.getString("name"));
-                s.setDescription(rs.getString("description"));
+                s.setName(stripSlashes(rs.getString("name")));
+                s.setDescription(stripSlashes(rs.getString("description")));
                 lista.add(s);
             }
         }catch (SQLException e){
@@ -136,8 +139,8 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
      */
     public void insertService(String name, String description) throws DaoException{
         try{
-            this.insertService.setString(1,name);
-            this.insertService.setString(2,description);
+            this.insertService.setString(1,addSlashes(name));
+            this.insertService.setString(2,addSlashes(description));
             this.insertService.executeUpdate();
 
         } catch (SQLException e){
@@ -173,9 +176,10 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
      */
     public void updateService(int id,String name, String description) throws DaoException{
         try{
-            this.updateService.setString(1,name);
-            this.updateService.setString(2,description);
+            this.updateService.setString(1,addSlashes(name));
+            this.updateService.setString(2,addSlashes(description));
             this.updateService.executeUpdate();
+
         }catch (SQLException e){
             throw new DaoException("Error query updateService", e);
         }
@@ -191,10 +195,11 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
             ResultSet rs=this.selectServicesByUserId.executeQuery();
 
             while (rs.next()){
-                Service s=new Service(this);
+                Service s = new Service(this);
+
                 s.setId(rs.getInt("id"));
-                s.setName(rs.getString("name"));
-                s.setDescription(rs.getString("description"));
+                s.setName(stripSlashes(rs.getString("name")));
+                s.setDescription(stripSlashes(rs.getString("description")));
                  lista.add(s);
             }
 

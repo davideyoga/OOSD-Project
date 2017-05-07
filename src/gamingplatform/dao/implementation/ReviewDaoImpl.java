@@ -15,6 +15,9 @@ import gamingplatform.dao.interfaces.GameDao;
 import gamingplatform.dao.interfaces.ReviewDao;
 import gamingplatform.model.Review;
 
+import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
+import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
+
 public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
 
     //Variabili di appoggio per preparare le query
@@ -98,8 +101,8 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
             while(rs.next()){
                 r.setIdUser(rs.getInt("id_user"));
                 r.setIdGame(rs.getInt("id_game"));
-                r.setTitle(rs.getString("title"));
-                r.setBody(rs.getString("body"));
+                r.setTitle(stripSlashes(rs.getString("title")));
+                r.setBody(stripSlashes(rs.getString("body")));
                 r.setVote(rs.getInt("vote"));
             }
         }catch (SQLException e){
@@ -127,8 +130,8 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
                 Review r=new Review(this);
                 r.setIdUser(rs.getInt("id_user"));
                 r.setIdGame(rs.getInt("id_game"));
-                r.setTitle(rs.getString("title"));
-                r.setBody(rs.getString("body"));
+                r.setTitle(stripSlashes(rs.getString("title")));
+                r.setBody(stripSlashes(rs.getString("body")));
                 r.setVote(rs.getInt("vote"));
                 lista.add(r);
             }
@@ -157,8 +160,8 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
                 Review r=new Review(this);
                 r.setIdUser(rs.getInt("id_user"));
                 r.setIdGame(rs.getInt("id_game"));
-                r.setTitle(rs.getString("title"));
-                r.setBody(rs.getString("body"));
+                r.setTitle(stripSlashes(rs.getString("title")));
+                r.setBody(stripSlashes(rs.getString("body")));
                 r.setVote(rs.getInt("vote"));
                 lista.add(r);
             }
@@ -187,8 +190,8 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
                 Review r=new Review(this);
                 r.setIdUser(rs.getInt("id_user"));
                 r.setIdGame(rs.getInt("id_game"));
-                r.setTitle(rs.getString("title"));
-                r.setBody(rs.getString("body"));
+                r.setTitle(stripSlashes(rs.getString("title")));
+                r.setBody(stripSlashes(rs.getString("body")));
                 r.setVote(rs.getInt("vote"));
                 lista.add(r);
             }
@@ -214,8 +217,8 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
         try{
             this.insertReview.setInt(1,idUser);
             this.insertReview.setInt(2,idGame);
-            this.insertReview.setString(3,title);
-            this.insertReview.setString(4,body);
+            this.insertReview.setString(3,addSlashes(title));
+            this.insertReview.setString(4,addSlashes(body));
             this.insertReview.setInt(5,vote);
             this.insertReview.executeUpdate();
 
@@ -258,8 +261,8 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
      */
     public void updateReview(int idUser, int idGame, String title, String body, int vote) throws DaoException{
         try{
-            this.updateReview.setString(1,title);
-            this.updateReview.setString(2,body);
+            this.updateReview.setString(1,addSlashes(title));
+            this.updateReview.setString(2,addSlashes(body));
             this.updateReview.setInt(3,vote);
             this.updateReview.setInt(4,idUser);
             this.updateReview.setInt(5,idGame);
