@@ -1,21 +1,21 @@
 package gamingplatform.controller;
 
-import gamingplatform.controller.utils.SecurityLayer;
-import gamingplatform.controller.utils.SessionManager;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static gamingplatform.controller.utils.SecurityLayer.redirect;
+import static gamingplatform.controller.utils.SessionManager.destroySession;
+
 
 public class Logout extends HttpServlet {
 
 
     protected void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        SessionManager.destroySession(request);
-        SecurityLayer.redirect("index", "OK-logout", response, request);
+        destroySession(request);
+        redirect("index", "OK-logout", response, request);
     }
 
     @Override

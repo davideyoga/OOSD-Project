@@ -13,12 +13,14 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import gamingplatform.controller.utils.SessionManager;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.GameDaoImpl;
 import gamingplatform.dao.interfaces.GameDao;
 import gamingplatform.model.Game;
-import gamingplatform.view.FreemarkerHelper;
+
+import static gamingplatform.controller.utils.SessionManager.getUser;
+import static gamingplatform.controller.utils.SessionManager.popMessage;
+import static gamingplatform.view.FreemarkerHelper.process;
 
 
 public class Index extends HttpServlet {
@@ -36,24 +38,27 @@ public class Index extends HttpServlet {
         //nel dettaglio inserisco un elemento "message" dentro la Map che andrà a processare freemarker
         //prendendolo dalla sessione tramite SessionManager.pop che appunto ritorna il messaggio in sessione, se c'è
         //oppure null
-        data.put("message", SessionManager.popMessage(request));
+        data.put("message", popMessage(request));
 
         //carico l'user nella Map prelevandolo dalla sessione se verificata
-        data.put("user",SessionManager.getUser(request));
+        data.put("user", getUser(request));
 
         //carico la lista dei giochi nell amappa di freemarker per mostrarli nella home
         try{
             GameDao game = new GameDaoImpl(ds);
+
             game.init();
             List<Game> games = game.getGames();
             game.destroy();
+
             data.put("games",games);
+
         }catch(DaoException e){
             Logger.getAnonymousLogger().log(Level.WARNING, "[Index] DaoException: nessun gioco nel db, oppure errore nella query "+e.getMessage());
         }
 
         //processo template
-        FreemarkerHelper.process("index.ftl", data, response, getServletContext());
+        process("index.ftl", data, response, getServletContext());
     }
 
 }

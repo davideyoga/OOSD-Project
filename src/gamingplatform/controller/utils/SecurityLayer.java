@@ -91,4 +91,44 @@ public class SecurityLayer {
 
 
 
+    //--------- DATA SECURITY ------------
+    //
+
+    /**
+     * questa funzione aggiunge un backslash davanti a
+     * tutti i caratteri "pericolosi", usati per eseguire
+     * SQL injection attraverso i parametri delle form
+     * @param s stringa da modificare
+     * @return stringa pulita
+     */
+    public static String addSlashes(String s) {
+        return s.replaceAll("(['\"\\\\])", "\\\\$1");
+    }
+
+    /**
+     * questa funzione rimuove gli slash aggiunti da addSlashes
+     * @param s stringa da modificare
+     * @return stringa pulita
+     */
+    public static String stripSlashes(String s) {
+        return s.replaceAll("\\\\(['\"\\\\])", "$1");
+    }
+
+    /**
+     * converte la stringa in numero
+     * @param s stringa da onvertire
+     * @return intero corrispondente
+     * @throws NumberFormatException in caso di errore
+     */
+    public static int checkNumeric(String s) throws NumberFormatException {
+        //convertiamo la stringa in numero, ma assicuriamoci prima che sia valida
+        //convert the string to a number, ensuring its validity
+        if (s != null) {
+            //se la conversione fallisce, viene generata un'eccezione
+            //if the conversion fails, an exception is raised
+            return Integer.parseInt(s);
+        } else {
+            throw new NumberFormatException("String argument is null");
+        }
+    }
 }

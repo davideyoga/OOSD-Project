@@ -78,7 +78,7 @@ function hideURLbar() {
         var fade_out = function () {
             $("#message").fadeOut();
         };
-        setTimeout(fade_out, 3000);
+        setTimeout(fade_out, 2750);
 
         <#if messageTxt??>
             var messageText = '${messageTxt}';
@@ -141,8 +141,6 @@ function hideURLbar() {
                 message = '<strong>Warning!</strong><br><br>' + messageText;
                 break;
         }
-
-        setTimeout(fade_out, 6000);
 
         $('#message')
                 .html(message)

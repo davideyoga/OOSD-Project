@@ -16,6 +16,9 @@ import gamingplatform.model.Group;
 import gamingplatform.model.Service;
 import gamingplatform.model.User;
 
+import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
+import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
+
 
 public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 	
@@ -139,8 +142,8 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			ResultSet rs=this.selectGroupById.executeQuery();
 			while(rs.next()){
 				g.setId(rs.getInt("id"));
-				g.setName(rs.getString("name"));
-				g.setDescription(rs.getString("description"));
+				g.setName(stripSlashes(rs.getString("name")));
+				g.setDescription(stripSlashes(rs.getString("description")));
 			}
 
 		} catch (SQLException e) {
@@ -160,8 +163,8 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 	 */
 	public void insertGroup(String name,String description) throws DaoException{
 		try{
-			this.insertGroup.setString(1, name);
-			this.insertGroup.setString(2,description);
+			this.insertGroup.setString(1, addSlashes(name));
+			this.insertGroup.setString(2,addSlashes(description));
 			this.insertGroup.executeUpdate();
 		}catch (Exception e){
 			throw new DaoException("Error query insertGroup", e);
@@ -194,10 +197,12 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 	 */
 	public void updateGroup(int id, String name,String description) throws DaoException{
 		try{
-			this.updateGroup.setString(1, name);
-			this.updateGroup.setString(2, description);
+			this.updateGroup.setString(1, addSlashes(name));
+			this.updateGroup.setString(2, addSlashes(description));
 			this.updateGroup.setInt(3, id);
+
 			this.insertGroup.executeUpdate();
+
 		}catch (Exception e){
 			throw new DaoException("Error query updateGroup", e);
 		}
@@ -227,8 +232,8 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 				Group group = new Group(this);
 				 
 				group.setId(rs.getInt("id"));
-				group.setName(rs.getString("name"));
-				group.setDescription(rs.getString("description"));
+				group.setName(stripSlashes(rs.getString("name")));
+				group.setDescription(stripSlashes(rs.getString("description")));
 				
 				list.add(group);
 			}
@@ -265,13 +270,13 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 
 				User u=new User(this);
 				u.setId(rs.getInt("id"));
-				u.setUsername(rs.getString("username"));
-				u.setName(rs.getString("name"));
-				u.setSurname(rs.getString("surname"));
-				u.setEmail(rs.getString("email"));
+				u.setUsername(stripSlashes(rs.getString("username")));
+				u.setName(stripSlashes(rs.getString("name")));
+				u.setSurname(stripSlashes(rs.getString("surname")));
+				u.setEmail(stripSlashes(rs.getString("email")));
 				u.setPassword(rs.getString("password"));
 				u.setExp(rs.getInt("exp"));
-				u.setAvatar(rs.getString("avatar"));
+				u.setAvatar(stripSlashes(rs.getString("avatar")));
 
 				list.add(u);
 			}
@@ -308,8 +313,8 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 				Group group = new Group(this);
 
 				group.setId(rs.getInt("id"));
-				group.setName(rs.getString("name"));
-				group.setDescription(rs.getString("description"));
+				group.setName(stripSlashes(rs.getString("name")));
+				group.setDescription(stripSlashes(rs.getString("description")));
 
 				list.add(group);
 			}
@@ -346,8 +351,8 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 				Service s=new Service(this);
 
 				s.setId(rs.getInt("id"));
-				s.setName(rs.getString("name"));
-				s.setDescription(rs.getString("description"));
+				s.setName(stripSlashes(rs.getString("name")));
+				s.setDescription(stripSlashes(rs.getString("description")));
 
 				list.add(s);
 			}

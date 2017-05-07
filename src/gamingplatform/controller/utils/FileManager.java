@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
 import static java.util.Objects.isNull;
 
 public class FileManager {
@@ -29,7 +30,7 @@ public class FileManager {
      */
     public static String fileUpload(Part filePart, String directory, ServletContext svc){
 
-        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+        String fileName = addSlashes(Paths.get(filePart.getSubmittedFileName()).getFileName().toString());
 
         if(isNull(fileName) || fileName.equals("")){
             return "default.png";
