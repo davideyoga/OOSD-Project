@@ -9,14 +9,17 @@ import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
 import static java.util.Objects.isNull;
 
-public class FileManager {
+public class Utils {
 
     @Resource(name = "jdbc/gamingplatform")
     private static DataSource ds;
@@ -40,7 +43,7 @@ public class FileManager {
         if(!(fileName.substring(fileName.length()-4).equals(".jpg") ||
              fileName.substring(fileName.length()-4).equals(".png"))){
 
-            Logger.getAnonymousLogger().log(Level.WARNING,"[FileManager] fileUpload fallito, formato non corretto: "+fileName+" - formato: "+fileName.substring(fileName.length()-4));
+            Logger.getAnonymousLogger().log(Level.WARNING,"[Utils] fileUpload fallito, formato non corretto: "+fileName+" - formato: "+fileName.substring(fileName.length()-4));
             return null;
         }
 
@@ -52,12 +55,24 @@ public class FileManager {
             File targetFile = new File(svc.getRealPath("template/"+directory+"/"+fileName));
             FileUtils.copyInputStreamToFile(fileContent, targetFile);
         } catch (IOException e) {
-            Logger.getAnonymousLogger().log(Level.WARNING,"[FileManager] fileUpload IOException "+e.getMessage());
+            Logger.getAnonymousLogger().log(Level.WARNING,"[Utils] fileUpload IOException "+e.getMessage());
             return null;
         }
 
         return fileName;
     }
+
+
+    public static List<String> getClassFields(Object o) {
+        Class<?> clazz = o.getClass();
+        List<String> list= new ArrayList<>();
+
+        for(Field field : clazz.getDeclaredFields()) {
+            list.add(field.getName());
+        }
+        return list;
+    }
+
 
 
 }

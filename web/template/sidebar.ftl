@@ -3,31 +3,34 @@
         <ul class="nav" id="side-menu">
 
             <li>
-                <a href="index" class=" hvr-bounce-to-right"><i class="fa fa-home nav_icon "></i><span class="nav-label">Home page</span> </a>
+                <a href="/index" class=" hvr-bounce-to-right"><i class="fa fa-home nav_icon "></i><span class="nav-label">Home page</span> </a>
             </li>
 
         <#if user??>
             <li>
-                <a href="profile" class=" hvr-bounce-to-right"><i class="fa fa-user nav_icon "></i><span class="nav-label">Profile</span> </a>
-            </li>
-            <li>
-                <a href="logout" class=" hvr-bounce-to-right"><i class="fa fa-arrow-circle-o-left nav_icon "></i><span class="nav-label">LogOut</span> </a>
+                <a href="/profile" class=" hvr-bounce-to-right"><i class="fa fa-user nav_icon "></i><span class="nav-label">Profile</span> </a>
             </li>
 
             <#if services??>
 
-                    <#list services as service>
-                        <li>
-                            <a href="#" class=" hvr-bounce-to-right"><i class="fa fa-sliders nav_icon"></i> <span class="nav-label">${service.name?cap_first}</span><span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li><a href="${service.name}?mode=a" class=" hvr-bounce-to-right"> <i class="fa fa-plus-square-o nav_icon"></i>Add ${service.name?cap_first}</a></li>
-                                <li><a href="${service.name}?mode=r" class=" hvr-bounce-to-right"> <i class="fa fa-bar-chart nav_icon"></i>Report ${service.name?cap_first}</a></li>
-                                <li><a href="${service.name}?mode=e" class=" hvr-bounce-to-right"> <i class="fa fa-edit nav_icon"></i>Edit ${service.name?cap_first}</a></li>
-                            </ul>
-                        </li>
-                    </#list>
+                <#list services as service>
+                    <li>
+                        <a href="#" class=" hvr-bounce-to-right"><i class="fa fa-sliders nav_icon"></i> <span class="nav-label">${service.name?cap_first}</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li><a href="/add/${service.name}" class=" hvr-bounce-to-right"> <i class="fa fa-plus-square-o nav_icon"></i>&nbsp&nbsp Add</a></li>
+                            <li><a href="/report/${service.name}" class=" hvr-bounce-to-right"> <i class="fa fa-bar-chart nav_icon"></i>&nbsp&nbsp Report</a></li>
+                            <li><a href="/edit/${service.name}" class=" hvr-bounce-to-right"> <i class="fa fa-edit nav_icon"></i>&nbsp&nbsp Edit</a></li>
+                        </ul>
+                    </li>
+                </#list>
 
             </#if>
+
+            <li>
+                <a href="/logout" class=" hvr-bounce-to-right"><i class="fa fa-arrow-circle-o-left nav_icon "></i><span class="nav-label">LogOut</span> </a>
+            </li>
+
+
 
         </#if>
 

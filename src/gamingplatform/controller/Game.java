@@ -20,8 +20,10 @@ public class Game extends HttpServlet {
 
         //se l'ultimo elemento dopo "/" non è numerico oppure se l'utente non è loggato
         if(!isNumeric(getLastBitFromUrl(request.getRequestURI())) || isNull(verifySession(request))){
-            redirect("index", "KO-not-logged", response, request);
+            redirect("/index", "KO-not-logged", response, request);
         }
+
+        int gameId= Integer.parseInt(getLastBitFromUrl(request.getRequestURI()));
     }
 
     @Override

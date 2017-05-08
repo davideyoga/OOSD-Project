@@ -5,7 +5,7 @@
         <form method="POST" action="login">
             <div class="col-md-6">
                 <div class="login-mail">
-                    <input type="text" placeholder="Username" name="username" required="">
+                    <input type="text" placeholder="Username" name="username" required="" autofocus>
                     <i class="fa fa-envelope"></i>
                 </div>
                 <div class="login-mail">

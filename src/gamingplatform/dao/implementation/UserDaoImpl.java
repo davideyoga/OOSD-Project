@@ -120,7 +120,14 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			while(rs.next())
 			{
 				User u=new User(this);
-				//TODO
+				u.setId(rs.getInt("id"));
+				u.setUsername(stripSlashes(rs.getString("username")));
+				u.setName(stripSlashes(rs.getString("name")));
+				u.setSurname(stripSlashes(rs.getString("surname")));
+				u.setEmail(stripSlashes(rs.getString("email")));
+				u.setPassword(rs.getString("password"));
+				u.setExp(rs.getInt("exp"));
+				u.setAvatar(stripSlashes(rs.getString("avatar")));
 				lista.add(u);
 			}
 		}catch (SQLException e){

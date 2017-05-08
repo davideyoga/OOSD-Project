@@ -141,6 +141,10 @@ public class SecurityLayer {
      * @return stringa pulita
      */
     public static String addSlashes(String s) {
+
+        if(isNull(s)){
+            return "";
+        }
         return s.replaceAll("(['\"\\\\])", "\\\\$1");
     }
 
@@ -150,6 +154,10 @@ public class SecurityLayer {
      * @return stringa pulita
      */
     public static String stripSlashes(String s) {
+        if(isNull(s)){
+            return "";
+        }
+
         return s.replaceAll("\\\\(['\"\\\\])", "$1");
     }
 

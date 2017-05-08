@@ -25,13 +25,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 function hideURLbar() {
     window.scrollTo(0, 1);
 } </script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+
+<script src="${context}/js/jquery.min.js"></script>
+<!--list.js-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+<!--datatables-->
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+<!--fine datatable-->
+
 <link href="${context}/css/bootstrap.min.css" rel='stylesheet' type='text/css'/>
 <!-- Custom Theme files -->
 <link href="${context}/css/style.css" rel='stylesheet' type='text/css'/>
 <link href="${context}/css/font-awesome.css" rel="stylesheet">
-<script src="${context}/js/jquery.min.js"></script>
 <!-- Mainly scripts -->
 <script src="${context}/js/jquery.metisMenu.js"></script>
 <script src="${context}/js/jquery.slimscroll.min.js"></script>
@@ -63,6 +69,7 @@ function hideURLbar() {
 <script type="text/javascript">
 
     $(document).ready(function () {
+
 
         $('#demo-pie-1').pieChart({
             barColor: '#3bb2d0',
@@ -152,7 +159,7 @@ function hideURLbar() {
                 break;
             case "KO-unauthorized":
                 $('#message').addClass("div_message_top_warning");
-                message = '<strong>Warning!</strong><br><br>You have not the needed authorization to access the resource.';
+                message = '<strong>Warning!</strong><br><br>You have not the authorization to access the resource.';
                 break;
             case "error":
             case "KO":

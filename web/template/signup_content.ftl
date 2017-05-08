@@ -5,7 +5,7 @@
         <form method="POST" enctype="multipart/form-data">
         <div class="col-md-6">
             <div class="login-mail">
-                <input type="text" placeholder="Name" name="name" required="">
+                <input type="text" placeholder="Name" name="name" required="" autofocus>
                 <i class="fa fa-address-card-o"></i>
             </div>
             <div class="login-mail">

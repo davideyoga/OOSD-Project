@@ -18,6 +18,7 @@ import gamingplatform.dao.implementation.GameDaoImpl;
 import gamingplatform.dao.interfaces.GameDao;
 import gamingplatform.model.Game;
 
+import static gamingplatform.controller.utils.SessionManager.getServices;
 import static gamingplatform.controller.utils.SessionManager.getUser;
 import static gamingplatform.controller.utils.SessionManager.popMessage;
 import static gamingplatform.view.FreemarkerHelper.process;
@@ -42,6 +43,9 @@ public class Index extends HttpServlet {
 
         //carico l'user nella Map prelevandolo dalla sessione se verificata
         data.put("user", getUser(request));
+
+        //carico i servizi
+        data.put("services", getServices(request));
 
         //carico la lista dei giochi nell amappa di freemarker per mostrarli nella home
         try{

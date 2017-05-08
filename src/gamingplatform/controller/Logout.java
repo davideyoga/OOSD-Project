@@ -15,7 +15,7 @@ public class Logout extends HttpServlet {
 
     protected void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         destroySession(request);
-        redirect("index", "OK-logout", response, request);
+        redirect("/index", "OK-logout", response, request);
     }
 
     @Override

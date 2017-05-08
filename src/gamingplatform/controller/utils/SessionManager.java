@@ -1,6 +1,7 @@
 package gamingplatform.controller.utils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
@@ -206,6 +207,23 @@ public class SessionManager {
         }
 
         return user;
+    }
+
+    /**
+     * recupera i servizi in sessione se la sessione è valida
+     * @param request richiesta servlet
+     * @return la lista dei servizi se presenti opure null su errorre
+     */
+    public static List<Service> getServices(HttpServletRequest request){
+        List <Service> services=null;
+
+        try {
+            services = (List<Service>)request.getSession().getAttribute("services");
+        }catch(NullPointerException e){
+            Logger.getAnonymousLogger().log(Level.WARNING,"non posso recuperare i servizi dalla sessione "+e.getMessage());
+        }
+
+        return services;
     }
 
     public static void redirectIfLogged(HttpServletRequest request, HttpServletResponse response){

@@ -12,13 +12,12 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import gamingplatform.controller.utils.FileManager;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.UserDaoImpl;
 import gamingplatform.dao.interfaces.UserDao;
 import gamingplatform.model.User;
 
-import static gamingplatform.controller.utils.FileManager.fileUpload;
+import static gamingplatform.controller.utils.Utils.fileUpload;
 import static gamingplatform.controller.utils.SecurityLayer.*;
 import static gamingplatform.controller.utils.SessionManager.popMessage;
 import static gamingplatform.controller.utils.SessionManager.redirectIfLogged;
@@ -103,7 +102,7 @@ public class Signup extends HttpServlet {
         }
 
         //se arrivo quì ho inserito l'user con successo
-        redirect("login","OK-signup",response,request);
+        redirect("/login","OK-signup",response,request);
 
     }
 

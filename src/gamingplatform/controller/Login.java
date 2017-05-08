@@ -117,7 +117,7 @@ public class Login extends HttpServlet {
             // log dell'eccezione
             // redirect a index con messaggio di errore
             Logger.getAnonymousLogger().log(Level.WARNING, "[Login] DaoException, redirect alla home "+e.getMessage());
-            redirect("index","KO",response,request);
+            redirect("/index","KO",response,request);
         }
 
 
