@@ -7,13 +7,13 @@ import freemarker.template.TemplateExceptionHandler;
 import freemarker.template.Version;
 
 
-public enum FreemarkerCfg {
+public enum SingletonFreemarkerCfg {
 
     INSTANCE;
 
     private Configuration cfg = null;
 
-    FreemarkerCfg() {}
+    SingletonFreemarkerCfg() {}
 
     public Configuration init(ServletContext servlet_context, String path) {
 

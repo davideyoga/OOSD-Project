@@ -32,7 +32,7 @@ public class FreemarkerHelper {
         response.setContentType("text/html; charset=UTF-8");
 
         //ottengo oggetto cfg dal singleton
-        Configuration cfg = FreemarkerCfg.INSTANCE.init(servlet_context, path);
+        Configuration cfg = SingletonFreemarkerCfg.INSTANCE.init(servlet_context, path);
 
         //creo oggetto template
         Template template;

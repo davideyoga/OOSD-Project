@@ -34,6 +34,30 @@
     </servlet-mapping>
     <!-- fine servlet index -->
 
+    <!-- servlet game -->
+    <servlet>
+        <servlet-name>Game</servlet-name>
+        <servlet-class>gamingplatform.controller.Game</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Game</servlet-name>
+        <url-pattern>/game/*</url-pattern>
+    </servlet-mapping>
+    <!-- fine servlet game -->
+
+    <!-- servlet report -->
+    <servlet>
+        <servlet-name>Report</servlet-name>
+        <servlet-class>gamingplatform.controller.Report</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Report</servlet-name>
+        <url-pattern>/report/*</url-pattern>
+    </servlet-mapping>
+    <!-- fine servlet report -->
+
     <!-- servlet login -->
     <servlet>
         <servlet-name>Login</servlet-name>

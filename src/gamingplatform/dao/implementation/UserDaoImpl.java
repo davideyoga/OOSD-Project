@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +25,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 	
 	private PreparedStatement insertUser,
 							  selectUserById,
+	                          selectUsers,
 							  getUserByUsernamePassword,
 	 						  deleteUserById,
 							  updateUserById;
@@ -45,6 +48,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			super.init(); // connection initialization
 			
 			this.insertUser = connection.prepareStatement("INSERT INTO user VALUES(NULL,?,?,?,?,?,?,?)");
+			this.selectUsers = connection.prepareStatement("SELECT * FROM user");
 			this.selectUserById = connection.prepareStatement("SELECT * FROM user WHERE id=?");
 			this.deleteUserById = connection.prepareStatement("DELETE FROM user WHERE id=?");
 			this.updateUserById = connection.prepareStatement("UPDATE user SET username=?,name=?,surname=?,email=?, password=?, exp=?, avatar=?");
@@ -54,35 +58,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			throw new DaoException("Error initializing user dao", e);
 		}
 	}
-	
-	/**
-	 * per inserire un utente nel database
-	 * @throws gamingplatform.dao.exception.DaoException
-	 */
-	@Override
-	public void insertUser(String username,String name, String surname,String email, String password,int exp, String avatar) throws DaoException {
-		
-			try {
 
-				this.insertUser.setString(1,addSlashes(username));
-				this.insertUser.setString(2,addSlashes(name));
-				this.insertUser.setString(3,addSlashes(surname));
-				this.insertUser.setString(4,addSlashes(email));
-				this.insertUser.setString(5,password);
-				this.insertUser.setInt(6,exp);
-				this.insertUser.setString( 7,addSlashes(avatar));
-
-				this.insertUser.executeUpdate();
-				
-				
-			} catch (SQLException e) {
-				throw new DaoException("Error sql insertUser", e);
-			}
-			
-			
-
-		
-	}
 
 	@Override
 	public void insertUser(User user) throws DaoException {
@@ -122,31 +98,29 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			}
 		}
 	}
-	
+
 	/**
-	 * per modificare un utente nel database
-	 * @throws gamingplatform.dao.exception.DaoException
+	 * Metodo che restituisce una lista di utenti
+	 * @return lista di utenti
+	 * @throws DaoException lancia eccezione in caso di errore
 	 */
-	@Override
-	public void updateUser(String username,String name, String surname,String email, String password,int exp, String avatar) throws DaoException {
-		
+	public List<User> getUsers() throws DaoException{
+		List<User> lista = new ArrayList<>();
 		try{
-			
-			this.updateUserById.setString(1, addSlashes(username));
-			this.updateUserById.setString(2, addSlashes(name));
-			this.updateUserById.setString(3, addSlashes(surname));
-			this.updateUserById.setString(4, addSlashes(email));
-			this.updateUserById.setString(5, password);
-			this.updateUserById.setInt(6, exp);
-			this.updateUserById.setString(7, addSlashes(avatar));
-			
-			this.updateUserById.executeUpdate();
-			
-		}catch (SQLException e) {
-			
-			throw new DaoException("Error dao update user", e);
+			ResultSet rs = this.selectUsers.executeQuery();
+
+			while(rs.next())
+			{
+				User u=new User(this);
+				//TODO
+				lista.add(u);
+			}
+		}catch (SQLException e){
+			throw new DaoException("Error query getUsers", e);
+
 		}
-		
+
+		return lista;
 	}
 
 	@Override
@@ -252,6 +226,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			this.insertUser.close();
 			this.selectUserById.close();
 			this.deleteUserById.close();
+			this.selectUsers.close();
 			this.updateUserById.close();
 			this.getUserByUsernamePassword.close();
 			

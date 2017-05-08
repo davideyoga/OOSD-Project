@@ -24,7 +24,7 @@
                     <#list games as game>
                         <div class="col-md ">
                             <div class="gallery-img">
-                                <a href="game?id=${game.id}" class="b-link-stripe b-animate-go swipebox" title="${game.name}">
+                                <a href="game/${game.id}" class="b-link-stripe b-animate-go swipebox" title="${game.name}">
                                     <img class="img-responsive" style="padding:5px; background-color: white" src="${context}/images/${game.image}" alt="">
                                     <span class="zoom-icon"> </span> </a>
 

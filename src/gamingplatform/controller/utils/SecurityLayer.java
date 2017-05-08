@@ -1,17 +1,23 @@
 package gamingplatform.controller.utils;
 
+import gamingplatform.model.Service;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.DatatypeConverter;
 
-import gamingplatform.view.FreemarkerHelper;
+import static gamingplatform.controller.utils.SessionManager.verifySession;
+import static gamingplatform.view.FreemarkerHelper.process;
+import static java.util.Objects.isNull;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,9 +26,32 @@ import java.util.logging.Logger;
 public class SecurityLayer {
 
 
-    public static boolean checkAuth(){
-        //TODO
-        return true;
+    /**
+     * passata una stringa corrispondente al nome di un servizio controlla se l'utente loggato
+     * ha accesso a quel servizio
+     * @param request richiesta servlet
+     * @param service servizio da controllare
+     * @return true se l'utente è autorizzato all'uso del servizio, false altrimenti
+     */
+    public static boolean checkAuth(HttpServletRequest request, String service){
+        //controllo se la sessione è valida
+        HttpSession session = verifySession(request);
+        if(!isNull(session) && !isNull(service)){
+            //recupero la lista dei servizi dalla sessione
+            List<Service> services = (ArrayList<Service>) session.getAttribute("services");
+            //scorro i servizi e provo a trovare il servizio con nome = a quello passato
+            for (Service s: services){
+                if(s.getName().equals(service)){
+                    Logger.getAnonymousLogger().log(Level.INFO,"[SecurityManager] servizio trovato, accesso consentito");
+                    //se lo trovo
+                    return true;
+                }
+            }
+            Logger.getAnonymousLogger().log(Level.INFO,"[SecurityManager] servizio non trovato, accesso negato");
+        }
+        //altrimenti
+        Logger.getAnonymousLogger().log(Level.INFO,"[SecurityManager] sessione non valida oppure service == null, accesso negato");
+        return false;
     }
 
     /**
@@ -68,7 +97,7 @@ public class SecurityLayer {
     public static void abort(String tpl, Map<String, Object> data, String message, HttpServletResponse response, ServletContext svc){
 
         data.put("message", message);
-        FreemarkerHelper.process(tpl, data, response, svc);
+        process(tpl, data, response, svc);
 
     }
 
@@ -91,8 +120,18 @@ public class SecurityLayer {
 
 
 
-    //--------- DATA SECURITY ------------
-    //
+    //--------- DATA SECURITY ------------//
+
+
+    /**
+     * ritorna l'ultimo segmento della url passata
+     * @param url url da analizzare
+     * @return ultimo segmento
+     */
+    public static String getLastBitFromUrl(final String url){
+        // return url.replaceFirst("[^?]*/(.*?)(?:\\?.*)","$1);" <-- incorrect
+        return url.replaceFirst(".*/([^/?]+).*", "$1");
+    }
 
     /**
      * questa funzione aggiunge un backslash davanti a
@@ -114,21 +153,4 @@ public class SecurityLayer {
         return s.replaceAll("\\\\(['\"\\\\])", "$1");
     }
 
-    /**
-     * converte la stringa in numero
-     * @param s stringa da onvertire
-     * @return intero corrispondente
-     * @throws NumberFormatException in caso di errore
-     */
-    public static int checkNumeric(String s) throws NumberFormatException {
-        //convertiamo la stringa in numero, ma assicuriamoci prima che sia valida
-        //convert the string to a number, ensuring its validity
-        if (s != null) {
-            //se la conversione fallisce, viene generata un'eccezione
-            //if the conversion fails, an exception is raised
-            return Integer.parseInt(s);
-        } else {
-            throw new NumberFormatException("String argument is null");
-        }
-    }
 }

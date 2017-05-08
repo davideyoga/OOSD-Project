@@ -148,7 +148,11 @@ function hideURLbar() {
                 break;
             case "KO-signup":
                 $('#message').addClass("div_message_top_warning");
-                message = '<strong>Success!</strong><br><br>Your signup request has failed.';
+                message = '<strong>Warning!</strong><br><br>Your signup request has failed.';
+                break;
+            case "KO-unauthorized":
+                $('#message').addClass("div_message_top_warning");
+                message = '<strong>Warning!</strong><br><br>You have not the needed authorization to access the resource.';
                 break;
             case "error":
             case "KO":
