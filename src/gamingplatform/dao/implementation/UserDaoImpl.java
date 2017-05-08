@@ -26,6 +26,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 							  getUserByUsernamePassword,
 	 						  deleteUserById,
 							  updateUserById,
+							  getHystoryLevelsByUserId,
 	                          getLevelByUserId; // Ottenere il livello attuale di un utente
 
 	/**
@@ -51,10 +52,15 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			this.deleteUserById = connection.prepareStatement("DELETE FROM user WHERE id=?");
 			this.updateUserById = connection.prepareStatement("UPDATE user SET username=?,name=?,surname=?,email=?, password=?, exp=?, avatar=?");
 			this.getUserByUsernamePassword = connection.prepareStatement("SELECT * FROM user WHERE username=? AND password =?");
-			this.getLevelByUserId = connection.prepareStatement("SELECT * FROM user " +
-					"													  LEFT JOIN userlevel ON id_user=id_level" +
-					"													  LEFT JOIN id_level=level.id" +
-					"													  WHERE user.id =? ORDER BY userlevel.date ");
+			//Query che mi restituisce l'attuale livello in cui si trova l'user
+			this.getLevelByUserId = connection.prepareStatement("SELECT level.id, level.name, level.icon, level.exp " +
+					"                                                   FROM level " +
+					"                                                   LEFT JOIN userlevel ON userlevel.id_level=level.id" +
+					"                                                   WHERE userlevel.id_user = ? ORDER BY date DESC LIMIT 1");
+			//Query che mi restituisce la storia dei livelli raggiunti da un user
+			this.getHystoryLevelsByUserId=connection.prepareStatement("SELECT * " +
+					"														FROM userlevel " +
+					"														WHERE id_user=?");
 
 		} catch (SQLException e) {
 			throw new DaoException("Error initializing user dao", e);
@@ -218,37 +224,38 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 
 	/**
 	 * Metodo che restituisce l'ultimo livello aggiornato di un dato utente
-	 * @param user_id
+	 * @param idUser
 	 * @return
 	 * @throws DaoException
 	 */
-	@Override
-	public Level getLevelByUserId(int user_id) throws DaoException{
+	public Level getLevelByUserId(int idUser) throws DaoException {
 
-		Level l = new Level(this);
+		Level level=new Level(this);
 
-		try {
+		try{
 
-			this.getLevelByUserId.setInt(1, user_id);
+			this.getLevelByUserId.setInt(1, idUser);
+			ResultSet rs = this.getLevelByUserId.executeQuery();
 
-			ResultSet rs = this.selectUserById.executeQuery();
+			level.setId(rs.getInt("id"));
+			level.setName(rs.getInt("name"));
+			level.setTrophy(rs.getString("trophy"));
+			level.setIcon(rs.getString("icon"));
+			level.setExp(rs.getInt("exp"));
 
-			while (rs.next()) {
 
-				l.setId(rs.getInt("id"));
-				l.setName(rs.getInt("name"));
-				l.setTrophy(stripSlashes(rs.getString("description")));
-				l.setIcon(stripSlashes(rs.getString("icon")));
-				l.setExp(rs.getInt("exp"));
-				break;
-			}
 
-		}catch (SQLException e) {
-				throw new DaoException("Error game getLevelUserById", e);
-			}
-			return l;
+		} catch (SQLException e) {
+			throw new DaoException("Error query getLevelByUserId", e);
+		}
+
+		return level;
 	}
 
+	/*TODO
+	public List<Level> getHistoryLevelsByUserId(int idUser) throws DaoException{
+		List<Level>
+	}*/
 
 	/**
 	 * chiudo la connessione e le query precompilate

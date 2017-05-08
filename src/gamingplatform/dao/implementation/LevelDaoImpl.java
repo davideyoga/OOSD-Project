@@ -23,8 +23,7 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
                               selectLevels,
                               insertLevel,
                               deleteLevel,
-                              updateLevel,
-                              selectLevelByUserId;
+                              updateLevel;
 
     // Costruttore
     public LevelDaoImpl(DataSource datasource) {
@@ -57,11 +56,6 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
 
             this.selectLevels=connection.prepareStatement("SELECT * FROM level");
 
-
-            this.selectLevelByUserId = connection.prepareStatement("SELECT level.id, level.name, level.icon, level.exp " +
-                    "                                                   FROM level " +
-                    "                                                   LEFT JOIN userlevel ON userlevel.id_level=level.id" +
-                    "                                                   WHERE userlevel.id_user = ? ORDER BY date DESC LIMIT 1");
 
         }   catch (SQLException e) {
             throw new DaoException("Error initializing level dao", e);
@@ -129,30 +123,6 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
     }
 
 
-    public Level getLevelByUserId(int keyUser) throws DaoException {
-
-        Level level=new Level(this);
-
-        try{
-
-            this.selectLevelByUserId.setInt(1, keyUser);
-            ResultSet rs = this.selectLevelByUserId.executeQuery();
-
-            level.setId(rs.getInt("id"));
-            level.setName(rs.getInt("name"));
-            level.setTrophy(rs.getString("trophy"));
-            level.setIcon(rs.getString("icon"));
-            level.setExp(rs.getInt("exp"));
-
-
-
-        } catch (SQLException e) {
-            throw new DaoException("Error query getLevelByUserId", e);
-        }
-
-        return level;
-    }
-
 
 
 
@@ -186,7 +156,6 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
             this.insertLevel.close();
             this.deleteLevel.close();
             this.updateLevel.close();
-            this.selectLevelByUserId.close();
             this.selectLevels.close();
         } catch (SQLException e) {
             throw new DaoException("Error destroy LevelDao", e);

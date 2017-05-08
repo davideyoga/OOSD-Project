@@ -21,8 +21,6 @@ public interface LevelDao extends DaoData {
 
     public void updateLevel(Level level) throws DaoException;
 
-    public Level getLevelByUserId(int keyUser) throws DaoException;
-
     public List<Level> getLevels () throws DaoException;
 
     public void destroy() throws DaoException;
