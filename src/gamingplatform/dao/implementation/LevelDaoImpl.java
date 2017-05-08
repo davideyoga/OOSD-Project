@@ -11,18 +11,20 @@ import java.util.List;
 import javax.sql.DataSource;
 import gamingplatform.dao.data.DaoDataMySQLImpl;
 import gamingplatform.dao.exception.DaoException;
-import gamingplatform.dao.interfaces.GroupsDao;
-import gamingplatform.model.Group;
+import gamingplatform.dao.interfaces.LevelDao;
 import gamingplatform.model.Level;
 
-/**
- * Created by GregBug on 03/05/2017.
- */
+import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
+
 
 public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
 
-    private PreparedStatement selectLevelById, insertLevel, deleleLevel, selectLevelByUserId;
-    private Object getLevelGroupByUserId, getLevelById;
+    private PreparedStatement selectLevelById,
+                              selectLevels,
+                              insertLevel,
+                              deleteLevel,
+                              updateLevel,
+                              selectLevelByUserId;
 
     // Costruttore
     public LevelDaoImpl(DataSource datasource) {
@@ -34,9 +36,32 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
         try {
             super.init(); //connection initialization
 
-            this.getLevelById = connection.prepareStatement("SELECT * FROM level WHERE id=?");
-            this.insertLevel = connection.prepareStatement("INSERT INTO level (name,trophy,icon,exp) VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            this.getLevelGroupByUserId = connection.prepareStatement("SELECT level.id, level.name, level.icon, level.exp FROM user LEFT JOIN userlevel ON userlevel.id LEFT JOIN user ON userlevel.id = user.id WHERE user.id = ?")
+            this.selectLevelById = connection.prepareStatement("SELECT * " +
+                    "                                                FROM level " +
+                    "                                                WHERE id=?");
+
+
+            this.insertLevel = connection.prepareStatement("INSERT INTO level (name,trophy,icon,exp) " +
+                    "                                            VALUES(NULL,?,?,?,?)");
+
+            this.deleteLevel=connection.prepareStatement("DELETE FROM level" +
+                    "                                           WHERE id=?");
+
+
+            this.updateLevel=connection.prepareStatement("UPDATE levels" +
+                    "                                          SET name=?," +
+                    "                                              trophy=?," +
+                    "                                              icon=?," +
+                    "                                              exp=?" +
+                    "                                          WHERE id=?");
+
+            this.selectLevels=connection.prepareStatement("SELECT * FROM level");
+
+
+            this.selectLevelByUserId = connection.prepareStatement("SELECT level.id, level.name, level.icon, level.exp " +
+                    "                                                   FROM level " +
+                    "                                                   LEFT JOIN userlevel ON userlevel.id_level=level.id" +
+                    "                                                   WHERE userlevel.id_user = ? ORDER BY date DESC LIMIT 1");
 
         }   catch (SQLException e) {
             throw new DaoException("Error initializing level dao", e);
@@ -45,56 +70,130 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
 
     @Override
     public Level getLevelById ( int keyLevel) throws DaoException{
-
+        Level l=new Level(this);
         try {
-            this.getLevelById.setInt(1, keyLevel);
+            this.selectLevelById.setInt(1, keyLevel);
+            ResultSet rs= this.selectLevelById.executeQuery();
+            l.setId(rs.getInt("id"));
+            l.setName(rs.getInt("name"));
+            l.setTrophy(rs.getString("trophy"));
+            l.setIcon(rs.getString("icon"));
+            l.setExp(rs.getInt("exp"));
         } catch (SQLException e) {
-
+            throw new DaoException("Error query getLevel", e);
         }
 
-        return null;
+        return l;
     }
 
-    @Override
-    public void insertLevel(Level level) {
-        // TODO Auto-generated method stub
+
+
+
+    public void insertLevel(Level level) throws DaoException {
+        try{
+            this.insertLevel.setInt(1,level.getName());
+            this.insertLevel.setString(2, addSlashes(level.getTrophy()));
+            this.insertLevel.setString(3, addSlashes(level.getIcon()));
+            this.insertLevel.setInt(4,level.getExp());
+            this.insertLevel.executeUpdate();
+        }catch (Exception e){
+            throw new DaoException("Error query insertLevel", e);
+        }
     }
 
-    /**
-     * estraggo i gruppi a cui appartiene l'utente con id keyUser
-     * @throws DaoException
-     */
-    @Override
-    public List<Level> getLevelByUserId(int keyUser) throws DaoException {
 
-        List<Level> lista = new ArrayList<Level>();
+
+    public void deleteLevel(int idLevel) throws DaoException {
+        try{
+            this.deleteLevel.setInt(1,idLevel);
+            this.deleteLevel.executeUpdate();
+        }catch (Exception e){
+            throw new DaoException("Error query deleteLevel", e);
+
+        }
+    }
+
+
+
+    public void updateLevel(Level level) throws DaoException {
+        try{
+            this.updateLevel.setInt(1,level.getName());
+            this.updateLevel.setString(2, addSlashes(level.getTrophy()));
+            this.updateLevel.setString(3, addSlashes(level.getIcon()));
+            this.updateLevel.setInt(4,level.getExp());
+            this.updateLevel.setInt(5,level.getId());
+            this.updateLevel.executeUpdate();
+        }catch (Exception e){
+            throw new DaoException("Error query updateLevel", e);
+        }
+    }
+
+
+    public Level getLevelByUserId(int keyUser) throws DaoException {
+
+        Level level=new Level(this);
 
         try{
 
-            this.getLevelGroupByUserId.setInt(1, keyUser);
-
+            this.selectLevelByUserId.setInt(1, keyUser);
             ResultSet rs = this.selectLevelByUserId.executeQuery();
 
             level.setId(rs.getInt("id"));
-            level.setName("name");
-            level.setDescription("trophy");
-            level.setexp("experience")
+            level.setName(rs.getInt("name"));
+            level.setTrophy(rs.getString("trophy"));
+            level.setIcon(rs.getString("icon"));
+            level.setExp(rs.getInt("exp"));
+
+
 
         } catch (SQLException e) {
-            throw new DaoException("Error get group User", e);
+            throw new DaoException("Error query getLevelByUserId", e);
+        }
+
+        return level;
+    }
+
+
+
+
+    public List<Level> getLevels() throws DaoException{
+        List<Level> lista=new ArrayList<>();
+        try{
+            ResultSet rs=this.selectLevels.executeQuery();
+
+            while (rs.next()) {
+                Level level=new Level(this);
+                level.setId(rs.getInt("id"));
+                level.setName(rs.getInt("name"));
+                level.setTrophy(rs.getString("trophy"));
+                level.setIcon(rs.getString("icon"));
+                level.setExp(rs.getInt("exp"));
+
+                lista.add(level);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Error query getLevels", e);
         }
 
         return lista;
-
     }
 
     @Override
-    public void deleteLevelById() {
-        // Todo Auto-generated method stub
-    }
+    public void destroy() throws DaoException {
+        //chiudo le quary precompilate
+        try {
+            this.selectLevelById.close();
+            this.insertLevel.close();
+            this.deleteLevel.close();
+            this.updateLevel.close();
+            this.selectLevelByUserId.close();
+            this.selectLevels.close();
+        } catch (SQLException e) {
+            throw new DaoException("Error destroy LevelDao", e);
+        }
 
-    @Override
-    public void destroy() {
+        //chiudo la connessione
+        super.destroy();
     }
 
 

@@ -23,6 +23,7 @@ import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
 public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 	
 	private PreparedStatement selectGroupById,
+							  selectGroups,
 							  insertGroup,
 							  deleteGroupById,
 							  updateGroup,
@@ -60,6 +61,11 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			this.selectGroupById = connection.prepareStatement("SELECT * " +
 					"												 FROM groups " +
 					"												 WHERE id=?");
+
+
+			//Query che retituisce la lista di tuuti i gruppi
+			this.selectGroups = connection.prepareStatement("SELECT * " +
+					"												 FROM groups ");
 
 			//Query che inserisce un nuovo gruppo nel DB
 			this.insertGroup = connection.prepareStatement("INSERT INTO groups"	 +
@@ -99,7 +105,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			//Query che restituisce i gruppi che hanno autorizzazioni su un dato servizio
 			this.selectGroupsByServiceId=connection.prepareStatement("SELECT groups.id," +
 					"														      groups.name," +
-					"														      groups.description," +
+					"														      groups.description" +
 					"													  FROM groups " +
 					"													  LEFT JOIN groupsservice ON groups.id = groupsservice.id_groups" +
 					"													  WHERE groupsservice.id_service=?");
@@ -107,7 +113,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			//Query che restituisce i servizi a cui può accedere un dato gruppo
 			this.selectServicesByGroupId=connection.prepareStatement("SELECT service.id," +
 					"														      service.name," +
-					"														      service.description," +
+					"														      service.description" +
 					"													  FROM service " +
 					"													  LEFT JOIN groupsservice ON service.id = groupsservice.id_service" +
 					"													  WHERE groupsservice.id_groups=?");
@@ -118,8 +124,8 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 
 			//Query che consente di aggiungere un utente a un gruppo
 			this.addUserToGroup=connection.prepareStatement("INSERT INTO usergroup" +
-					"												 VALUES id_user=?," +
-					"														id_groups=?");
+					"												 VALUES (id_user=?," +
+					"														id_groups=?)");
 
 
 			//Query che consente di rimuovere un servizio da un gruppo
@@ -128,8 +134,8 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 
 			//Query che consente di aggiungere un servizio al gruppo
 			this.addServiceToGroup=connection.prepareStatement("INSERT INTO groupsservice" +
-					"												 VALUES id_groups=?," +
-					"														id_service=?");
+					"												 VALUES (id_groups=?," +
+					"														id_service=?)");
 
 		} catch (SQLException e) {
 			throw new DaoException("Error initializing group dao", e);
@@ -169,6 +175,33 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 		
 		return g;
 	}
+
+
+
+
+	public List<Group> getGroups() throws DaoException{
+		List<Group> lista= new ArrayList<>();
+
+		try{
+			ResultSet rs=this.selectGroups.executeQuery();
+
+			while (rs.next()){
+				Group g=new Group(this);
+
+				g.setId(rs.getInt("id"));
+				g.setName(rs.getString("name"));
+				g.setDescription(rs.getString("description"));
+
+				lista.add(g);
+			}
+		} catch (Exception e){
+			throw new DaoException("Error query getGroups", e);
+		}
+		return lista;
+	}
+
+
+
 
 	/**
 	 * Metodo che permette l'inserimento di un gruppo nel DB

@@ -15,11 +15,15 @@ public interface LevelDao extends DaoData {
 
     public Level getLevelById(int keyLevel) throws DaoException;
 
-    public void  setLevel(Level level) throws DaoException;
+    public void insertLevel(Level level) throws DaoException;
 
-    public List<Level> getLevelByUserId(int keyUser) throws DaoException;
+    public void deleteLevel(int idLevel) throws DaoException;
 
-    public void deleteLevelById() throws DaoException;
+    public void updateLevel(Level level) throws DaoException;
+
+    public Level getLevelByUserId(int keyUser) throws DaoException;
+
+    public List<Level> getLevels () throws DaoException;
 
     public void destroy() throws DaoException;
 

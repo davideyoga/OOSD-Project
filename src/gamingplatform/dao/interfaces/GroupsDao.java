@@ -14,6 +14,8 @@ public interface GroupsDao extends DaoData{
 	
 	public Group getGroup( int idGroup) throws DaoException;
 
+	public List<Group> getGroups()throws DaoException;
+
 	public void insertGroup( Group group ) throws DaoException;
 
 	public void deleteGroupById( int idGroup) throws DaoException;
