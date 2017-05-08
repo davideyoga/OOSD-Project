@@ -29,6 +29,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 							  getUserByUsernamePassword,
 	 						  deleteUserById,
 							  updateUserById;
+	                          getLevelByUserId; // Ottenere il livello attuale di un utente
 
 	/**
 	 * Costruttore per inizializzare la connessione
@@ -53,6 +54,10 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			this.deleteUserById = connection.prepareStatement("DELETE FROM user WHERE id=?");
 			this.updateUserById = connection.prepareStatement("UPDATE user SET username=?,name=?,surname=?,email=?, password=?, exp=?, avatar=?");
 			this.getUserByUsernamePassword = connection.prepareStatement("SELECT * FROM user WHERE username=? AND password =?");
+			this.getLevelByUserId = connection.prepareStatement("SELECT * FROM user " +
+					"													  LEFT JOIN userlevel ON id_user=id_level" +
+					"													  LEFT JOIN id_level=level.id" +
+					"													  WHERE user.id =? ORDER BY userlevel.date ")
 
 		} catch (SQLException e) {
 			throw new DaoException("Error initializing user dao", e);
@@ -212,6 +217,35 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 		}
 
 		return user;
+	}
+
+	/**
+	 * Metodo che restituisce l'ultimo livello aggiornato di un dato utente
+	 * @param user_id
+	 * @return
+	 * @throws DaoException
+	 */
+	@Override
+	public User getLevelByUserId(int user_id) throws DaoException{
+
+		Level l = new Level(this);
+
+		try {
+			this.selectUserById.setInt(1,id_user);
+			ResultSet rs=this.selectUserById.executeQuery();
+
+			while(rs.next()){
+				l.setId(rs.getInt("id"));
+				l.setName(stripSlashes(rs.getString("name")));
+				l.setTrophy(stripSlashes(rs.getString("description")));
+				l.setIcon(stripSlashes(rs.getString("icon")));
+				l.setexp(stripSlashes(rs.getString("exp")));
+				break;
+			}catch (SQLException e) {
+				throw new DaoException("Error game getLevelUserById", e);
+			}
+			return l;
+		}
 	}
 
 	/**
