@@ -239,33 +239,6 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
 
 
     /**
-     * Metodo di inserimento di un nuovo elemento nella tabella review del DataBase
-     * @param idUser identificativo dell'user autore della recensione
-     * @param idGame identificativo del gioco recensito
-     * @param title titolo della recensione
-     * @param body corpo della recensione
-     * @param vote voto assegnato al gioco
-     * @throws DaoException lancia eccezione in caso di errore
-     */
-    public void insertReview(int idUser, int idGame, String title, String body,int vote) throws DaoException{
-        try{
-            this.insertReview.setInt(1,idUser);
-            this.insertReview.setInt(2,idGame);
-            this.insertReview.setString(3,addSlashes(title));
-            this.insertReview.setString(4,addSlashes(body));
-            this.insertReview.setInt(5,vote);
-            this.insertReview.executeUpdate();
-
-        } catch (SQLException e){
-            throw new DaoException("Error query insertReview", e);
-
-        }
-    }
-
-
-
-
-    /**
      * Metodo che permette la cancellazione di un gioco dalla tabella game dato id_user e id_game
      * @param idUser è l'id dello user autore della recensione
      * @param idGame è l'id del gioco recensito
@@ -297,30 +270,6 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
             this.updateReview.setInt(3,review.getVote());
             this.updateReview.setInt(4,review.getIdUser());
             this.updateReview.setInt(5,review.getIdGame());
-            this.updateReview.executeUpdate();
-        }catch (SQLException e){
-            throw new DaoException("Error query updateReview", e);
-
-        }
-    }
-
-
-    /**
-     * Metodo che permette la modifica di una review
-     * @param idUser è l'id dell'user autore della review
-     * @param idGame è l'id del gioco recensito
-     * @param title è il titolo della recensione
-     * @param body  è il corpo della recensione
-     * @param vote è il voto assegnato al gioco
-     * @throws DaoException lancia eccezione in caso di errore
-     */
-    public void updateReview(int idUser, int idGame, String title, String body, int vote) throws DaoException{
-        try{
-            this.updateReview.setString(1,addSlashes(title));
-            this.updateReview.setString(2,addSlashes(body));
-            this.updateReview.setInt(3,vote);
-            this.updateReview.setInt(4,idUser);
-            this.updateReview.setInt(5,idGame);
             this.updateReview.executeUpdate();
         }catch (SQLException e){
             throw new DaoException("Error query updateReview", e);

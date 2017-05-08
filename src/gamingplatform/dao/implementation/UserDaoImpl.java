@@ -1,21 +1,18 @@
 package gamingplatform.dao.implementation;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.sql.DataSource;
 
 import gamingplatform.dao.data.DaoDataMySQLImpl;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.interfaces.UserDao;
-import gamingplatform.model.Group;
 import gamingplatform.model.User;
+import gamingplatform.model.Level;
 
 import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
 import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
@@ -28,7 +25,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 	                          selectUsers,
 							  getUserByUsernamePassword,
 	 						  deleteUserById,
-							  updateUserById;
+							  updateUserById,
 	                          getLevelByUserId; // Ottenere il livello attuale di un utente
 
 	/**
@@ -57,7 +54,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			this.getLevelByUserId = connection.prepareStatement("SELECT * FROM user " +
 					"													  LEFT JOIN userlevel ON id_user=id_level" +
 					"													  LEFT JOIN id_level=level.id" +
-					"													  WHERE user.id =? ORDER BY userlevel.date ")
+					"													  WHERE user.id =? ORDER BY userlevel.date ");
 
 		} catch (SQLException e) {
 			throw new DaoException("Error initializing user dao", e);
@@ -226,27 +223,32 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 	 * @throws DaoException
 	 */
 	@Override
-	public User getLevelByUserId(int user_id) throws DaoException{
+	public Level getLevelByUserId(int user_id) throws DaoException{
 
 		Level l = new Level(this);
 
 		try {
-			this.selectUserById.setInt(1,id_user);
-			ResultSet rs=this.selectUserById.executeQuery();
 
-			while(rs.next()){
+			this.getLevelByUserId.setInt(1, user_id);
+
+			ResultSet rs = this.selectUserById.executeQuery();
+
+			while (rs.next()) {
+
 				l.setId(rs.getInt("id"));
-				l.setName(stripSlashes(rs.getString("name")));
+				l.setName(rs.getInt("name"));
 				l.setTrophy(stripSlashes(rs.getString("description")));
 				l.setIcon(stripSlashes(rs.getString("icon")));
-				l.setexp(stripSlashes(rs.getString("exp")));
+				l.setExp(rs.getInt("exp"));
 				break;
-			}catch (SQLException e) {
+			}
+
+		}catch (SQLException e) {
 				throw new DaoException("Error game getLevelUserById", e);
 			}
 			return l;
-		}
 	}
+
 
 	/**
 	 * chiudo la connessione e le query precompilate

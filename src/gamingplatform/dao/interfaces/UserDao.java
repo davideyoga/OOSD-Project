@@ -5,6 +5,7 @@ import gamingplatform.dao.data.*;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.model.Group;
 import gamingplatform.model.User;
+import gamingplatform.model.Level;
 
 import java.util.List;
 
@@ -22,9 +23,11 @@ public interface UserDao extends DaoData{
 	public List<User> getUsers() throws DaoException;
 
 	public User getUser( int idUser) throws DaoException;
-	
-	public void destroy() throws DaoException;
 
 	public User getUserByUsernamePassword(String username, String password) throws DaoException;
+
+	public Level getLevelByUserId(int user_id) throws DaoException;
+
+	public void destroy() throws DaoException;
 	
 }

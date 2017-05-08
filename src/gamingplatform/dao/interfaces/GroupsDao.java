@@ -15,14 +15,10 @@ public interface GroupsDao extends DaoData{
 	public Group getGroup( int idGroup) throws DaoException;
 
 	public void insertGroup( Group group ) throws DaoException;
-	
-	public void insertGroup(String name, String description) throws DaoException;
 
 	public void deleteGroupById( int idGroup) throws DaoException;
 
 	public void updateGroup( Group group ) throws DaoException;
-
-	public void updateGroup(int id, String name, String description) throws DaoException;
 
 	public List<Group> getGroupsByUserId(int idUser)throws DaoException;
 

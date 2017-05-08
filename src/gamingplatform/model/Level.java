@@ -1,5 +1,7 @@
 package gamingplatform.model;
 
+import gamingplatform.dao.data.DaoData;
+
 public class Level{
 
     //Attributes
@@ -9,12 +11,12 @@ public class Level{
     private String icon;
     private int exp;
 
-    public Level(int id, int name, String trophy, String icon, int exp) {
-        this.id = id;
-        this.name = name;
-        this.trophy = trophy;
-        this.icon = icon;
-        this.exp = exp;
+    public Level(DaoData d) {
+        this.id = 0;
+        this.name = 0;
+        this.trophy = null;
+        this.icon = null;
+        this.exp = 0;
     }
 
 

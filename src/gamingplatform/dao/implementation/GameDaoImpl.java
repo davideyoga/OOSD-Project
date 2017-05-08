@@ -191,32 +191,6 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
 
 
     /**
-     * Metodo di inserimento di un nuovo elemento nella tabella game del DataBase
-     * @param name è il nome del gioco da dover inserire
-     * @param exp sono i punti esperienza che si posssono guadagnare giocandoci
-     * @param image  è l'immagine di presentazione del gioco
-     * @param description è la descrizione del gioco
-     * @throws DaoException lancia eccezione in caso di errore
-     */
-    public void insertGame(String name, int exp, String image, String description) throws DaoException{
-        try{
-            this.insertGame.setString(1,addSlashes(name));
-            this.insertGame.setInt(2,exp);
-            this.insertGame.setString(3,addSlashes(image));
-            this.insertGame.setString(4,addSlashes(description));
-
-            this.insertGame.executeUpdate();
-
-        } catch (SQLException e){
-            throw new DaoException("Error query insertGame", e);
-
-        }
-    }
-
-
-
-
-    /**
      * Metodo che permette la cancellazione di un gioco dalla tabella game dato l'id
      * @param idGame è l'id del gioco da cancellare
      * @throws DaoException lancia eccezione in caso di errore
@@ -262,30 +236,6 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
             this.updateGame.setString(3,addSlashes(game.getImage()));
             this.updateGame.setString(4,addSlashes(game.getDescription()));
             this.updateGame.setInt(5,game.getId());
-            this.updateGame.executeUpdate();
-        }catch (SQLException e){
-            throw new DaoException("Error query updateGame", e);
-
-        }
-    }
-
-
-    /**
-     * Metodo che permette la modifica di un daro gioco
-     * @param id è il codice identificativo del gioco
-     * @param name nome del gioco
-     * @param exp punti esperienza dati dal gioco
-     * @param image immagine di presentazione del gioco
-     * @param description descrizione del gioco
-     * @throws DaoException lancia eccezione in caso di errore
-     */
-    public void updateGame(int id,String name, int exp, String image, String description) throws DaoException{
-        try{
-            this.updateGame.setString(1,addSlashes(name));
-            this.updateGame.setInt(2,exp);
-            this.updateGame.setString(3,addSlashes(image));
-            this.updateGame.setString(4,addSlashes(description));
-            this.updateGame.setInt(5,id);
             this.updateGame.executeUpdate();
         }catch (SQLException e){
             throw new DaoException("Error query updateGame", e);

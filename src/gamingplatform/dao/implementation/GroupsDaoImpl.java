@@ -188,24 +188,6 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 
 
 	/**
-	 * Metodo che permette l'inserimento di un gruppo nel DB
-	 * @param name il nome del gruppo
-	 * @param description è la breve descrizione del gruppo
-	 * @throws DaoException lancia eccezione in caso di errore
-	 */
-	public void insertGroup(String name,String description) throws DaoException{
-		try{
-			this.insertGroup.setString(1, addSlashes(name));
-			this.insertGroup.setString(2,addSlashes(description));
-			this.insertGroup.executeUpdate();
-		}catch (Exception e){
-			throw new DaoException("Error query insertGroup", e);
-		}
-		
-	}
-
-
-	/**
 	 * Metodo che consente l'eliminazione di un gruppo dal DB
 	 * @param idGroup identificatore del gruppo da eliminare
 	 * @throws DaoException lancia eccezione in caso di errore
@@ -230,27 +212,6 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			this.updateGroup.setString(1, addSlashes(group.getName()));
 			this.updateGroup.setString(2, addSlashes(group.getDescription()));
 			this.updateGroup.setInt(3, group.getId());
-
-			this.insertGroup.executeUpdate();
-
-		}catch (Exception e){
-			throw new DaoException("Error query updateGroup", e);
-		}
-	}
-
-
-	/**
-	 * Metodo che consente la modifica di un gruppo esistente nel DB
-	 * @param id identificativo del gruppo
-	 * @param name denominazione del gruppo
-	 * @param description descrizione del gruppo
-	 * @throws DaoException lancia eccezione in caso di errore
-	 */
-	public void updateGroup(int id, String name,String description) throws DaoException{
-		try{
-			this.updateGroup.setString(1, addSlashes(name));
-			this.updateGroup.setString(2, addSlashes(description));
-			this.updateGroup.setInt(3, id);
 
 			this.insertGroup.executeUpdate();
 

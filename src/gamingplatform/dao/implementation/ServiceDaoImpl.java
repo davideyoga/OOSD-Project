@@ -147,26 +147,6 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
 
 
     /**
-     * Metodo di inserimento di un nuovo elemento nella tabella service del DataBase
-     * @param name è il nome del servizio
-     * @param description la descrizione del servizio
-     * @throws DaoException
-     */
-    public void insertService(String name, String description) throws DaoException{
-        try{
-            this.insertService.setString(1,addSlashes(name));
-            this.insertService.setString(2,addSlashes(description));
-            this.insertService.executeUpdate();
-
-        } catch (SQLException e){
-            throw new DaoException("Error query insertService", e);
-
-        }
-    }
-
-
-
-    /**
      * Metodo che permette la cancellazione di un servizio dalla tabella service dato l'id
      * @param idService è l'id del servizio da cancellare
      * @throws DaoException lancia eccezione in caso di errore
@@ -194,25 +174,6 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
             this.updateService.setString(1,addSlashes(service.getName()));
             this.updateService.setString(2,addSlashes(service.getDescription()));
 
-            this.updateService.executeUpdate();
-
-        }catch (SQLException e){
-            throw new DaoException("Error query updateService", e);
-        }
-    }
-
-
-    /**
-     * Metodo che permette la modifica di un servizio in service
-     * @param id è l'identificativo del servizio
-     * @param name è il nome del servizio
-     * @param description è la descrizione del servizio
-     * @throws DaoException lancia eccezione in caso di errore
-     */
-    public void updateService(int id,String name, String description) throws DaoException{
-        try{
-            this.updateService.setString(1,addSlashes(name));
-            this.updateService.setString(2,addSlashes(description));
             this.updateService.executeUpdate();
 
         }catch (SQLException e){

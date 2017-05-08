@@ -20,15 +20,9 @@ public interface ReviewDao extends DaoData{
 
     public void insertReview(Review review) throws DaoException;
 
-    public void insertReview(int idUser, int idGame, String title, String body,int vote) throws DaoException;
-
     public void deleteReview(int idUser, int idGame) throws DaoException;
 
     public void updateReview(Review review) throws DaoException;
-
-    public void updateReview(int idUser, int idGame, String title, String body, int vote) throws DaoException;
-
-
 
     public void destroy() throws DaoException;
 }

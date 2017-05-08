@@ -18,15 +18,11 @@ public interface GameDao extends DaoData{
 
     public void insertGame( Game game) throws DaoException;
 
-    public void insertGame(String name, int exp, String image, String description) throws DaoException;
-
     public void deleteGameById(int idGame) throws DaoException;
 
     public void deleteGameByName(String nameGame) throws DaoException;
 
     public void updateGame( Game game ) throws DaoException;
-
-    public void updateGame(int id,String name, int exp, String image, String description) throws DaoException;
 
     public void destroy() throws DaoException;
 }
