@@ -23,37 +23,49 @@ public class DBTableStructureDaoImpl extends DaoDataMySQLImpl implements DBTable
     public DBTableStructureDaoImpl (DataSource dataSource){ super (dataSource);}
 
 
-    public void init() throws DaoException {
+    public void init(String table) throws DaoException {
         try{
             super.init();
 
             //query che mi restituisce la struttura di una tabella
-            getTableStructure=connection.prepareStatement("SHOW COLUMNS FROM ?");
+            getTableStructure=connection.prepareStatement("SHOW COLUMNS FROM "+table);
 
         }catch (SQLException | DaoException e){
             throw new DaoException("Error initializing DBTableStructure",e);
         }
     }
 
-    public DBTableStructure getTableStructure (String table) throws DaoException{
+
+    /**
+     * Metodo che restituisce un DBTableStructure vuoto
+     */
+    @Override
+    public DBTableStructure getDBTableStructure() {
+        return new DBTableStructure(this);
+    }
+
+    public DBTableStructure getTableStructure () throws DaoException{
+
         DBTableStructure ts=new DBTableStructure(this);
+
         try{
-            this.getTableStructure.setString(1,table);
-            ResultSet rs= this.getTableStructure.executeQuery();
-            Integer order=new Integer(1);
+            ResultSet rs = this.getTableStructure.executeQuery();
+            Integer order = new Integer(1);
+
             HashMap<Integer,String> f=new HashMap<>();
             HashMap<Integer,String> t=new HashMap<>();
             HashMap<Integer,String> n=new HashMap<>();
             HashMap<Integer,String> k=new HashMap<>();
             HashMap<Integer,String> d=new HashMap<>();
             HashMap<Integer,String> e=new HashMap<>();
-            while(rs.next()){
-                f.put(order,stripSlashes(rs.getString("Fields")));
-                t.put(order,stripSlashes(rs.getString("Type")));
-                n.put(order,stripSlashes(rs.getString("Null")));
-                k.put(order,stripSlashes(rs.getString("Key")));
-                d.put(order,stripSlashes(rs.getString("Default")));
-                e.put(order,stripSlashes(rs.getString("Extra")));
+
+            while(rs.next()) {
+                f.put(order, rs.getString("Field"));
+                t.put(order, rs.getString("Type"));
+                n.put(order, rs.getString("Null"));
+                k.put(order, rs.getString("Key"));
+                d.put(order, rs.getString("Default"));
+                e.put(order, rs.getString("Extra"));
                 order+=1;
             }
 
@@ -63,6 +75,7 @@ public class DBTableStructureDaoImpl extends DaoDataMySQLImpl implements DBTable
             ts.setKeys(k);
             ts.setDefaults(d);
             ts.setExtras(e);
+
         }catch (Exception exep){
             throw new DaoException("Error query getTableStructure",exep);
         }

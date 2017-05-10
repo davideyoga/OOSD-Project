@@ -35,6 +35,9 @@ public enum SingletonFreemarkerCfg {
             // non logga eccezioni dentro FreeMarker che sarebbero comunque rilanciate
             cfg.setLogTemplateExceptions(false);
 
+            //permette operazioni avanzate su hashmap
+            cfg.setAPIBuiltinEnabled(true);
+
         }
 
         return cfg;

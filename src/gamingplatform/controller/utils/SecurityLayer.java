@@ -123,15 +123,7 @@ public class SecurityLayer {
     //--------- DATA SECURITY ------------//
 
 
-    /**
-     * ritorna l'ultimo segmento della url passata
-     * @param url url da analizzare
-     * @return ultimo segmento
-     */
-    public static String getLastBitFromUrl(final String url){
-        // return url.replaceFirst("[^?]*/(.*?)(?:\\?.*)","$1);" <-- incorrect
-        return url.replaceFirst(".*/([^/?]+).*", "$1");
-    }
+
 
     /**
      * questa funzione aggiunge un backslash davanti a

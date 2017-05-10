@@ -76,7 +76,7 @@ public class DBTableStructure {
         this.extras = extras;
     }
 
-    public int arity (HashMap<Integer, String> fields){
+    public int getArity (){
         return fields.size();
     }
 }

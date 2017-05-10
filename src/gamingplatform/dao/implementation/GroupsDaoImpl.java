@@ -95,7 +95,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 					"														   user.username," +
 					"														   user.name," +
 					"														   user.surname," +
-					"														   user.e-mail," +
+					"														   user.email," +
 					"														   user.password," +
 					"														   user.exp," +
 					"														   user.avatar" +
@@ -305,9 +305,9 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 
 		try{
 
-			this.selectGroupsByUserId.setInt( 1, idGroup);
+			this.selectUsersByGroupId.setInt( 1, idGroup);
 
-			ResultSet rs = this.selectGroupsByUserId.executeQuery();
+			ResultSet rs = this.selectUsersByGroupId.executeQuery();
 
 			//rs ritorna un insieme di tuple rappresentanti i gruppi acuoi appartiene l'utente
 			//scorro rs ed aggiungo alla lista il gruppo
@@ -381,13 +381,13 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 	 */
 	public List<Service> getServicesByGroupId(int idGroup) throws DaoException {
 
-		List<Service> list = new ArrayList<Service>();
+		List<Service> list = new ArrayList<>();
 
 		try{
 
-			this.selectGroupsByUserId.setInt( 1, idGroup);
+			this.selectServicesByGroupId.setInt( 1, idGroup);
 
-			ResultSet rs = this.selectGroupsByUserId.executeQuery();
+			ResultSet rs = this.selectServicesByGroupId.executeQuery();
 
 			//rs ritorna un insieme di tuple rappresentanti i gruppi acuoi appartiene l'utente
 			//scorro rs ed aggiungo alla lista il gruppo

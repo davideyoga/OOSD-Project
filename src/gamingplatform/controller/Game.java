@@ -6,9 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static gamingplatform.controller.utils.SecurityLayer.getLastBitFromUrl;
 import static gamingplatform.controller.utils.SecurityLayer.redirect;
 import static gamingplatform.controller.utils.SessionManager.verifySession;
+import static gamingplatform.controller.utils.Utils.getLastBitFromUrl;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isNumeric;
 

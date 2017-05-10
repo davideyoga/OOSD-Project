@@ -76,6 +76,38 @@ public class Utils {
         return list;
     }
 
+    /**
+     * ritorna l'ultimo segmento della url passata
+     * @param url url da analizzare
+     * @return ultimo segmento
+     */
+    public static String getLastBitFromUrl(final String url){
+        return url.replaceFirst(".*/([^/?]+).*", "$1");
+    }
+
+
+    /**
+     * ritorna l'n-ultimo segmento della url passata
+     * es. /terzultimo/penultimo/ultimo con n=1 torna "penultimo"
+     * @param url url da analizzare
+     * @param n indica l'elemento da tornare
+     * @return n-ultimo segmento
+     */
+    public static String getNlastBitFromUrl(final String url, int n){
+
+        String segment="";
+        int length=0;
+
+        for(int i=0; i<=n; i++){
+            //System.out.println("passata "+i+", segment: "+segment+", length: "+length);
+            segment=getLastBitFromUrl(url.substring(0,url.length()-length));
+            length+=segment.length()+1; //+1 per il "/"
+        }
+
+        //System.out.println("return: "+segment);
+        return segment;
+    }
+
 
 
 }

@@ -17,9 +17,8 @@
                     <li>
                         <a href="#" class=" hvr-bounce-to-right"><i class="fa fa-sliders nav_icon"></i> <span class="nav-label">${service.name?cap_first}</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li><a href="/add/${service.name}" class=" hvr-bounce-to-right"> <i class="fa fa-plus-square-o nav_icon"></i>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Add</a></li>
-                            <li><a href="/report/${service.name}" class=" hvr-bounce-to-right"> <i class="fa fa-bar-chart nav_icon"></i>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Report</a></li>
-                            <li><a href="/edit/${service.name}" class=" hvr-bounce-to-right"> <i class="fa fa-edit nav_icon"></i>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Edit</a></li>
+                            <li><a href="/add/${service.name}" style="font-size:70%;" class=" hvr-bounce-to-right"> <i class="fa fa-plus-square-o nav_icon"></i>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Add</a></li>
+                            <li><a href="/report/${service.name}" style="font-size:70%;" class=" hvr-bounce-to-right"> <i class="fa fa-bar-chart nav_icon"></i>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Report</a></li>
                         </ul>
                     </li>
                 </#list>
