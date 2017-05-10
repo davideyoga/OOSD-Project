@@ -28,11 +28,13 @@ function hideURLbar() {
 
 <script src="${context}/js/jquery.min.js"></script>
 <!--list.js-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+<script src="${context}/js/list.min.js"></script>
 <!--datatables-->
-<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
-<!--fine datatable-->
+
+<script type="text/javascript" charset="utf8" src="${context}/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="${context}/js/dataTables.bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="${context}/css/dataTables.bootstrap.min.css"/>
 
 <link href="${context}/css/bootstrap.min.css" rel='stylesheet' type='text/css'/>
 <!-- Custom Theme files -->

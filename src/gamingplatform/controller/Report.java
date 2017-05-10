@@ -108,40 +108,46 @@ public class Report extends HttpServlet {
 
                     ServiceDao serviceDao = new ServiceDaoImpl(ds);
                     serviceDao.init();
-                    List <Service> items = serviceDao.getServices();
-                    data.put("item",items);
+                    List <Service> services = serviceDao.getServices();
+                    data.put("items",services);
                     data.put("table","service");
                     data.put("fields",getClassFields(serviceDao.getService()));
-
                     serviceDao.destroy();
 
                     break;
 
-                    /*
+
                 case "groups":
 
                     GroupsDao groupsDao = new GroupsDaoImpl(ds);
                     groupsDao.init();
-                    List <Group> items = groupsDao.getGroups();
-                    groupsDao.destroy();
-                    data.put("item",items);
+                    List <Group> groups = groupsDao.getGroups();
+                    data.put("items",groups);
                     data.put("table","groups");
+                    data.put("fields",getClassFields(groupsDao.getGroup()));
+                    groupsDao.destroy();
+
                     break;
+
+                    /*
 
                 case "level":
 
                     LevelDao levelDao = new LevelDaoImpl(ds);
                     levelDao.init();
-                    List <Level> items = levelDao.getLevels();
-                    levelDao.destroy();
-                    data.put("item",items);
+                    List <gamingplatform.model.Level> levels = levelDao.getLevels();
+                    data.put("items",levels);
                     data.put("table","level");
+                    data.put("fields",getClassFields(levelDao.getLevel()));
+                    levelDao.destroy();
                     break;
-                */
+
+                    */
+
 
                 default:
                     redirect("/index", "KO", response, request);
-                    break;
+                    return;
             }
 
 
@@ -154,6 +160,7 @@ public class Report extends HttpServlet {
         //processo template
         FreemarkerHelper.process("report.ftl", data, response, getServletContext());
     }
+    
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

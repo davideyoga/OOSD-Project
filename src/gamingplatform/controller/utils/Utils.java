@@ -68,6 +68,9 @@ public class Utils {
         List<String> list= new ArrayList<>();
 
         for(Field field : clazz.getDeclaredFields()) {
+            if(field.getName().equals("password")){
+                continue;
+            }
             list.add(field.getName());
         }
         return list;

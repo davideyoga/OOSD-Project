@@ -9,6 +9,53 @@ h1, h2, h3 {margin: 0;}
 ul, ol {margin: 0;padding: 0;}
 p {margin: 0;}
 
+thead{
+    background-color: #1abc9c!important;
+    color: white;
+    font-size:95%;
+}
+
+tbody{
+    font-size:90%;
+}
+
+
+#report_filter > label, #report_length > label{
+    margin-bottom: -10px!important;
+    margin-top: -10px!important;
+    font-size:90%;
+    color: #B3AEAE!important;
+}
+
+#report{
+    border-radius: 4px!important;
+    border:1px solid #1abc9c!important;
+}
+
+.dataTables_info, .dataTables_paginate{
+    margin-top:5px!important;
+    font-size:90%;
+    color: #B3AEAE!important;
+}
+
+tr.odd:hover, tr.even:hover{
+    cursor: pointer!important;
+    background-color: #e1f5f1!important;
+    transition:0.5s all;
+    -webkit-transition:0.5s all;
+    -moz-transition:0.5s all;
+    -o-transition:0.5s all;
+    -ms-transition:0.5s all;
+}
+
+tr.odd:hover > td, tr.even:hover > td{
+    border-color:#e1f5f1!important;
+    transition:0.5s all;
+    -webkit-transition:0.5s all;
+    -moz-transition:0.5s all;
+    -o-transition:0.5s all;
+    -ms-transition:0.5s all;
+}
 html, body{
   	font-family:'Montserrat-Regular';
     font-size: 100%;
@@ -100,6 +147,7 @@ div#wrapper {
   padding: 4px 6px;
   border: none;
   text-shadow: none;
+    color: #B3AEAE;
 }
 
 .but_list, .tab-content{
@@ -419,12 +467,52 @@ a.dropdown-toggle.dropdown-at {
 nav.navbar.navbar-static-top {
     float: right;
 }
+
+select.input-sm{
+    border:0px;
+    margin-left:0px!important;
+    padding-left:0px;
+}
+
+.input-sm{
+    background: none;
+    border: none;
+    border-bottom:1px solid #B3AEAE;
+    margin-left: -52px!important;
+    padding-left:60px;
+    outline: none;
+    font-size: 0.9em;
+}
+
+.col-sm-12{
+    margin: 10px 0!important;
+}
+
+table tr:last-child td:first-child {
+    border-bottom-left-radius: 4px;
+}
+
+table tr:last-child td:last-child {
+    border-bottom-right-radius: 4px;
+}
+
+.table>thead:first-child>tr:first-child>th:first-child {
+    border-top-left-radius: 4px!important;
+}
+
+.table>thead:first-child>tr:first-child>th:last-child {
+    border-top-right-radius: 4px!important;
+}
+
+th.sorting_asc, th.sorting_desc, th.sorting{
+    border-color:#1abc9c!important;
+}
+
 .navbar-left-right input[type="text"]{
 	background: none;
 	border: none;
 	outline: none;
-	color:#B3AEAE;
-	font-size: 0.9em;	
+	font-size: 0.9em;
 }
 .navbar-left-right input[type="submit"], input[type="button"]{
 	background: url(../images/search.png) 0px 2px no-repeat;
@@ -1170,6 +1258,21 @@ i.fa.fa-twitter {
     padding: 1em;
 
 }
+.row{
+    background: #fff;
+    display: block;
+    margin: 1em 0em;
+    padding: 0.5em;
+    border: 1px solid #ebeff6;
+    border-color: #ebeff6;
+    -webkit-border-radius: 4px;
+    -o-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
 .row.show-grid {
     margin: 1em 0;
 }
@@ -1457,8 +1560,9 @@ label.control-label {
 }
 .login-do p{
 	font-size: 0.9em;
-    color: #999;	
-    margin: 0.7em 0;
+    color: #999;
+    margin-top: 8.5px !important;
+    margin-bottom:-1px!important;
     font-family: 'Muli-Regular';
 }
 
@@ -1541,6 +1645,9 @@ label.control-label {
 
 /* Shutter In Horizontal */
 .hvr-shutter-in-horizontal {
+    margin-top: 0px !important;
+    height: 41px;
+    padding-top:3px;
   display: inline-block;
   vertical-align: middle;
   -webkit-transform: translateZ(0);
@@ -1781,7 +1888,6 @@ div#home {
 .table td, .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
     padding: 15px !important;
     font-size: 0.85em;
-    color: #999;
     border-top: none !important;
 }
 
