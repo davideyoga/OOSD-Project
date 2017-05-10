@@ -24,5 +24,4 @@ public interface GameDao extends DaoData{
 
     public void updateGame( Game game ) throws DaoException;
 
-    public void destroy() throws DaoException;
 }

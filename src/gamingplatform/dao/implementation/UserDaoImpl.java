@@ -246,8 +246,8 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 
 			level.setId(rs.getInt("id"));
 			level.setName(rs.getInt("name"));
-			level.setTrophy(rs.getString("trophy"));
-			level.setIcon(rs.getString("icon"));
+			level.setTrophy(stripSlashes(rs.getString("trophy")));
+			level.setIcon(stripSlashes(rs.getString("icon")));
 			level.setExp(rs.getInt("exp"));
 
 
@@ -259,10 +259,9 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 		return level;
 	}
 
-	/*TODO
-	public List<Level> getHistoryLevelsByUserId(int idUser) throws DaoException{
-		List<Level>
-	}*/
+
+
+
 
 	/**
 	 * chiudo la connessione e le query precompilate

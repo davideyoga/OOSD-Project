@@ -22,5 +22,4 @@ public interface ServiceDao extends DaoData{
 
     public void updateSerivce( Service service) throws DaoException;
 
-    public void destroy() throws DaoException;
 }

@@ -15,6 +15,7 @@ import gamingplatform.dao.interfaces.LevelDao;
 import gamingplatform.model.Level;
 
 import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
+import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
 
 
 public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
@@ -70,8 +71,8 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
             ResultSet rs= this.selectLevelById.executeQuery();
             l.setId(rs.getInt("id"));
             l.setName(rs.getInt("name"));
-            l.setTrophy(rs.getString("trophy"));
-            l.setIcon(rs.getString("icon"));
+            l.setTrophy(stripSlashes(rs.getString("trophy")));
+            l.setIcon(stripSlashes(rs.getString("icon")));
             l.setExp(rs.getInt("exp"));
         } catch (SQLException e) {
             throw new DaoException("Error query getLevel", e);
@@ -135,8 +136,8 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
                 Level level=new Level(this);
                 level.setId(rs.getInt("id"));
                 level.setName(rs.getInt("name"));
-                level.setTrophy(rs.getString("trophy"));
-                level.setIcon(rs.getString("icon"));
+                level.setTrophy(stripSlashes(rs.getString("trophy")));
+                level.setIcon(stripSlashes(rs.getString("icon")));
                 level.setExp(rs.getInt("exp"));
 
                 lista.add(level);

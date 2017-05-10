@@ -27,7 +27,4 @@ public interface UserDao extends DaoData{
 	public User getUserByUsernamePassword(String username, String password) throws DaoException;
 
 	public Level getLevelByUserId(int user_id) throws DaoException;
-
-	public void destroy() throws DaoException;
-	
 }
