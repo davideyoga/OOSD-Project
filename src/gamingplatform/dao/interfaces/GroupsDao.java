@@ -38,7 +38,4 @@ public interface GroupsDao extends DaoData{
 
 	public void addServiceToGroup(int idGroup, int idService)throws DaoException;
 
-
-	public void destroy() throws DaoException;
-	
 }

@@ -24,5 +24,4 @@ public interface ReviewDao extends DaoData{
 
     public void updateReview(Review review) throws DaoException;
 
-    public void destroy() throws DaoException;
 }
