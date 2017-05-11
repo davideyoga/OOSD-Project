@@ -60,6 +60,10 @@ public class SecurityLayer {
      * @return sha1(x) oppure null
      */
     public static String sha1Encrypt(String x) {
+        if(isNull(x)){
+            Logger.getAnonymousLogger().log(Level.WARNING, "SecurityException: parametro null" );
+            return null;
+        }
         String sha1 = null;
         try {
             MessageDigest msdDigest = MessageDigest.getInstance("SHA-1");

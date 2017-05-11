@@ -70,7 +70,7 @@
     </servlet-mapping>
     <!-- fine servlet edit -->
 
-    <!-- servlet edit -->
+    <!-- servlet add -->
     <servlet>
         <servlet-name>Add</servlet-name>
         <servlet-class>gamingplatform.controller.Add</servlet-class>
@@ -80,7 +80,19 @@
         <servlet-name>Add</servlet-name>
         <url-pattern>/add/*</url-pattern>
     </servlet-mapping>
-    <!-- fine servlet edit -->
+    <!-- fine servlet add -->
+
+    <!-- servlet doInsert -->
+    <servlet>
+        <servlet-name>doInsert</servlet-name>
+        <servlet-class>gamingplatform.controller.doInsert</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>doInsert</servlet-name>
+        <url-pattern>/doInsert/*</url-pattern>
+    </servlet-mapping>
+    <!-- fine servlet doInsert -->
 
     <!-- servlet login -->
     <servlet>
