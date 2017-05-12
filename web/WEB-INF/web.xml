@@ -58,6 +58,42 @@
     </servlet-mapping>
     <!-- fine servlet report -->
 
+    <!-- servlet edit -->
+    <servlet>
+        <servlet-name>Edit</servlet-name>
+        <servlet-class>gamingplatform.controller.Edit</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Edit</servlet-name>
+        <url-pattern>/edit/*</url-pattern>
+    </servlet-mapping>
+    <!-- fine servlet edit -->
+
+    <!-- servlet add -->
+    <servlet>
+        <servlet-name>Add</servlet-name>
+        <servlet-class>gamingplatform.controller.Add</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Add</servlet-name>
+        <url-pattern>/add/*</url-pattern>
+    </servlet-mapping>
+    <!-- fine servlet add -->
+
+    <!-- servlet doInsert -->
+    <servlet>
+        <servlet-name>doInsert</servlet-name>
+        <servlet-class>gamingplatform.controller.doInsert</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>doInsert</servlet-name>
+        <url-pattern>/doInsert/*</url-pattern>
+    </servlet-mapping>
+    <!-- fine servlet doInsert -->
+
     <!-- servlet login -->
     <servlet>
         <servlet-name>Login</servlet-name>

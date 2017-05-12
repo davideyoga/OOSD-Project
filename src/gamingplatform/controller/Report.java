@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static gamingplatform.controller.utils.SecurityLayer.getLastBitFromUrl;
+import static gamingplatform.controller.utils.Utils.getLastBitFromUrl;
 import static gamingplatform.controller.utils.SecurityLayer.redirect;
 import static gamingplatform.controller.utils.SecurityLayer.checkAuth;
 import static gamingplatform.controller.utils.SessionManager.getServices;
@@ -67,6 +67,8 @@ public class Report extends HttpServlet {
             redirect("/index", "KO-unauthorized", response, request);
             return;
         }
+        data.put("table",item);
+
 
 
         //disambiguo la tabella di cui l'utente vuole il report
@@ -85,7 +87,6 @@ public class Report extends HttpServlet {
                     userDao.init();
                     List<User> users = userDao.getUsers();
                     data.put("items",users);
-                    data.put("table","user");
                     data.put("fields",getClassFields(userDao.getUser()));
                     userDao.destroy();
 
@@ -97,7 +98,6 @@ public class Report extends HttpServlet {
                     gameDao.init();
                     List<gamingplatform.model.Game> games = gameDao.getGames();
                     data.put("items",games);
-                    data.put("table","game");
                     data.put("fields",getClassFields(gameDao.getGame()));
                     gameDao.destroy();
 
@@ -110,7 +110,6 @@ public class Report extends HttpServlet {
                     serviceDao.init();
                     List <Service> services = serviceDao.getServices();
                     data.put("items",services);
-                    data.put("table","service");
                     data.put("fields",getClassFields(serviceDao.getService()));
                     serviceDao.destroy();
 
@@ -123,13 +122,10 @@ public class Report extends HttpServlet {
                     groupsDao.init();
                     List <Group> groups = groupsDao.getGroups();
                     data.put("items",groups);
-                    data.put("table","groups");
                     data.put("fields",getClassFields(groupsDao.getGroup()));
                     groupsDao.destroy();
 
                     break;
-
-                    /*
 
                 case "level":
 
@@ -137,12 +133,9 @@ public class Report extends HttpServlet {
                     levelDao.init();
                     List <gamingplatform.model.Level> levels = levelDao.getLevels();
                     data.put("items",levels);
-                    data.put("table","level");
                     data.put("fields",getClassFields(levelDao.getLevel()));
                     levelDao.destroy();
                     break;
-
-                    */
 
 
                 default:

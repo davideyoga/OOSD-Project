@@ -13,6 +13,8 @@ import java.util.List;
  */
 public interface LevelDao extends DaoData {
 
+    public Level getLevel();
+
     public Level getLevelById(int keyLevel) throws DaoException;
 
     public void insertLevel(Level level) throws DaoException;

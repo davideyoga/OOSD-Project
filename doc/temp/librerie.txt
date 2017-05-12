@@ -1,0 +1,8 @@
+librerie richieste (da includere nel progetto e mettere dentro gamingplatofrm/web/WEB-INF/lib):
+
+commons-io-2.5.jar						https://commons.apache.org/proper/commons-io/
+commons-lang3-3.5.jar					https://commons.apache.org/proper/commons-lang/
+freemarker.jar							http://freemarker.org/freemarkerdownload.html
+mysql-connector-java-5.1.42-bin.jar		https://dev.mysql.com/downloads/connector/j/5.1.html
+tomcat-dbcp.jar 						da prendere dentro la cartella di installazione di tomcat
+tomcat-jdbc.jar							come sopra

@@ -1558,6 +1558,37 @@ label.control-label {
     text-align: center;	
     text-decoration: none;    
 }
+
+.edit_btn_hover:hover{
+     background-color: #148f77!important;
+     border-color: #148f77!important;
+     transition:0.5s all;
+     -webkit-transition:0.5s all;
+     -moz-transition:0.5s all;
+     -o-transition:0.5s all;
+     -ms-transition:0.5s all;
+ }
+
+.delete_btn_hover:hover{
+    background-color: #cd2d33!important;
+    border-color: #cd2d33!important;
+    transition:0.5s all;
+    -webkit-transition:0.5s all;
+    -moz-transition:0.5s all;
+    -o-transition:0.5s all;
+    -ms-transition:0.5s all;
+}
+
+.confirm_btn_hover:hover{
+    background-color: #ec971f!important;
+    border-color: #ec971f!important;
+    transition:0.5s all;
+    -webkit-transition:0.5s all;
+    -moz-transition:0.5s all;
+    -o-transition:0.5s all;
+    -ms-transition:0.5s all;
+}
+
 .login-do p{
 	font-size: 0.9em;
     color: #999;

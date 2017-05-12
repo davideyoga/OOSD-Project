@@ -12,10 +12,6 @@
                     <input type="password" placeholder="Password" name="password" required="">
                     <i class="fa fa-lock"></i>
                 </div>
-                <a class="news-letter " href="#">
-                    <label class="checkbox1"><input type="checkbox" name="checkbox"><i> </i>Forgot Password</label>
-                </a>
-
 
             </div>
             <div class="col-md-6 login-do">

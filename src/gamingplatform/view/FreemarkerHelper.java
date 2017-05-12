@@ -49,6 +49,9 @@ public class FreemarkerHelper {
             //processo la template con la Map
             template.process(data, out);
 
+            //esplicito pulizia da garbage collection
+            data=null;
+
         } catch (TemplateException | IOException ex) {
 
             //log dei dettagli dell'eccezione

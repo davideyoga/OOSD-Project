@@ -60,6 +60,10 @@ public class SecurityLayer {
      * @return sha1(x) oppure null
      */
     public static String sha1Encrypt(String x) {
+        if(isNull(x)){
+            Logger.getAnonymousLogger().log(Level.WARNING, "SecurityException: parametro null" );
+            return null;
+        }
         String sha1 = null;
         try {
             MessageDigest msdDigest = MessageDigest.getInstance("SHA-1");
@@ -123,15 +127,7 @@ public class SecurityLayer {
     //--------- DATA SECURITY ------------//
 
 
-    /**
-     * ritorna l'ultimo segmento della url passata
-     * @param url url da analizzare
-     * @return ultimo segmento
-     */
-    public static String getLastBitFromUrl(final String url){
-        // return url.replaceFirst("[^?]*/(.*?)(?:\\?.*)","$1);" <-- incorrect
-        return url.replaceFirst(".*/([^/?]+).*", "$1");
-    }
+
 
     /**
      * questa funzione aggiunge un backslash davanti a

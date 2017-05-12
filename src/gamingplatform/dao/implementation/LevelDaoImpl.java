@@ -63,6 +63,8 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
         }
     }
 
+    public Level getLevel() {return new Level(this);}
+
     @Override
     public Level getLevelById ( int keyLevel) throws DaoException{
         Level l=new Level(this);
