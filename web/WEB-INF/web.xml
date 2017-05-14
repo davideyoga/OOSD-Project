@@ -94,6 +94,30 @@
     </servlet-mapping>
     <!-- fine servlet doInsert -->
 
+    <!-- servlet doDelete -->
+    <servlet>
+        <servlet-name>doDelete</servlet-name>
+        <servlet-class>gamingplatform.controller.doDelete</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>doDelete</servlet-name>
+        <url-pattern>/doDelete/*</url-pattern>
+    </servlet-mapping>
+    <!-- fine servlet doDelete -->
+
+    <!-- servlet doDelete -->
+    <servlet>
+        <servlet-name>doUpdate</servlet-name>
+        <servlet-class>gamingplatform.controller.doUpdate</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>doUpdate</servlet-name>
+        <url-pattern>/doUpdate/*</url-pattern>
+    </servlet-mapping>
+    <!-- fine servlet doUpdate -->
+
     <!-- servlet login -->
     <servlet>
         <servlet-name>Login</servlet-name>

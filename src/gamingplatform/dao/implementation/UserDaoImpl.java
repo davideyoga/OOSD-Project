@@ -50,7 +50,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			this.selectUsers = connection.prepareStatement("SELECT * FROM user");
 			this.selectUserById = connection.prepareStatement("SELECT * FROM user WHERE id=?");
 			this.deleteUserById = connection.prepareStatement("DELETE FROM user WHERE id=?");
-			this.updateUserById = connection.prepareStatement("UPDATE user SET username=?,name=?,surname=?,email=?, password=?, exp=?, avatar=?");
+			this.updateUserById = connection.prepareStatement("UPDATE user SET username=?,name=?,surname=?,email=?, password=?, exp=?, avatar=? WHERE id=?");
 			this.getUserByUsernamePassword = connection.prepareStatement("SELECT * FROM user WHERE username=? AND password =?");
 			//Query che mi restituisce l'attuale livello in cui si trova l'user
 			this.getLevelByUserId = connection.prepareStatement("SELECT level.id, level.name, level.icon, level.exp " +
@@ -150,6 +150,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			this.updateUserById.setString(5, user.getPassword());
 			this.updateUserById.setInt(6, user.getExp());
 			this.updateUserById.setString(7, addSlashes(user.getAvatar()));
+			this.updateUserById.setInt(8, user.getId());
 
 			this.updateUserById.executeUpdate();
 
