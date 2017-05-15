@@ -5,7 +5,7 @@ import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.interfaces.UserDao;
 import gamingplatform.dao.interfaces.UserLevelDao;
 import gamingplatform.model.Level;
-
+import gamingplatform.model.UserLevel;
 import javax.sql.DataSource;
 import java.net.DatagramPacket;
 import java.sql.PreparedStatement;
@@ -92,7 +92,7 @@ public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
 
     // TODO QUA DEVI FINIRE DI SCRIVERE LE COSE
     public UserLevel setUserLevel(UserLevel obj) throws DaoException {
-
+    // TODO qua devo finire
 
 
     }
