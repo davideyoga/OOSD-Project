@@ -74,9 +74,9 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
             deleteReview=connection.prepareStatement("DELETE FROM review WHERE id_user=? AND id_game=?");
 
             //query di update di una review
-            updateReview=connection.prepareStatement(" UPDATE game" +
-                    "                                      SET title=?" + //L'ID NON LO PUOI MODIFICARE
-                    "                                          body=?" +
+            updateReview=connection.prepareStatement(" UPDATE review " +
+                    "                                      SET title=?, " +
+                    "                                          body=?," +
                     "                                          vote=?" +
                     "                                      WHERE id_user=? AND id_game=?");
 

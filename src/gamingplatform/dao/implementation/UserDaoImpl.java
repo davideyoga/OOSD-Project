@@ -3,7 +3,6 @@ package gamingplatform.dao.implementation;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,6 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 							  getUserByUsernamePassword,
 	 						  deleteUserById,
 							  updateUserById,
-							  getHystoryLevelsByUserId,
 	                          getLevelByUserId; // Ottenere il livello attuale di un utente
 
 	/**
@@ -45,24 +43,59 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 	public void init() throws DaoException{
 		try {
 			super.init(); // connection initialization
-			
-			this.insertUser = connection.prepareStatement("INSERT INTO user VALUES(NULL,?,?,?,?,?,?,?)");
-			this.selectUsers = connection.prepareStatement("SELECT * FROM user");
-			this.selectUserById = connection.prepareStatement("SELECT * FROM user WHERE id=?");
-			this.deleteUserById = connection.prepareStatement("DELETE FROM user WHERE id=?");
-			this.updateUserById = connection.prepareStatement("UPDATE user SET username=?,name=?,surname=?,email=?, password=?, exp=?, avatar=? WHERE id=?");
-			this.getUserByUsernamePassword = connection.prepareStatement("SELECT * FROM user WHERE username=? AND password =?");
-			//Query che mi restituisce l'attuale livello in cui si trova l'user
-			this.getLevelByUserId = connection.prepareStatement("SELECT level.id, level.name, level.icon, level.exp " +
-					"                                                   FROM level " +
-					"                                                   LEFT JOIN userlevel ON userlevel.id_level=level.id" +
-					"                                                   WHERE userlevel.id_user = ? ORDER BY date DESC LIMIT 1");
-			//Query che mi restituisce la storia dei livelli raggiunti da un user
-			this.getHystoryLevelsByUserId=connection.prepareStatement("SELECT * " +
-					"														FROM userlevel " +
-					"														WHERE id_user=?");
 
-		} catch (SQLException e) {
+			//query insert
+			this.insertUser = connection.prepareStatement("INSERT INTO user" +
+					"										    VALUES(NULL,?,?,?,?,?,?,?)");
+
+
+
+			//query select all users
+			this.selectUsers = connection.prepareStatement("SELECT * " +
+					"											 FROM user");
+
+
+
+			//query select one user from id
+			this.selectUserById = connection.prepareStatement("SELECT * " +
+					"												FROM user " +
+					"												WHERE id=?");
+
+
+
+			//query delete a user
+			this.deleteUserById = connection.prepareStatement("DELETE FROM user " +
+					"												WHERE id=?");
+
+
+
+			//query update user
+			this.updateUserById = connection.prepareStatement("UPDATE user " +
+					"												SET username=?," +
+					"													name=?," +
+					"													surname=?," +
+					"													email=?," +
+					"												 	password=?," +
+					"													exp=?, " +
+					"													avatar=?" +
+					"												WHERE id=?");
+
+
+
+			//query select user from username e password
+			this.getUserByUsernamePassword = connection.prepareStatement("SELECT * " +
+					"														   FROM user " +
+					"														   WHERE username=? AND password =?");
+
+
+
+			//Query che mi restituisce l'attuale livello in cui si trova l'user
+			this.getLevelByUserId = connection.prepareStatement("SELECT level.id, level.name, level.icon, level.trophy, level.exp " +
+					"                                                 FROM level " +
+					"                                                 LEFT JOIN userlevel ON userlevel.id_level=level.id " +
+					"                                                 WHERE userlevel.id_user = ? ORDER BY date DESC LIMIT 1");
+
+		} catch (Exception e) {
 			throw new DaoException("Error initializing user dao", e);
 		}
 	}
@@ -84,7 +117,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			this.insertUser.executeUpdate();
 
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new DaoException("Error sql insertUser", e);
 		}
 
@@ -101,7 +134,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 				this.deleteUserById.setInt(1, idUser);
 				this.deleteUserById.executeUpdate();
 				
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				throw new DaoException("Error dao delete user", e);
 			}
 		}
@@ -130,7 +163,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 				u.setAvatar(stripSlashes(rs.getString("avatar")));
 				lista.add(u);
 			}
-		}catch (SQLException e){
+		}catch (Exception e){
 			throw new DaoException("Error query getUsers", e);
 
 		}
@@ -154,7 +187,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 
 			this.updateUserById.executeUpdate();
 
-		}catch (SQLException e) {
+		}catch (Exception e) {
 
 			throw new DaoException("Error dao update user", e);
 		}
@@ -190,7 +223,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 				user.setAvatar(stripSlashes(rs.getString("avatar")));
 			}
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new DaoException("Error dao user get user ", e);
 		}
 		
@@ -223,7 +256,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 				user.setAvatar(stripSlashes(rs.getString("avatar")));
 			}
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new DaoException("Error dao user get user ", e);
 		}
 
@@ -245,15 +278,17 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			this.getLevelByUserId.setInt(1, idUser);
 			ResultSet rs = this.getLevelByUserId.executeQuery();
 
-			level.setId(rs.getInt("id"));
-			level.setName(rs.getInt("name"));
-			level.setTrophy(stripSlashes(rs.getString("trophy")));
-			level.setIcon(stripSlashes(rs.getString("icon")));
-			level.setExp(rs.getInt("exp"));
+			while(rs.next()) {
+				level.setId(rs.getInt("id"));
+				level.setName(rs.getInt("name"));
+				level.setTrophy(stripSlashes(rs.getString("trophy")));
+				level.setIcon(stripSlashes(rs.getString("icon")));
+				level.setExp(rs.getInt("exp"));
+			}
 
 
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new DaoException("Error query getLevelByUserId", e);
 		}
 
@@ -280,7 +315,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			this.updateUserById.close();
 			this.getUserByUsernamePassword.close();
 			
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new DaoException("Error destroy dao user", e);
 		}
 		

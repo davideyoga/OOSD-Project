@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +42,8 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
                                                                                "game.id, " +
                                                                                "game.name, " +
                                                                                "game.exp, " +
-                                                                               "game.description " +
+                                                                               "game.description, " +
+                                                                               "game.image "+
                                                                                "FROM game " +
                                                                                "LEFT JOIN usergame ON game.id = usergame.id_game " +
                                                                                "WHERE usergame.id_user = ?");
@@ -56,9 +58,9 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
      * @throws DaoException lancia eccezione in caso di errore
      */
     @Override
-    public Map<Date, Game> getDateGamesByUserId(int userId) throws DaoException{
+    public Map<Timestamp, Game> getDateGamesByUserId(int userId) throws DaoException{
 
-        Map<Date, Game> map = new HashMap<>();
+        Map<Timestamp, Game> map = new HashMap<>();
 
         try {
             this.selectGamesByUserId.setInt(1, userId); //setto la query
@@ -68,7 +70,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
 
                 Game game = new Game(this); //dichiaro il livello corrispondente alla data da inserire nella mappa
 
-                Date date = rs.getDate("date"); //estraggo la data dal risultato della query
+                Timestamp date = rs.getTimestamp("date"); //estraggo la data dal risultato della query
 
                 // setto le variabili del livello da restituire nella mappa
                 game.setId(rs.getInt("id"));
