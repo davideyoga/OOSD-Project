@@ -11,6 +11,6 @@ import java.util.Map;
 
 public interface UserGameDao extends DaoData {
 
-    public Map<Date,Game> getDateGamesByUserId(int userId) throws DaoException, SQLException;
+    public Map<Date,Game> getDateGamesByUserId(int userId) throws DaoException;
 
 }

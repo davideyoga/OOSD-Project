@@ -10,6 +10,6 @@ import java.util.Map;
 
 public interface UserLevelDao extends DaoData {
 
-    public Map<Date,Level> getDateLevelsByUserId(int userId) throws DaoException, SQLException;
+    public Map<Date,Level> getDateLevelsByUserId(int userId) throws DaoException;
 
 }

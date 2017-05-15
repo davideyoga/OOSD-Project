@@ -18,7 +18,7 @@ import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
 
 public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
 
-    private PreparedStatement selectGameByUserId;
+    private PreparedStatement selectGamesByUserId;
 
     /**
      * Costruttore per inizializzare la connessione
@@ -37,14 +37,14 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
         try {
             super.init(); // connection initialization
 
-            this.selectGameByUserId = connection.prepareStatement("SELECT username.date, " +
-                    "game.id, " +
-                    "game.name, " +
-                    "game.exp, " +
-                    "game.description\n" +
-                    "FROM game\n" +
-                    "LEFT JOIN usergame ON user.id = usergame.id\n" +
-                    "WHERE usergame.id = ?");
+            this.selectGamesByUserId = connection.prepareStatement("SELECT usergame.date, " +
+                                                                               "game.id, " +
+                                                                               "game.name, " +
+                                                                               "game.exp, " +
+                                                                               "game.description " +
+                                                                               "FROM game " +
+                                                                               "LEFT JOIN usergame ON game.id = usergame.id_game " +
+                                                                               "WHERE usergame.id_user = ?");
 
         } catch (SQLException e) {
             throw new DaoException("Error initializing user game dao", e);
@@ -61,8 +61,8 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
         Map<Date, Game> map = new HashMap<>();
 
         try {
-            this.selectGameByUserId.setInt(1, userId); //setto la query
-            ResultSet rs = this.selectGameByUserId.executeQuery(); //eseguo la query
+            this.selectGamesByUserId.setInt(1, userId); //setto la query
+            ResultSet rs = this.selectGamesByUserId.executeQuery(); //eseguo la query
 
             while( rs.next() ){ //ciclo ogni tupla del risultato
 
@@ -96,7 +96,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
 
         //chiudo le quary precompilate
         try {
-            this.selectGameByUserId.close();
+            this.selectGamesByUserId.close();
 
         } catch (SQLException e) {
             throw new DaoException("Error destroy dao user", e);
