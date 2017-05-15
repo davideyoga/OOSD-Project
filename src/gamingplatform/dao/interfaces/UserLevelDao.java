@@ -13,4 +13,10 @@ public interface UserLevelDao extends DaoData {
 
     public Map<Timestamp,Level> getDateLevelsByUserId(int userId) throws DaoException;
 
+    // TODO QUA DEVI FINIRE DI SCRIVERE LE COSE
+    public UserLevel setUserLevel(UserLevel obj) throws DaoException;
+
+    // TODO QUA DEVI FINIRE DI SCRIVERE LE COSE
+    public UserLevel setUserLevel(UserLevel obj) throws DaoException;
+
 }

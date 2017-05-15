@@ -2,13 +2,16 @@ package gamingplatform.dao.implementation;
 
 import gamingplatform.dao.data.DaoDataMySQLImpl;
 import gamingplatform.dao.exception.DaoException;
+import gamingplatform.dao.interfaces.UserDao;
 import gamingplatform.dao.interfaces.UserLevelDao;
 import gamingplatform.model.Level;
 
 import javax.sql.DataSource;
+import java.net.DatagramPacket;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +19,8 @@ import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
 
 public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
 
-    PreparedStatement selectLevelsByUserId;
+    PreparedStatement selectLevelsByUserId,
+                      insertUserLevel;
 
     /**
      * Costruttore per inizializzare la connessione
@@ -35,16 +39,19 @@ public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
         try {
             super.init(); // connection initialization
 
-            this.selectLevelsByUserId = connection.prepareStatement(" SELECT userlevel.date," +
+            this.selectLevelsByUserId = connection.prepareStatement("SELECT userlevel.date," +
                                                                                 " level.id," +
                                                                                 " level.name," +
                                                                                 " level.trophy," +
                                                                                 " level.icon," +
                                                                                 " level.exp" +
                                                                         " FROM level LEFT JOIN userlevel ON level.id = userlevel.id_level " +
-                                                                        " WHERE userlevel.id_user = ? ");
+                                                                        "WHERE userlevel.id_user = ? ");
 
-        } catch (Exception e) {
+            this.insertUserLevel = connection.prepareStatement("INSERT INTO userlevel (date) " +
+                    "                                                VALUES (?); ");
+
+        } catch (SQLException e) {
             throw new DaoException("Error initializing user level dao", e);
         }
     }
@@ -54,9 +61,9 @@ public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
      * @throws DaoException lancia eccezione in caso di errore
      */
     @Override
-    public Map<Timestamp, Level> getDateLevelsByUserId(int userId) throws DaoException{
+    public Map<Date, Level> getDateLevelsByUserId(int userId) throws DaoException{
 
-        Map<Timestamp, Level> map = new HashMap<>();
+        Map<Date, Level> map = new HashMap<>();
 
         try {
             this.selectLevelsByUserId.setInt(1, userId); //setto la query
@@ -66,7 +73,7 @@ public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
 
                 Level level = new Level(this); //dichiaro il livello corrispondente alla data da inserire nella mappa
 
-                Timestamp date = rs.getTimestamp("date"); //estraggo la data dal risultato della query
+                Date date = rs.getDate("date"); //estraggo la data dal risultato della query
 
                 // setto le variabili del livello da restituire nella mappa
                 level.setId(rs.getInt("id"));
@@ -74,16 +81,20 @@ public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
                 level.setTrophy(stripSlashes(rs.getString("trophy")));
                 level.setIcon(stripSlashes(rs.getString("icon")));
                 level.setExp(rs.getInt("exp"));
-
                 map.put(date,level);
-
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new DaoException("Error get levels by user id in user level dao", e);
         }
-
         return map;
+    }
+
+    // TODO QUA DEVI FINIRE DI SCRIVERE LE COSE
+    public UserLevel setUserLevel(UserLevel obj) throws DaoException {
+
+
+
     }
 
     /**
@@ -96,8 +107,9 @@ public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
         //chiudo le quary precompilate
         try {
             this.selectLevelsByUserId.close();
+            // TODO QUA DEVI FINIRE DI SCRIVERE LE COSE
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new DaoException("Error destroy dao user", e);
         }
 
