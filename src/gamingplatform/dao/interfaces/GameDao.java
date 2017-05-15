@@ -3,6 +3,7 @@ package gamingplatform.dao.interfaces;
 import gamingplatform.dao.data.DaoData;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.model.Game;
+import gamingplatform.model.Review;
 
 import java.util.List;
 
@@ -23,5 +24,7 @@ public interface GameDao extends DaoData{
     public void deleteGameByName(String nameGame) throws DaoException;
 
     public void updateGame( Game game ) throws DaoException;
+
+    public double getAverageVote (Game game) throws DaoException;
 
 }

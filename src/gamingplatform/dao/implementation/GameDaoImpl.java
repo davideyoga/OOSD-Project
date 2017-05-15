@@ -13,6 +13,7 @@ import gamingplatform.dao.data.DaoDataMySQLImpl;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.interfaces.GameDao;
 import gamingplatform.model.Game;
+import gamingplatform.model.Review;
 
 import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
 import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
@@ -26,8 +27,8 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
                               deleteGameById,
                               deleteGameByName,
                               selectGames,
-                              updateGame;
-
+                              updateGame,
+                              selectAverageVote;
 
     /**
      * Costruttore per inizializzare la connessione
@@ -80,11 +81,15 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
                     "                                        description=?" +
                     "                                    WHERE id=?");
 
+            // Query che torna la media dei voti di un gioco, dato il gioco
+            selectAverageVote = connection.prepareStatement("SELECT id_game, AVG (vote) " +
+                                                               "FROM review " +
+                                                               "WHERE id_game = ? ");
+
         }catch (SQLException e){
             throw new DaoException("Error initializing GameDao", e);
         }
     }
-
 
     @Override
     public Game getGame() {
@@ -243,6 +248,21 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
         }
     }
 
+    public double getAverageVote (Game game) throws DaoException{
+        double avg=0;
+        try {
+            ResultSet rs = this.selectAverageVote.executeQuery();
+
+            while (rs.next()){
+                 avg = rs.getDouble("AVG(vote)");
+            }
+
+        }catch (SQLException e){
+            throw new DaoException("Error query getAverageVote", e);
+        }
+        return avg;
+    }
+
     /**
      * Metodo che chiude la connessione e le query preparate
      * @throws DaoException lancia eccezione in caso di errore
@@ -258,6 +278,7 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
             this.deleteGameByName.close();
             this.selectGames.close();
             this.updateGame.close();
+            this.selectAverageVote.close();
 
 
         } catch (SQLException e) {
