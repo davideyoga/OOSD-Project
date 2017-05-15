@@ -11,16 +11,21 @@
                 <a href="/profile" class=" hvr-bounce-to-right"><i class="fa fa-user nav_icon "></i><span class="nav-label">Profile</span> </a>
             </li>
 
-            <#if services??>
+            <#if services?? && (services?size>0)>
 
                 <#list services as service>
-                    <li>
-                        <a href="#" class=" hvr-bounce-to-right"><i class="fa fa-sliders nav_icon"></i> <span class="nav-label">${service.name?cap_first}</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li><a href="/add/${service.name}" style="font-size:70%;" class=" hvr-bounce-to-right"> <i class="fa fa-plus-square-o nav_icon"></i>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Add</a></li>
-                            <li><a href="/report/${service.name}" style="font-size:70%;" class=" hvr-bounce-to-right"> <i class="fa fa-bar-chart nav_icon"></i>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Report</a></li>
-                        </ul>
-                    </li>
+                <#if service.name?starts_with("review") || !(service.name?has_content)>
+
+                    <#else>
+                        <li>
+                            <a href="#" class=" hvr-bounce-to-right"><i class="fa fa-sliders nav_icon"></i> <span class="nav-label">${service.name?cap_first}</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li><a href="/add/${service.name}" style="font-size:70%;" class=" hvr-bounce-to-right"> <i class="fa fa-plus-square-o nav_icon"></i>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Add</a></li>
+                                <li><a href="/report/${service.name}" style="font-size:70%;" class=" hvr-bounce-to-right"> <i class="fa fa-bar-chart nav_icon"></i>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Report</a></li>
+                            </ul>
+                        </li>
+                </#if>
+
                 </#list>
 
             </#if>
@@ -28,8 +33,6 @@
             <li>
                 <a href="/logout" class=" hvr-bounce-to-right"><i class="fa fa-arrow-circle-o-left nav_icon "></i><span class="nav-label">LogOut</span> </a>
             </li>
-
-
 
         </#if>
 

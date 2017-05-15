@@ -1,8 +1,8 @@
 package gamingplatform.controller;
 
 import gamingplatform.dao.exception.DaoException;
-import gamingplatform.dao.implementation.*;
-import gamingplatform.dao.interfaces.*;
+import gamingplatform.dao.implementation.UserDaoImpl;
+import gamingplatform.dao.interfaces.UserDao;
 import gamingplatform.model.User;
 
 import javax.annotation.Resource;
@@ -17,22 +17,24 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static gamingplatform.controller.utils.SecurityLayer.*;
+import static gamingplatform.controller.utils.SecurityLayer.checkAuth;
+import static gamingplatform.controller.utils.SecurityLayer.sha1Encrypt;
 import static gamingplatform.controller.utils.Utils.fileUpload;
 import static gamingplatform.controller.utils.Utils.getLastBitFromUrl;
+import static gamingplatform.controller.utils.Utils.getNlastBitFromUrl;
 import static java.util.Objects.isNull;
 
 
 /**
- * classe atta al processamento di richieste ajax post per l'inserimento di elementi nel db
- * risponde a url del tipo /doInser/tabella/
+ * classe atta al processamento di richieste ajax post per la modifica di elementi nel db
+ * risponde a url del tipo /doUpdate/tabella/idElemento
  */
 @MultipartConfig(
         fileSizeThreshold=1024*1024,    // 1 MB
         maxFileSize=1024*1024*5,        // 5 MB
         maxRequestSize=1024*1024*5*5    // 25 MB
 )
-public class doInsert extends HttpServlet {
+public class doUpdate extends HttpServlet {
 
     @Resource(name = "jdbc/gamingplatform")
     private static DataSource ds;
@@ -45,22 +47,32 @@ public class doInsert extends HttpServlet {
 
         //se non è una chiamata ajax
         if (!"XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
-            Logger.getAnonymousLogger().log(Level.WARNING, "[doInsert] non è una chiamata ajax");
+            Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate] non è una chiamata ajax");
             //torno KO alla chiamata servlet
             response.getWriter().write("KO");
             return;
         }
 
         //carico la tabella in cui si vuole aggiungere la tupla (la url è della forma /add/tabella
-        String item = getLastBitFromUrl(request.getRequestURI());
+        String item = getNlastBitFromUrl(request.getRequestURI(), 1);
 
         //controllo quì se l'utente è loggato e ha acesso a quella determinata tabella
         if (!checkAuth(request, item)) {
-            //se l'ultimo elemento dopo lo "/" (ovvero il servizio a cui si sta provando ad accedere)
+            //se il servizio a cui si sta provando ad accedere
             //non è un servizio a cui l'utente ha accesso
             response.getWriter().write("KO");
             return;
         }
+
+        String id=getLastBitFromUrl(request.getRequestURI());
+
+        if(isNull(id) || id.equals("")){
+            Logger.getAnonymousLogger().log(Level.WARNING, "[doDelete: "+item+"] parametri post non validi");
+            response.getWriter().write("KO");
+            return;
+        }
+
+        int itemId=Integer.parseInt(id);
 
         try {
 
@@ -80,7 +92,7 @@ public class doInsert extends HttpServlet {
                     if (isNull(username) || isNull(name) || isNull(surname) || isNull(email) || isNull(password) ||
                             username.equals("") || name.equals("") || surname.equals("") || email.equals("") || password.equals("")) {
 
-                        Logger.getAnonymousLogger().log(Level.WARNING, "[doInsert: "+item+"] Parametri POST non validi ");
+                        Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: "+item+"] Parametri POST non validi ");
                         //torno KO alla chiamata servlet
                         response.getWriter().write("KO");
                         return;
@@ -89,7 +101,7 @@ public class doInsert extends HttpServlet {
                     String avatarName = fileUpload(avatar, "avatars", getServletContext());
                     if (isNull(avatarName)) {
 
-                        Logger.getAnonymousLogger().log(Level.WARNING, "[doInsert: "+item+"] Upload file fallito");
+                        Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: "+item+"] Upload file fallito");
                         //torno KO alla chiamata servlet
                         response.getWriter().write("KO");
                         return;
@@ -101,6 +113,7 @@ public class doInsert extends HttpServlet {
                     //provo ad inserire l'utente
 
                     User user = userDao.getUser();
+                    user.setId(itemId); //differenza rispetto alla insert, devo fornire l'id!, è sempre dentro la variabile itemId
                     user.setUsername(username);
                     user.setName(name);
                     user.setSurname(surname);
@@ -108,7 +121,7 @@ public class doInsert extends HttpServlet {
                     user.setPassword(password);
                     user.setExp(0);
                     user.setAvatar(avatarName);
-                    userDao.insertUser(user);
+                    userDao.updateUser(user);
                     userDao.destroy();
 
                     break;
@@ -118,7 +131,7 @@ public class doInsert extends HttpServlet {
                 //default
                 default:
 
-                    Logger.getAnonymousLogger().log(Level.WARNING, "[doInsert: "+item+"] caso default nello switch");
+                    Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: "+item+"] caso default nello switch");
                     //torno KO alla chiamata servlet
                     response.getWriter().write("KO");
                     return;
@@ -126,7 +139,7 @@ public class doInsert extends HttpServlet {
 
 
         } catch (DaoException e) {
-            Logger.getAnonymousLogger().log(Level.WARNING, "doInsert: "+item+"]" + e.getMessage());
+            Logger.getAnonymousLogger().log(Level.WARNING, "doUpdate: "+item+"]" + e.getMessage());
             //torno KO alla chiamata servlet
             response.getWriter().write("KO");
             return;

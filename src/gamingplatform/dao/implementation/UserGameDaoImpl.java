@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +19,7 @@ import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
 
 public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
 
-    private PreparedStatement selectGameByUserId;
+    private PreparedStatement selectGamesByUserId;
 
     /**
      * Costruttore per inizializzare la connessione
@@ -37,14 +38,15 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
         try {
             super.init(); // connection initialization
 
-            this.selectGameByUserId = connection.prepareStatement("SELECT username.date, " +
-                    "game.id, " +
-                    "game.name, " +
-                    "game.exp, " +
-                    "game.description\n" +
-                    "FROM game\n" +
-                    "LEFT JOIN usergame ON user.id = usergame.id\n" +
-                    "WHERE usergame.id = ?");
+            this.selectGamesByUserId = connection.prepareStatement("SELECT usergame.date, " +
+                                                                               "game.id, " +
+                                                                               "game.name, " +
+                                                                               "game.exp, " +
+                                                                               "game.description, " +
+                                                                               "game.image "+
+                                                                               "FROM game " +
+                                                                               "LEFT JOIN usergame ON game.id = usergame.id_game " +
+                                                                               "WHERE usergame.id_user = ?");
 
         } catch (SQLException e) {
             throw new DaoException("Error initializing user game dao", e);
@@ -56,19 +58,19 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
      * @throws DaoException lancia eccezione in caso di errore
      */
     @Override
-    public Map<Date, Game> getDateGamesByUserId(int userId) throws DaoException{
+    public Map<Timestamp, Game> getDateGamesByUserId(int userId) throws DaoException{
 
-        Map<Date, Game> map = new HashMap<>();
+        Map<Timestamp, Game> map = new HashMap<>();
 
         try {
-            this.selectGameByUserId.setInt(1, userId); //setto la query
-            ResultSet rs = this.selectGameByUserId.executeQuery(); //eseguo la query
+            this.selectGamesByUserId.setInt(1, userId); //setto la query
+            ResultSet rs = this.selectGamesByUserId.executeQuery(); //eseguo la query
 
             while( rs.next() ){ //ciclo ogni tupla del risultato
 
                 Game game = new Game(this); //dichiaro il livello corrispondente alla data da inserire nella mappa
 
-                Date date = rs.getDate("date"); //estraggo la data dal risultato della query
+                Timestamp date = rs.getTimestamp("date"); //estraggo la data dal risultato della query
 
                 // setto le variabili del livello da restituire nella mappa
                 game.setId(rs.getInt("id"));
@@ -96,7 +98,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
 
         //chiudo le quary precompilate
         try {
-            this.selectGameByUserId.close();
+            this.selectGamesByUserId.close();
 
         } catch (SQLException e) {
             throw new DaoException("Error destroy dao user", e);

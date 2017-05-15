@@ -32,9 +32,7 @@
                                 <!-- caso varchar e password-->
                             <#elseif fields?api.get(i)?starts_with("password")>
                                 <#assign type="password">
-                                <#if mode=="edit">
-                                    <#assign constraints="disabled">
-                                </#if>
+
                                 <!-- caso varchar e avatar-->
                             <#elseif fields?api.get(i)?starts_with("avatar")>
                                 <#assign picture=true>
@@ -268,13 +266,10 @@
         // Create an FormData object
         var pippoData = new FormData(pippoForm);
 
-        // disabled the submit button
-        $("#insert_btn").prop("disabled", true);
-
         $.ajax({
             type: "POST",
             enctype: 'multipart/form-data',
-            url: "/doEdit/${table}",
+            url: "/doUpdate/${table}/${itemId}",
             data: pippoData,
             processData: false,
             contentType: false,
@@ -308,13 +303,10 @@
         // Create an FormData object
         var pippoData = new FormData(pippoForm);
 
-        // disabled the submit button
-        $("#insert_btn").prop("disabled", true);
-
         $.ajax({
             type: "POST",
             enctype: 'multipart/form-data',
-            url: "/doDelete/${table}",
+            url: "/doDelete/${table}/${itemId}",
             data: pippoData,
             processData: false,
             contentType: false,
@@ -345,9 +337,6 @@
 
         // Create an FormData object
         var pippoData = new FormData(pippoForm);
-
-        // disabled the submit button
-        $("#insert_btn").prop("disabled", true);
 
         $.ajax({
             type: "POST",
