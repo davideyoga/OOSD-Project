@@ -4,12 +4,10 @@ import gamingplatform.dao.data.DaoDataMySQLImpl;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
-import gamingplatform.dao.data.DaoDataMySQLImpl;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.interfaces.LevelDao;
 import gamingplatform.model.Level;
@@ -24,6 +22,7 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
                               selectLevels,
                               insertLevel,
                               deleteLevel,
+                              selectNextLevel,
                               updateLevel;
 
     // Costruttore
@@ -38,29 +37,55 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
 
             this.selectLevelById = connection.prepareStatement("SELECT * " +
                     "                                                FROM level " +
-                    "                                                WHERE id=?");
+                    "                                                WHERE id=? ");
 
 
-            this.insertLevel = connection.prepareStatement("INSERT INTO level (name,trophy,icon,exp) " +
+            this.insertLevel = connection.prepareStatement("INSERT INTO level (id,name,trophy,icon,exp) " +
                     "                                            VALUES(NULL,?,?,?,?)");
 
             this.deleteLevel=connection.prepareStatement("DELETE FROM level" +
                     "                                           WHERE id=?");
 
 
-            this.updateLevel=connection.prepareStatement("UPDATE levels" +
+            this.updateLevel=connection.prepareStatement("UPDATE level " +
                     "                                          SET name=?," +
-                    "                                              trophy=?," +
-                    "                                              icon=?," +
-                    "                                              exp=?" +
+                    "                                              trophy=?, " +
+                    "                                              icon=?, " +
+                    "                                              exp=? " +
                     "                                          WHERE id=?");
 
             this.selectLevels=connection.prepareStatement("SELECT * FROM level");
 
+            this.selectNextLevel = connection.prepareStatement("SELECT level.id, level.name, level.trophy, level.icon, level.exp FROM level WHERE level.exp > ? ORDER BY exp ASC LIMIT 1");
 
-        }   catch (SQLException e) {
+
+        }   catch (Exception e) {
             throw new DaoException("Error initializing level dao", e);
         }
+    }
+
+
+
+    @Override
+    public Level getNextLevel ( Level level) throws DaoException{
+        Level l=new Level(this);
+        try {
+            this.selectNextLevel.setInt(1, level.getExp());
+            ResultSet rs= this.selectNextLevel.executeQuery();
+
+            while(rs.next()) {
+                l.setId(rs.getInt("id"));
+                l.setName(rs.getInt("name"));
+                l.setTrophy(stripSlashes(rs.getString("trophy")));
+                l.setIcon(stripSlashes(rs.getString("icon")));
+                l.setExp(rs.getInt("exp"));
+            }
+
+        } catch (Exception e) {
+            throw new DaoException("Error query getNextLevel", e);
+        }
+
+        return l;
     }
 
     public Level getLevel() {return new Level(this);}
@@ -71,12 +96,15 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
         try {
             this.selectLevelById.setInt(1, keyLevel);
             ResultSet rs= this.selectLevelById.executeQuery();
-            l.setId(rs.getInt("id"));
-            l.setName(rs.getInt("name"));
-            l.setTrophy(stripSlashes(rs.getString("trophy")));
-            l.setIcon(stripSlashes(rs.getString("icon")));
-            l.setExp(rs.getInt("exp"));
-        } catch (SQLException e) {
+
+            while(rs.next()) {
+                l.setId(rs.getInt("id"));
+                l.setName(rs.getInt("name"));
+                l.setTrophy(stripSlashes(rs.getString("trophy")));
+                l.setIcon(stripSlashes(rs.getString("icon")));
+                l.setExp(rs.getInt("exp"));
+            }
+        } catch (Exception e) {
             throw new DaoException("Error query getLevel", e);
         }
 
@@ -144,7 +172,7 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
 
                 lista.add(level);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DaoException("Error query getLevels", e);
         }
 
@@ -160,7 +188,8 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
             this.deleteLevel.close();
             this.updateLevel.close();
             this.selectLevels.close();
-        } catch (SQLException e) {
+            this.selectNextLevel.close();
+        } catch (Exception e) {
             throw new DaoException("Error destroy LevelDao", e);
         }
 

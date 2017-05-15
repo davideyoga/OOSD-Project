@@ -23,6 +23,8 @@ public interface LevelDao extends DaoData {
 
     public void updateLevel(Level level) throws DaoException;
 
+    public Level getNextLevel(Level currentLevel) throws DaoException;
+
     public List<Level> getLevels () throws DaoException;
 
 }

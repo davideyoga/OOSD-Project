@@ -2,15 +2,13 @@ package gamingplatform.dao.implementation;
 
 import gamingplatform.dao.data.DaoDataMySQLImpl;
 import gamingplatform.dao.exception.DaoException;
-import gamingplatform.dao.interfaces.UserDao;
 import gamingplatform.dao.interfaces.UserLevelDao;
 import gamingplatform.model.Level;
 
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +44,7 @@ public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
                                                                         " FROM level LEFT JOIN userlevel ON level.id = userlevel.id_level " +
                                                                         "WHERE userlevel.id_user = ? ");
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DaoException("Error initializing user level dao", e);
         }
     }
@@ -56,9 +54,9 @@ public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
      * @throws DaoException lancia eccezione in caso di errore
      */
     @Override
-    public Map<Date, Level> getDateLevelsByUserId(int userId) throws DaoException{
+    public Map<Timestamp, Level> getDateLevelsByUserId(int userId) throws DaoException{
 
-        Map<Date, Level> map = new HashMap<>();
+        Map<Timestamp, Level> map = new HashMap<>();
 
         try {
             this.selectLevelsByUserId.setInt(1, userId); //setto la query
@@ -68,7 +66,7 @@ public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
 
                 Level level = new Level(this); //dichiaro il livello corrispondente alla data da inserire nella mappa
 
-                Date date = rs.getDate("date"); //estraggo la data dal risultato della query
+                Timestamp date = rs.getTimestamp("date"); //estraggo la data dal risultato della query
 
                 // setto le variabili del livello da restituire nella mappa
                 level.setId(rs.getInt("id"));
@@ -81,7 +79,7 @@ public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
 
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DaoException("Error get levels by user id in user level dao", e);
         }
 
@@ -99,7 +97,7 @@ public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
         try {
             this.selectLevelsByUserId.close();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DaoException("Error destroy dao user", e);
         }
 
