@@ -56,7 +56,9 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
 
             this.selectLevels=connection.prepareStatement("SELECT * FROM level");
 
-            this.selectNextLevel = connection.prepareStatement("SELECT level.id, level.name, level.trophy, level.icon, level.exp FROM level WHERE level.exp > ? ORDER BY exp ASC LIMIT 1");
+            this.selectNextLevel = connection.prepareStatement("SELECT level.id, level.name, level.trophy, level.icon, level.exp" +
+                    "                                                FROM level " +
+                    "                                                WHERE level.exp > ? ORDER BY exp ASC LIMIT 1");
 
 
         }   catch (Exception e) {

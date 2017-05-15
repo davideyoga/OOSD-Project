@@ -70,12 +70,11 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
 
             //query che mi restituisce i servizi a cui un utente ha autorizzazione ad accedere
             selectServicesByUserId=connection.prepareStatement("SELECT service.id, service.name, service.description" +
-                    "                                                FROM user " +
-                    "                                                LEFT JOIN usergroups ON usergroups.id_user=user.id" +
+                    "                                                FROM usergroups" +
                     "                                                LEFT JOIN groups ON groups.id=usergroups.id_groups" +
                     "                                                LEFT JOIN groupsservice ON groupsservice.id_groups=groups.id" +
                     "                                                LEFT JOIN service ON groupsservice.id_service=service.id" +
-                    "                                                WHERE user.id=? ORDER BY service.name");
+                    "                                                WHERE usergroups.id_user=? ORDER BY service.name");
 
         }catch (SQLException e){
             throw new DaoException("Error initializing group dao", e);

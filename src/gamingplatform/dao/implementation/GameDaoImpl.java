@@ -83,8 +83,8 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
 
             // Query che torna la media dei voti di un gioco, dato il gioco
             selectAverageVote = connection.prepareStatement("SELECT id_game, AVG (vote) " +
-                                                               "FROM review " +
-                                                               "WHERE id_game = ? ");
+                                                               "  FROM review " +
+                                                               "  WHERE id_game = ? ");
 
         }catch (SQLException e){
             throw new DaoException("Error initializing GameDao", e);

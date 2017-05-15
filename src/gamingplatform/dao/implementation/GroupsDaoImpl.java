@@ -65,13 +65,13 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 
 			//Query che retituisce la lista di tuuti i gruppi
 			this.selectGroups = connection.prepareStatement("SELECT * " +
-					"												 FROM groups ");
+					"											  FROM groups ");
 
 			//Query che inserisce un nuovo gruppo nel DB
 			this.insertGroup = connection.prepareStatement("INSERT INTO groups"	 +
 					"											 VALUES (NULL," +
 					"													 name=?," +
-					"											 	     description=?)", Statement.RETURN_GENERATED_KEYS);
+					"											 	     description=?)");
 			//Query di cancellazione di un gruppo
 			this.deleteGroupById= connection.prepareStatement("DELETE FROM groups WHERE id=?");
 

@@ -35,14 +35,14 @@ public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
         try {
             super.init(); // connection initialization
 
-            this.selectLevelsByUserId = connection.prepareStatement("SELECT userlevel.date," +
+            this.selectLevelsByUserId = connection.prepareStatement(" SELECT userlevel.date," +
                                                                                 " level.id," +
                                                                                 " level.name," +
                                                                                 " level.trophy," +
                                                                                 " level.icon," +
                                                                                 " level.exp" +
                                                                         " FROM level LEFT JOIN userlevel ON level.id = userlevel.id_level " +
-                                                                        "WHERE userlevel.id_user = ? ");
+                                                                        " WHERE userlevel.id_user = ? ");
 
         } catch (Exception e) {
             throw new DaoException("Error initializing user level dao", e);
