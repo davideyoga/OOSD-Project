@@ -314,6 +314,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			this.selectUsers.close();
 			this.updateUserById.close();
 			this.getUserByUsernamePassword.close();
+			this.getLevelByUserId.close();
 			
 		} catch (Exception e) {
 			throw new DaoException("Error destroy dao user", e);

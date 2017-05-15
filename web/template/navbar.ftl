@@ -37,7 +37,7 @@
                             <img style="width:50px; height: 50px;" src="${context}/avatars/${user.avatar}" onerror="this.onerror=null;this.src='${context}/images/missing_image.png';"></a>
                         <ul class="dropdown-menu " role="menu">
                             <li><a href="/profile"><i class="fa fa-user"></i>&nbspProfile</a></li>
-                            <li><a href="/profile"><i class="fa fa-cogs"></i>Edit Profile</a></li>
+                            <li><a href="/edit/user/${user.id}"><i class="fa fa-cogs"></i>Edit Profile</a></li>
                             <li><a href="/logout"><i class="fa fa-arrow-circle-o-left"></i>&nbspLogOut</a></li>
 
                         </ul>

@@ -489,6 +489,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			this.insertGroup.close();
 			this.deleteGroupById.close();
 			this.updateGroup.close();
+			this.selectGroups.close();
 			this.selectGroupsByUserId.close();
 			this.selectUsersByGroupId.close();
 			this.selectGroupsByServiceId.close();

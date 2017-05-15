@@ -3,7 +3,6 @@ package gamingplatform.controller;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.UserDaoImpl;
 import gamingplatform.dao.interfaces.UserDao;
-import gamingplatform.model.User;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;

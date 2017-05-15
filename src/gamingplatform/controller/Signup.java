@@ -84,6 +84,7 @@ public class Signup extends HttpServlet {
             //provo ad inserire l'utente
 
             User user=userDao.getUser();
+
             user.setUsername(username);
             user.setName(name);
             user.setSurname(surname);
@@ -93,6 +94,7 @@ public class Signup extends HttpServlet {
             user.setAvatar(avatarName);
 
             userDao.insertUser(user);
+
             userDao.destroy();
         }catch(DaoException e){
             //in caso di errori nell'inserimento dell'utente

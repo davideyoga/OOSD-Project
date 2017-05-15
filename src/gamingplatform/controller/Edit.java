@@ -61,12 +61,21 @@ public class Edit extends HttpServlet {
         String item = getNlastBitFromUrl(request.getRequestURI(), 1);
         data.put("table", item);
 
+        //recupero l'id dell'item di cui mostrare la form di modifica
+        Integer id = Integer.parseInt(getLastBitFromUrl(request.getRequestURI()));
+        data.put("itemId", id);
+
+
+
         //controllo quì se l'utente è loggato e ha acesso al report di quella determinata tabella
-        if (!checkAuth(request, item)) {
-            //se l'ultimo elemento dopo lo "/" (ovvero il servizio a cui si sta provando ad accedere)
-            //non è un servizio a cui l'utente ha accesso
-            redirect("/index", "KO-unauthorized", response, request);
-            return;
+        //se l'utente sta cercando di modificare il suo profilo, glielo permetto
+        if(!(item.equals("user") && getUser(request).getId()==id)) {
+            if (!checkAuth(request, item)) {
+                //se l'ultimo elemento dopo lo "/" (ovvero il servizio a cui si sta provando ad accedere)
+                //non è un servizio a cui l'utente ha accesso
+                redirect("/index", "KO-unauthorized", response, request);
+                return;
+            }
         }
 
 
@@ -86,9 +95,6 @@ public class Edit extends HttpServlet {
             data.put("extras", dbs.getExtras());
             data.put("arity", dbs.getArity());
 
-            //recupero l'id dell'item di cui mostrare la form di modifica
-            Integer id = Integer.parseInt(getLastBitFromUrl(request.getRequestURI()));
-            data.put("itemId", id);
 
             switch (item) {
 

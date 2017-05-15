@@ -37,6 +37,7 @@ public class SecurityLayer {
         //controllo se la sessione è valida
         HttpSession session = verifySession(request);
         if(!isNull(session) && !isNull(service)){
+
             //recupero la lista dei servizi dalla sessione
             List<Service> services = (ArrayList<Service>) session.getAttribute("services");
             //scorro i servizi e provo a trovare il servizio con nome = a quello passato

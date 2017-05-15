@@ -46,6 +46,18 @@
     </servlet-mapping>
     <!-- fine servlet game -->
 
+    <!-- servlet profile -->
+    <servlet>
+        <servlet-name>Profile</servlet-name>
+        <servlet-class>gamingplatform.controller.Profile</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Profile</servlet-name>
+        <url-pattern>/profile</url-pattern>
+    </servlet-mapping>
+    <!-- fine servlet game -->
+
     <!-- servlet report -->
     <servlet>
         <servlet-name>Report</servlet-name>
