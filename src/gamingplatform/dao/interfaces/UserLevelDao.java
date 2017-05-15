@@ -16,5 +16,4 @@ public interface UserLevelDao extends DaoData {
     public List<List<Object>> getLastXItemsFromUserLevel(int userId, int n) throws DaoException;
 
 
-
 }
