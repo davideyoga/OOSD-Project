@@ -34,9 +34,6 @@ public class Profile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        //carico l'user nella Map prelevandolo dalla sessione se verificata
-        data.put("user", getUser(request));
-
         //carico i servizi
         data.put("services", getServices(request));
 
@@ -64,9 +61,11 @@ public class Profile extends HttpServlet {
             userLevelDao.init();
             userGameDao.init();
 
+            data.put("user", userDao.getUser(userId));
+
             gamingplatform.model.Level currentLevel = userDao.getLevelByUserId(userId);
-            List<List<Object>> userGameList = userGameDao.getLastXItemsFromUserGame(userId,4);
-            List<List<Object>> userLevelList = userLevelDao.getLastXItemsFromUserLevel(userId,4);
+            List<List<Object>> userGameList = userGameDao.getLastXItemsFromUserGame(userId,5);
+            List<List<Object>> userLevelList = userLevelDao.getLastXItemsFromUserLevel(userId,5);
 
             Collections.reverse(userGameList);
             Collections.reverse(userLevelList);

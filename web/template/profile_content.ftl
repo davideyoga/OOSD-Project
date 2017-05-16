@@ -26,13 +26,13 @@
 
         <div class="horz-grid">
             <div class="row show-grid" style="margin :0; border:0px;">
-                <div class="col-md-6 my_hover_div">
+                <div class="col-md-3 my_hover_div">
 
                     <img src="${context}/avatars/${user.avatar}" style="width:100%; height: 100%; z-index:2;">
 
                 </div>
                 <!--container descrizione-->
-                <div class="col-md-6" style="background: #ffffff; border:0px; padding: 0 0 0 20px;">
+                <div class="col-md-9" style="background: #ffffff; border:0px; padding: 0 0 0 20px;">
                     <div class="well" style="width:100%; height: 100%; padding:10px;">
                         Name: <b>${user.name}</b>
                     </div>
@@ -45,14 +45,21 @@
                     <div class="well" style="width:100%; height: 100%; padding:10px;">
                         Email: <b>${user.email}</b>
                     </div>
-                    <div style="position: absolute; bottom: -205px; right: 5px;">
-                        <button type="submit" onclick="window.location='/edit/user/${user.id}'" id="edit_btn" style="background-color: #1abc9c; border-color: #1abc9c;" class="btn btn-lg btn-primary edit_btn_hover">Edit Infos
-                        </button>
+                    <div class="well" style="width:100%; height: 100%; padding:10px; visibility:hidden">
+                        Email: <b>${user.email}</b>
                     </div>
+
+                    <button type="submit" onclick="window.location='/edit/user/${user.id}'" id="edit_btn"
+                            style="background-color: #1abc9c; border-color: #1abc9c; float:right;"
+                            class="btn btn-lg btn-primary edit_btn_hover">Edit Infos
+                    </button>
+
 
 
                 </div>
+
             </div>
+
         </div>
 
         <!-- barra progresso -->
@@ -73,8 +80,8 @@
         <div class="graph-grid">
             <div class="col-md-6 graph-1" style="padding-left:0px;">
                 <div class="grid-1">
-                    <h4>Exp gain chart (last 5 items)</h4>
-                    <canvas id="bar1" height="500" width="500" style="width: 500px; height: 300px;"></canvas>
+                    <h4 style="margin-bottom:10px;">Exp gain chart (last 5 items)</h4>
+                    <canvas id="bar1" height="500" width="500" style="width: 100%; height: 100%;"></canvas>
                     <script>
 
 
@@ -107,8 +114,8 @@
             </div>
             <div class="col-md-6 graph-2" style="padding-right:0px;">
                 <div class="grid-1">
-                    <h4>Levels Chart (last 5 items)</h4>
-                    <canvas id="line1" height="500" width="500" style="width: 500px; height: 300px;"></canvas>
+                    <h4 style="margin-bottom:10px;">Levels Chart (last 5 items)</h4>
+                    <canvas id="line1" height="500" width="500" style="width: 100%; height: 100%;"></canvas>
                     <script>
 
                         var lineChartData = {
@@ -150,14 +157,18 @@
             <div class="typo-1" style="padding:0;">
 
                 <div class="row" style="background-color: #fec057; border-radius: 4px;">
-                    <div class="col-sm-6">
-                        <div style="margin-top:6px; "><label style="color:white;">Full game sessions report:</label></div>
+                    <div class="col-sm-6" style="width:100%;">
+                        <div style="margin-top:6px; "><label style="color:white; float:left;">Full game sessions
+                            report</label>
+                            <label style="color:white; float:right; cursor:pointer;" id="showGamesBtn">show</label>
+                            <label style="color:white; float:right; display:none; cursor:pointer;" id="hideGamesBtn">hide</label>
+                        </div>
                     </div>
                 </div>
             </div>
 
 
-            <div class="typo-1" style="padding:0;">
+            <div class="typo-1" style="padding:0; display:none" id="gameTable">
 
                 <table id="reportGames" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
@@ -169,48 +180,7 @@
                     </thead>
 
                     <tbody>
-                        <#list userGameListFull as item>
-                        <tr>
-                            <#list item as i>
-                                <td>
-                                    <#if i??>
-                                    ${i}
-                                    <#else>
-                                        null or not available
-                                    </#if>
-                                </td>
-                            </#list>
-                        </tr>
-                        </#list>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-
-        <div class="typo-1" style="padding:0;">
-
-            <div class="row" style="background-color: #337ab7; border-radius: 4px;">
-                <div class="col-sm-6">
-                    <div style="margin-top:6px; font-size: 105%;"><label style="color:white;">Full level history:</label></div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="typo-1" style="padding:0;">
-
-            <table id="reportLevels" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Level Name</th>
-                    <th>Exp Nedded</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                    <#list userLevelListFull as item>
+                    <#list userGameListFull as item>
                     <tr>
                         <#list item as i>
                             <td>
@@ -223,16 +193,61 @@
                         </#list>
                     </tr>
                     </#list>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="typo-1" style="padding:0;">
+
+            <div class="row" style="background-color: #337ab7; border-radius: 4px;">
+                <div class="col-sm-6" style="width:100%;">
+                    <div style="margin-top:6px; "><label style="color:white; float:left;">Full level history</label>
+                        <label style="color:white; float:right; cursor:pointer;" id="showLevelsBtn">show</label>
+                        <label style="color:white; float:right; display:none; cursor:pointer;"
+                               id="hideLevelsBtn">hide</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="typo-1" style="padding:0; display: none" id="levelTable">
+
+            <table id="reportLevels" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Level Name</th>
+                    <th>Exp Nedded</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <#list userLevelListFull as item>
+                <tr>
+                    <#list item as i>
+                        <td>
+                            <#if i??>
+                            ${i}
+                            <#else>
+                                null or not available
+                            </#if>
+                        </td>
+                    </#list>
+                </tr>
+                </#list>
                 </tbody>
             </table>
         </div>
     </div>
 
 
-    </div>
+</div>
 
 
-    <!--//content-->
+<!--//content-->
 
 <#include "footer.ftl">
 </div>
@@ -244,5 +259,30 @@
     $(document).ready(function () {
         $('#reportGames').DataTable();
         $('#reportLevels').DataTable();
+
+
+        $('#showGamesBtn').click(function () {
+            $('#gameTable').fadeIn();
+            $('#showGamesBtn').hide();
+            $('#hideGamesBtn').fadeIn();
+        });
+
+        $('#hideGamesBtn').click(function () {
+            $('#gameTable').fadeOut();
+            $('#hideGamesBtn').hide();
+            $('#showGamesBtn').fadeIn();
+        });
+
+        $('#showLevelsBtn').click(function () {
+            $('#levelTable').fadeIn();
+            $('#showLevelsBtn').hide();
+            $('#hideLevelsBtn').fadeIn();
+        });
+
+        $('#hideLevelsBtn').click(function () {
+            $('#levelTable').fadeOut();
+            $('#hideLevelsBtn').hide();
+            $('#showLevelsBtn').fadeIn();
+        });
     });
 </script>

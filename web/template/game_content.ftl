@@ -29,7 +29,7 @@
 
     <div class="horz-grid">
         <div class="row show-grid" style="margin :0; border:0px;">
-            <div class="col-md-6 my_hover_div">
+            <div class="col-md-4 my_hover_div">
 
                 <img src="${context}/images/${game.image}" style="width:100%; height: 100%; z-index:2;">
 
@@ -43,7 +43,7 @@
 
             </div>
             <!--container descrizione-->
-            <div class="col-md-6" style="background: #ffffff; border:0px; padding: 0 0 0 20px;">
+            <div class="col-md-8" style="background: #ffffff; border:0px; padding: 0 0 0 20px;">
                 <div class="well" style="width:100%; height: 100%; padding:10px;">
                 ${game.description}
                 </div>
@@ -90,7 +90,7 @@
                             </script>
                         </ul>
                         <form class="text-sub">
-                            <input type="submit" value="post">
+                            <input type="submit" style="background-color:#337ab7" value="post">
                         </form>
                         <div class="clearfix"></div>
                     </div>

@@ -1,5 +1,6 @@
 package gamingplatform.controller;
 
+import gamingplatform.controller.utils.SessionManager;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.UserDaoImpl;
 import gamingplatform.dao.interfaces.UserDao;
@@ -19,9 +20,11 @@ import java.util.logging.Logger;
 
 import static gamingplatform.controller.utils.SecurityLayer.checkAuth;
 import static gamingplatform.controller.utils.SecurityLayer.sha1Encrypt;
+import static gamingplatform.controller.utils.SessionManager.getUser;
 import static gamingplatform.controller.utils.Utils.fileUpload;
 import static gamingplatform.controller.utils.Utils.getLastBitFromUrl;
 import static gamingplatform.controller.utils.Utils.getNlastBitFromUrl;
+import static gamingplatform.controller.utils.SessionManager.getUser;
 import static java.util.Objects.isNull;
 
 
@@ -56,14 +59,6 @@ public class doUpdate extends HttpServlet {
         //carico la tabella in cui si vuole modificare la tupla (la url è della forma /doUpdate/tabella/idElemento
         String item = getNlastBitFromUrl(request.getRequestURI(), 1);
 
-        //controllo quì se l'utente è loggato e ha acesso a quella determinata tabella
-        if (!checkAuth(request, item)) {
-            //se il servizio a cui si sta provando ad accedere
-            //non è un servizio a cui l'utente ha accesso
-            response.getWriter().write("KO");
-            return;
-        }
-
         String id="";
 
         //per gestire il caso review abbiamo bisogno di 2 id, l'id utente e l'id del gioco per identificare la singola recensione
@@ -83,7 +78,6 @@ public class doUpdate extends HttpServlet {
 
         }
 
-
         if(isNull(id) || id.equals("")){
             Logger.getAnonymousLogger().log(Level.WARNING, "[doDelete: "+item+"] parametri post non validi");
             response.getWriter().write("KO");
@@ -91,6 +85,17 @@ public class doUpdate extends HttpServlet {
         }
 
         int itemId=Integer.parseInt(id);
+
+        //controllo quì se l'utente è loggato e ha acesso a quella determinata tabella
+        //se l'utente sta cercando di modificare il suo profilo, glielo permetto
+        if(!(item.equals("user") && getUser(request).getId() == itemId)) {
+            if (!checkAuth(request, item)) {
+                //se il servizio a cui si sta provando ad accedere
+                //non è un servizio a cui l'utente ha accesso
+                response.getWriter().write("KO");
+                return;
+            }
+        }
 
         try {
 
@@ -104,6 +109,7 @@ public class doUpdate extends HttpServlet {
                     String surname = request.getParameter("surname");
                     String email = request.getParameter("email");
                     String password = sha1Encrypt(request.getParameter("password"));
+                    int exp = Integer.parseInt(request.getParameter("exp"));
                     Part avatar = request.getPart("avatar"); // recupera <input type="file" name="avatar">
 
                     //se i parametri in input non sono validi
@@ -137,9 +143,10 @@ public class doUpdate extends HttpServlet {
                     user.setSurname(surname);
                     user.setEmail(email);
                     user.setPassword(password);
-                    user.setExp(0);
+                    user.setExp(exp);
                     user.setAvatar(avatarName);
                     userDao.updateUser(user);
+
                     userDao.destroy();
 
                     break;

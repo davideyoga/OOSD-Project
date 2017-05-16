@@ -61,7 +61,7 @@ public class SecurityLayer {
      * @return sha1(x) oppure null
      */
     public static String sha1Encrypt(String x) {
-        if(isNull(x)){
+        if(isNull(x) || x.equals("")){
             Logger.getAnonymousLogger().log(Level.WARNING, "SecurityException: parametro null" );
             return null;
         }
@@ -77,18 +77,6 @@ public class SecurityLayer {
         return sha1;
     }
 
-
-    /**
-     * aggiorna i valori di gruppi/servizi a cui appartiene l'utente e li carica in sessione
-     *
-     * @param request richiesta servlet
-     */
-
-    public static void updateAuth(HttpServletRequest request, HttpServletResponse response) {
-
-        HttpSession session = SessionManager.verifySession(request);
-        //TODO update permessi
-    }
 
 
     /**

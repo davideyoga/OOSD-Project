@@ -214,6 +214,7 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 			ResultSet rs = this.selectUserById.executeQuery(); //eseguo la query
 
 			while(rs.next()){
+				user.setId(idUser);
 				user.setUsername(stripSlashes(rs.getString("username")));
 				user.setName(stripSlashes(rs.getString("name")));
 				user.setSurname(stripSlashes(rs.getString("surname")));

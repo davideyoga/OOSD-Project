@@ -1,5 +1,7 @@
 <div class="content-main" xmlns="http://www.w3.org/1999/html">
 
+
+
     <!--content-->
     <div class="content-top" style="padding:5px 20px 20px 20px;">
 
@@ -106,7 +108,7 @@
                                            required </#if> id="id_${fields?api.get(i)}"
                                            placeholder="Insert ${fields?api.get(i)?cap_first}"
 
-                                        <#if item?? && item[fields?api.get(i)]??>
+                                        <#if item?? && item[fields?api.get(i)]?? && !type?starts_with("password")>
                                            value="${item[fields?api.get(i)]}"
                                         </#if>>
                                 </div>
@@ -414,4 +416,19 @@
     }
 
 
+</script>
+
+<script>
+    <#assign disable="true">
+    <#list services as service>
+        <#if service.name?starts_with("user")>
+            <#assign disable="false">
+        <#break>
+        </#if>
+    </#list>
+
+    var username="${user.username}";
+    if(username === document.getElementById("id_username").getAttribute("value") && ${disable}){
+        document.getElementById("id_exp").setAttribute("readonly","true");
+    }
 </script>
