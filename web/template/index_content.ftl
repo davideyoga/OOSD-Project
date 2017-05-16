@@ -30,7 +30,7 @@
 
                             </div>
                             <div class="text-gallery">
-                                <a href="game?id=${game.id}"><h6 class="gameName">${game.name}</h6></a>
+                                <a href="/game/${game.id}"><h6 class="gameName">${game.name}</h6></a>
                             </div>
                         </div>
                     </#list>

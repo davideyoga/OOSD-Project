@@ -51,7 +51,7 @@ public class doInsert extends HttpServlet {
             return;
         }
 
-        //carico la tabella in cui si vuole aggiungere la tupla (la url è della forma /add/tabella
+        //carico la tabella in cui si vuole aggiungere la tupla (la url è della forma /doInsert/tabella
         String item = getLastBitFromUrl(request.getRequestURI());
 
         //controllo quì se l'utente è loggato e ha acesso a quella determinata tabella
@@ -68,7 +68,7 @@ public class doInsert extends HttpServlet {
 
                 //caso inserimento user
                 case "user":
-                    //prelevo parametri POST
+                    //prelevo parametri POST per l'user
                     String username = request.getParameter("username");
                     String name = request.getParameter("name");
                     String surname = request.getParameter("surname");
@@ -110,6 +110,8 @@ public class doInsert extends HttpServlet {
                     user.setAvatar(avatarName);
                     userDao.insertUser(user);
                     userDao.destroy();
+
+                    //TODO nell'iserimento dell'utente (da fare anche in signup) bisogna aggiungere na tupla dentro userlevel che indica che al momento della registrazione l'utente è al livello 0
 
                     break;
 

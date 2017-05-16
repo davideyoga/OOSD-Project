@@ -147,7 +147,7 @@
                                             Delete
                                         </button>
 
-                                        <button type="submit" id="confirm_btn_${reviews[i].idGame}_${reviews[i].idUser}" onclick="window.location='/doDelete/review/${reviews[i].idGame}-${reviews[i].idUser}'"
+                                        <button type="submit" id="confirm_btn_${reviews[i].idGame}_${reviews[i].idUser}"
                                                 style="height:40px; width:70px; padding:10px; font-size:90%; float:right; display:none; border-color:#f0ad4e; background-color:#f0ad4e;"
                                                 class="btn btn-lg btn-warning warning_11 confirm_btn_hover">Confirm
                                         </button>

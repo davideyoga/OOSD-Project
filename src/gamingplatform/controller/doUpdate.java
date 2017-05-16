@@ -53,7 +53,7 @@ public class doUpdate extends HttpServlet {
             return;
         }
 
-        //carico la tabella in cui si vuole aggiungere la tupla (la url è della forma /add/tabella
+        //carico la tabella in cui si vuole modificare la tupla (la url è della forma /doUpdate/tabella/idElemento
         String item = getNlastBitFromUrl(request.getRequestURI(), 1);
 
         //controllo quì se l'utente è loggato e ha acesso a quella determinata tabella
@@ -64,7 +64,25 @@ public class doUpdate extends HttpServlet {
             return;
         }
 
-        String id=getLastBitFromUrl(request.getRequestURI());
+        String id="";
+
+        //per gestire il caso review abbiamo bisogno di 2 id, l'id utente e l'id del gioco per identificare la singola recensione
+        //l'uri è del tipo /doUpdate/review/idGioco&idUser in questo caso
+        String idGame="";
+        String idUser="";
+
+        if(item.equals("review")){
+
+            String idArray[]=getLastBitFromUrl(request.getRequestURI()).split("&");
+            idGame=idArray[0];
+            idUser=idArray[1];
+
+        }else{
+            //caso base di qualsiasi altra tabella con id semplice
+            id=getLastBitFromUrl(request.getRequestURI());
+
+        }
+
 
         if(isNull(id) || id.equals("")){
             Logger.getAnonymousLogger().log(Level.WARNING, "[doDelete: "+item+"] parametri post non validi");

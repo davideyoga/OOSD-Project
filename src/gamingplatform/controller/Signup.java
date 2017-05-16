@@ -91,6 +91,8 @@ public class Signup extends HttpServlet {
             user.setEmail(email);
             user.setPassword(password);
             user.setExp(0);
+            //TODO nell'iserimento dell'utente (da fare anche in doInsert/user) bisogna aggiungere na tupla dentro userlevel che indica che al momento della registrazione l'utente è al livello 0
+
             user.setAvatar(avatarName);
 
             userDao.insertUser(user);

@@ -34,6 +34,9 @@ public class doDelete extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        //imposto tipo di ritorno della risposta
+        response.setContentType("text/html;charset=UTF-8");
+
         //se non è una chiamata ajax
         if (!"XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
             Logger.getAnonymousLogger().log(Level.WARNING, "[doDelete] non è una chiamata ajax");
@@ -42,7 +45,6 @@ public class doDelete extends HttpServlet {
             return;
         }
 
-        response.setContentType("text/html;charset=UTF-8");
 
         //carico la tabella in cui si vuole aggiungere la tupla (la url è della forma /doDelete/tabella/idElemento
         String item = getNlastBitFromUrl(request.getRequestURI(), 1);
@@ -55,7 +57,25 @@ public class doDelete extends HttpServlet {
             return;
         }
 
-        String id=getLastBitFromUrl(request.getRequestURI());
+        String id="";
+
+        //per gestire il caso review abbiamo bisogno di 2 id, l'id utente e l'id del gioco per identificare la singola recensione
+        //l'uri è del tipo /doDelete/review/idGioco&idUser
+        String idGame="";
+        String idUser="";
+
+        if(item.equals("review")){
+
+            String idArray[] = getLastBitFromUrl(request.getRequestURI()).split("&");
+            idGame=idArray[0];
+            idUser=idArray[1];
+
+        }else{
+            //caso base di qualsiasi altra tabella con id semplice
+            id=getLastBitFromUrl(request.getRequestURI());
+
+        }
+
 
         if(isNull(id) || id.equals("")){
             Logger.getAnonymousLogger().log(Level.WARNING, "[doDelete: "+item+"] parametri POST non validi");
@@ -63,6 +83,7 @@ public class doDelete extends HttpServlet {
             return;
         }
 
+        //gestire caso review a parte (è della forma /doDelete/review/idGame-idUser
         int itemId=Integer.parseInt(id);
 
         try {
