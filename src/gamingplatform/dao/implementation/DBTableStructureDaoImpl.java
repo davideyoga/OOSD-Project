@@ -90,7 +90,7 @@ public class DBTableStructureDaoImpl extends DaoDataMySQLImpl implements DBTable
         try {
             this.getTableStructure.close();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DaoException("Error destroy GameDao", e);
         }
 

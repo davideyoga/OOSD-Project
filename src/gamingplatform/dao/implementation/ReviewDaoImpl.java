@@ -81,7 +81,7 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
                     "                                      WHERE id_user=? AND id_game=?");
 
 
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error initializing review dao", e);
         }
     }
@@ -114,7 +114,7 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
                 r.setBody(stripSlashes(rs.getString("body")));
                 r.setVote(rs.getInt("vote"));
             }
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error query getReview", e);
 
         }
@@ -144,7 +144,7 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
                 r.setVote(rs.getInt("vote"));
                 lista.add(r);
             }
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error query getReviews", e);
 
         }
@@ -177,7 +177,7 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
                 r.setVote(rs.getInt("vote"));
                 lista.add(r);
             }
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error query getReviewsByUser", e);
 
         }
@@ -194,7 +194,7 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
      * @throws DaoException lancia eccezione in caso di errore
      */
     public List<Review> getReviewsByGame(int idGame) throws DaoException{
-        List<Review> lista=new ArrayList<Review>();
+        List<Review> lista=new ArrayList<>();
         try{
             selectReviewsByGame.setInt(1,idGame);
             ResultSet rs=this.selectReviewsByGame.executeQuery();
@@ -209,7 +209,7 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
                 r.setVote(rs.getInt("vote"));
                 lista.add(r);
             }
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error query getReviewsByGame", e);
 
         }
@@ -249,7 +249,7 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
             this.deleteReview.setInt(1,idUser);
             this.deleteReview.setInt(1,idGame);
             this.deleteReview.executeUpdate();
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error query deleteReview", e);
 
         }
@@ -271,7 +271,7 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
             this.updateReview.setInt(4,review.getIdUser());
             this.updateReview.setInt(5,review.getIdGame());
             this.updateReview.executeUpdate();
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error query updateReview", e);
 
         }
@@ -293,7 +293,7 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
             this.selectReviewsByGame.close();
             this.updateReview.close();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DaoException("Error destroy ReviewDao", e);
         }
 

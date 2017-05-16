@@ -137,7 +137,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 					"												 VALUES (id_groups=?," +
 					"														id_service=?)");
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new DaoException("Error initializing group dao", e);
 		}
 	}
@@ -168,7 +168,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 				g.setDescription(stripSlashes(rs.getString("description")));
 			}
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new DaoException("Error query getGroup", e);
 
 		}
@@ -283,7 +283,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 				list.add(group);
 			}
 			
-		}catch (SQLException e) {
+		}catch (Exception e) {
 			throw new DaoException("Error query getGroupByUserId", e);
 		}
 		
@@ -326,7 +326,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 				list.add(u);
 			}
 
-		}catch (SQLException e) {
+		}catch (Exception e) {
 			throw new DaoException("Error query getUsersByGroupId", e);
 		}
 
@@ -364,7 +364,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 				list.add(group);
 			}
 
-		}catch (SQLException e) {
+		}catch (Exception e) {
 			throw new DaoException("Error query getGroupByServiceId", e);
 		}
 
@@ -402,7 +402,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 				list.add(s);
 			}
 
-		}catch (SQLException e) {
+		}catch (Exception e) {
 			throw new DaoException("Error query getServiceByGroupId", e);
 		}
 
@@ -500,7 +500,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			this.addServiceToGroup.close();
 
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new DaoException("Error destroy GroupDao", e);
 		}
 

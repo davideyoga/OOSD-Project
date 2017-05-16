@@ -2,7 +2,7 @@ package gamingplatform.dao.implementation;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.lang.Exception;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +76,7 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
                     "                                                LEFT JOIN service ON groupsservice.id_service=service.id" +
                     "                                                WHERE usergroups.id_user=? ORDER BY service.name");
 
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error initializing group dao", e);
         }
     }
@@ -109,7 +109,7 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
                 s.setName(stripSlashes(rs.getString("name")));
                 s.setDescription(stripSlashes(rs.getString("description")));
             }
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error game getServiceById", e);
 
         }
@@ -136,7 +136,7 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
                 s.setDescription(stripSlashes(rs.getString("description")));
                 lista.add(s);
             }
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error query getServices", e);
 
         }
@@ -154,7 +154,7 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
         try{
             this.deleteServiceById.setInt(1,idService);
             this.deleteServiceById.executeUpdate();
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error query deleteServiceById", e);
 
         }
@@ -175,7 +175,7 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
 
             this.updateService.executeUpdate();
 
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error query updateService", e);
         }
     }
@@ -223,7 +223,7 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
             this.insertService.setString(2,addSlashes(service.getDescription()));
             this.insertService.executeUpdate();
 
-        } catch (SQLException e){
+        } catch (Exception e){
             throw new DaoException("Error query insertService", e);
 
         }
@@ -245,7 +245,7 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
             this.updateService.close();
             this.selectServicesByUserId.close();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DaoException("Error destroy ServiceDao", e);
         }
 

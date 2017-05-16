@@ -43,7 +43,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
                     "FROM usergame LEFT JOIN game ON game.id=usergame.id_game " +
                     "WHERE usergame.id_user = ? ORDER BY date DESC LIMIT ?");
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DaoException("Error initializing user game dao", e);
         }
     }
@@ -79,7 +79,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
 
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DaoException("Error get games by user id in user games dao", e);
         }
         return list;
@@ -97,7 +97,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
         try {
             this.selectLastXItems.close();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DaoException("Error destroy dao user", e);
         }
 

@@ -86,7 +86,7 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
                                                                "  FROM review " +
                                                                "  WHERE id_game = ? ");
 
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error initializing GameDao", e);
         }
     }
@@ -113,7 +113,7 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
                 g.setImage(stripSlashes(rs.getString("image")));
                 g.setDescription(stripSlashes(rs.getString("description")));
             }
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error game getGameById", e);
 
         }
@@ -137,7 +137,7 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
                 g.setImage(stripSlashes(rs.getString("image")));
                 g.setDescription(stripSlashes(rs.getString("description")));
             }
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error query getGameByName", e);
 
         }
@@ -165,7 +165,7 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
                 g.setDescription(stripSlashes(rs.getString("description")));
                 lista.add(g);
             }
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error query getGames", e);
 
         }
@@ -188,7 +188,7 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
 
             this.insertGame.executeUpdate();
 
-        } catch (SQLException e){
+        } catch (Exception e){
             throw new DaoException("Error query insertGame", e);
 
         }
@@ -222,7 +222,7 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
         try{
             this.deleteGameByName.setString(1,addSlashes(nameGame));
             this.deleteGameByName.executeUpdate();
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error query deleteGameByName", e);
 
         }
@@ -242,7 +242,7 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
             this.updateGame.setString(4,addSlashes(game.getDescription()));
             this.updateGame.setInt(5,game.getId());
             this.updateGame.executeUpdate();
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error query updateGame", e);
 
         }
@@ -257,7 +257,7 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
                  avg = rs.getDouble("AVG(vote)");
             }
 
-        }catch (SQLException e){
+        }catch (Exception e){
             throw new DaoException("Error query getAverageVote", e);
         }
         return avg;
@@ -281,7 +281,7 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
             this.selectAverageVote.close();
 
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DaoException("Error destroy GameDao", e);
         }
 
