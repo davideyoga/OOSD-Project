@@ -9,7 +9,7 @@
 
             <div class="agile-tables">
                 <div class="typo-grid">
-                    <div class="typo-1">
+                   <div class="typo-1">
                     <#if items?? && fields??>
 
                         <table id="report" class="table table-striped table-bordered" cellspacing="0" width="100%">

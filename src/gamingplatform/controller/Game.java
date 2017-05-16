@@ -79,6 +79,7 @@ public class Game extends HttpServlet {
             ReviewDao reviewDao=new ReviewDaoImpl(ds);
             reviewDao.init();
             List<Review> reviews = reviewDao.getReviewsByGame(gameId);
+
             data.put("reviews", reviews);
 
             UserDao userDao = new UserDaoImpl(ds);
@@ -90,24 +91,26 @@ public class Game extends HttpServlet {
             //e una lista di livelli dove livello[i] corrisponde a utente[i]
             //posso usare il foreach in quanto negli arraylist l'ordine è mantenuto
             for(Review r : reviews){
-                int tempId=r.getIdGame();
+
+                int tempId=r.getIdUser();
+
                 User tempUser = userDao.getUser(tempId);
+
                 gamingplatform.model.Level tempLevel = userDao.getLevelByUserId(tempId);
                 users.add(tempUser);
                 levels.add(tempLevel);
             }
 
-            userDao.destroy();
 
             data.put("users",users);
             data.put("levels",levels);
 
-
             //int average = reviewDao.getAverageByGameId(gameId);
             double average = 3.33;
             data.put("average", average);
-            reviewDao.destroy();
 
+            reviewDao.destroy();
+            userDao.destroy();
 
 
         }catch (DaoException e){

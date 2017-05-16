@@ -14,15 +14,15 @@
             <h2 style="float:left; width:70%;">${game.name?cap_first}</h2>
 
             <#if average??>
-            <ul class="icon" id="starList" style="float:right;">
+                <ul class="icon" id="starList" style="float:right;">
 
-                <#list 1..(average?round) as i>
-                    <i class="post-file fa fa-star" ></i>
-                </#list>
+                    <#list 1..(average?round) as i>
+                        <i class="post-file fa fa-star"></i>
+                    </#list>
 
-                <i class="post-file">&nbsp&nbsp${average}&nbsp&nbsp<span style="font-size:65%;">/5</span></i>
+                    <i class="post-file">&nbsp&nbsp${average}&nbsp&nbsp<span style="font-size:65%;">/5</span></i>
 
-            </ul>
+                </ul>
             </#if>
         </div>
     </div>
@@ -82,12 +82,10 @@
                                             .removeClass("fa-star-o")
                                             .addClass("fa-star");
 
-                                    var value=$(this).attr("id").charAt(4);
+                                    var value = $(this).attr("id").charAt(4);
 
                                     $("#star").val(value);
                                 });
-
-
 
                             </script>
                         </ul>
@@ -100,56 +98,79 @@
 
             </div>
 
+            <#assign authReview=0>
+            <#list services as service>
+                <#if service.name?contains("review")>
+                    <#assign authReview=1>
+                </#if>
+            </#list>
 
-            <div class="col-md-12 post-top" style="background:#fff; border:0; padding:20px 0 0 0;">
+
+            <div class="col-md-12 post-top" style="background:#fff; border:0; padding:20px 0 0 0;" id="reviewList">
                 <#if reviews?? && (reviews?size>0)>
+                    <form class="navbar-left-right"
+                          style="margin-left:0em; width:33%; border-bottom:1px solid silver; margin-bottom: 20px;"
+                          id="gameSearchForm">
+                        <input type="text" class="search" style="float:left;" placeholder="Search through reviews">
+                        <input type="button" value="" style="float:right" class="fa fa-search search">
+                    </form>
                     <table class="table">
-                        <tbody>
-                        <#list 0..reviews?size as i>
+                        <tbody class="list">
+                            <#list 0..(reviews?size-1) as i>
 
-                        <tr class="table-row">
-                            <td class="table-img">
-                                <img src="${context}/avatars/${users[i].avatar}" alt="">
-                            </td>
-                            <td class="table-text">
-                                <h6>${users[i].username}</h6>
-                                <p>${reviews[i].body}</p>
-                            </td>
-                            <td>
-                                <span class="fam">${levels[i].name}</span>
-                            </td>
-                            <td class="march">
-                                ${reviews[i].date}
-                            </td>
+                            <tr class="table-row">
+                                <td class="table-img" style="width:10%;">
+                                    <img src="${context}/avatars/${users[i].avatar}" class="reviewAvatar"
+                                         style="height: 50px; width:50px;">
+                                </td>
 
-                            <td>
-                                <i class="fa fa-star-half-o icon-state-warning">${reviews[i].vote}</i>
-                            </td>
-                        </tr>
+                                <td class="table-text" style="width: <#if authReview==1>65%<#else>75%</#if>;">
+                                    <h6 class="username">${users[i].username}</h6>
+                                    <p class="body">${reviews[i].body}</p>
+                                </td>
 
-                        </#list>
+                                <td>
+                                    <span class="fam" style="width:10%;">lvl. ${levels[i].name}</span>
+                                </td>
+
+                                <td>
+                                    <i class="fa fa-star-half-o icon-state-warning voteReview"
+                                       style="width:5%;">${reviews[i].vote}</i>
+                                </td>
+                                <#if authReview==1>
+
+                                    <td style="width:10%;">
+                                        <button type="button" id="del_btn_${reviews[i].idGame}_${reviews[i].idUser}"
+                                                style="float:right; background-color:#d95459; height:40px; width:70px; padding:10px; font-size:90%; border-color:#d95459;"
+                                                class="btn btn-lg btn-danger delete_btn_hover"
+                                                onclick="this.style.display='none'; document.getElementById('confirm_btn_${reviews[i].idGame}_${reviews[i].idUser}').style.display='block';">
+                                            Delete
+                                        </button>
+
+                                        <button type="submit" id="confirm_btn_${reviews[i].idGame}_${reviews[i].idUser}" onclick="window.location='/doDelete/review/${reviews[i].idGame}-${reviews[i].idUser}'"
+                                                style="height:40px; width:70px; padding:10px; font-size:90%; float:right; display:none; border-color:#f0ad4e; background-color:#f0ad4e;"
+                                                class="btn btn-lg btn-warning warning_11 confirm_btn_hover">Confirm
+                                        </button>
+                                    </td>
+
+                                </#if>
+
+                            </tr>
+
+                            </#list>
 
                         </tbody>
                     </table>
-                    <#else>
+
+                    <ul class="pagination"></ul>
+
+                <#else>
                     There are no reviews for this game :(
                 </#if>
-
-
             </div>
-
-
-
-
-
         </div>
-
-
     </div>
-
-
 </div>
-
 
 <#else>
     <!-- se c'è qualche errore col gioco-->
@@ -177,3 +198,15 @@
 </div>
 
 <div class="clearfix"></div>
+
+
+<script>
+    var options = {
+        valueNames: ['username', 'body', 'voteReview', 'reviewAvatar'],
+        page: 5,
+        pagination: true
+    };
+
+    var reviews = new List('reviewList', options);
+
+</script>
