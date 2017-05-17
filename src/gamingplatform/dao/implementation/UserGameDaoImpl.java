@@ -48,6 +48,11 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
         }
     }
 
+    @Override
+    public UserGame getUserGame() {
+        return new UserGame(this);
+    }
+
     /**
      * Metodo che restituisce un'insieme di chiave valore che rappresentano la data in cui l'utente con ID userId ha cambiato livello in cui si trova
      *

@@ -14,6 +14,7 @@ import java.util.Map;
 
 public interface UserGameDao extends DaoData {
 
+    public UserGame getUserGame();
 
 
     public List<List<Object>> getLastXItemsFromUserGame(int userId, int n) throws DaoException;
