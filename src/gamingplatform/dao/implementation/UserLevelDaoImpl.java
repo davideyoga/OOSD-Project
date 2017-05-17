@@ -38,7 +38,7 @@ public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
         try {
             super.init(); // connection initialization
 
-            this.selectLastXitems = connection.prepareStatement(" SELECT level.name, level.exp, userlevel.date" +
+            this.selectLastXitems = connection.prepareStatement(" SELECT level.name, level.exp, level.icon, level.trophy, userlevel.date" +
                                                                         " FROM userlevel LEFT JOIN level ON userlevel.id_level = level.id"+
                                                                         " WHERE userlevel.id_user = ? ORDER BY date DESC LIMIT ?");
 
@@ -68,12 +68,12 @@ public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
 
                 innerList.add(rs.getTimestamp("date")); //estraggo la data dal risultato della query
                 innerList.add(rs.getInt("name"));
+                innerList.add(stripSlashes(rs.getString("icon")));
+                innerList.add(stripSlashes(rs.getString("trophy")));
                 innerList.add((rs.getInt("exp")));
 
 
                 list.add(innerList);
-
-
             }
 
         } catch (Exception e) {

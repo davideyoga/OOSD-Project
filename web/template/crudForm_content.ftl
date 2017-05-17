@@ -56,7 +56,7 @@
                             <#elseif fields?api.get(i)?starts_with("icon")>
                                 <#assign picture=true>
                                 <#if item?? && item[fields?api.get[i]]??>
-                                    <#assign picturePath="${context}/icons/${item[fields?api.get[i]]}">
+                                    <#assign picturePath="${context}/images/${item[fields?api.get[i]]}">
                                 </#if>
                                 <#assign pictureOldName="Current Icon">
                                 <#assign pictureConstraints="style=\"width:125px; height:125px;\"">
