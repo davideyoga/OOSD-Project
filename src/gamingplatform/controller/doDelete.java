@@ -123,20 +123,22 @@ public class doDelete extends HttpServlet {
                     break;
 
                 case "review":
+                    int idG = Integer.parseInt(idGame);
+                    int idU = Integer.parseInt(idUser);
                     ReviewDao reviewDao = new ReviewDaoImpl(ds);
                     reviewDao.init();
-                    reviewDao.deleteReview(idGame,idUser);
+                    reviewDao.deleteReview(idG,idU);
                     reviewDao.destroy();
                     break;
 
-                case "service"
+                case "service":
                     ServiceDao serviceDao = new ServiceDaoImpl(ds);
                     serviceDao.init();
                     serviceDao.deleteServiceById(itemId);
                     serviceDao.destroy();
                     break;
 
-                case "groups"
+                case "groups":
                     GroupsDao groupsDao = new GroupsDaoImpl(ds);
                     groupsDao.init();
                     groupsDao.deleteGroupById(itemId);
