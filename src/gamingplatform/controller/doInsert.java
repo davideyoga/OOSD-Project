@@ -4,6 +4,8 @@ import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.*;
 import gamingplatform.dao.interfaces.*;
 import gamingplatform.model.User;
+import gamingplatform.model.Game;
+import gamingplatform.model.UserGame;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -14,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,16 +73,16 @@ public class doInsert extends HttpServlet {
                 //caso inserimento user
                 case "user":
                     //prelevo parametri POST per l'user
-                    String username = request.getParameter("username");
-                    String name = request.getParameter("name");
-                    String surname = request.getParameter("surname");
-                    String email = request.getParameter("email");
-                    String password = sha1Encrypt(request.getParameter("password"));
-                    Part avatar = request.getPart("avatar"); // recupera <input type="file" name="avatar">
+                    String usernameUser = request.getParameter("username");
+                    String nameUser = request.getParameter("name");
+                    String surnameUser = request.getParameter("surname");
+                    String emailUser = request.getParameter("email");
+                    String passwordUser = sha1Encrypt(request.getParameter("password"));
+                    Part avatarUser = request.getPart("avatar"); // recupera <input type="file" name="avatar">
 
                     //se i parametri in input non sono validi
-                    if (isNull(username) || isNull(name) || isNull(surname) || isNull(email) || isNull(password) ||
-                            username.equals("") || name.equals("") || surname.equals("") || email.equals("") || password.equals("")) {
+                    if (isNull(usernameUser) || isNull(nameUser) || isNull(surnameUser) || isNull(emailUser) || isNull(passwordUser) ||
+                            usernameUser.equals("") || nameUser.equals("") || surnameUser.equals("") || emailUser.equals("") || passwordUser.equals("")) {
 
                         Logger.getAnonymousLogger().log(Level.WARNING, "[doInsert: "+item+"] Parametri POST non validi ");
                         //torno KO alla chiamata servlet
@@ -86,7 +90,7 @@ public class doInsert extends HttpServlet {
                         return;
                     }
                     //provo ad effettuare l'upload del file
-                    String avatarName = fileUpload(avatar, "avatars", getServletContext());
+                    String avatarName = fileUpload(avatarUser, "avatars", getServletContext());
                     if (isNull(avatarName)) {
 
                         Logger.getAnonymousLogger().log(Level.WARNING, "[doInsert: "+item+"] Upload file fallito");
@@ -101,21 +105,98 @@ public class doInsert extends HttpServlet {
                     //provo ad inserire l'utente
 
                     User user = userDao.getUser();
-                    user.setUsername(username);
-                    user.setName(name);
-                    user.setSurname(surname);
-                    user.setEmail(email);
-                    user.setPassword(password);
+                    user.setUsername(usernameUser);
+                    user.setName(nameUser);
+                    user.setSurname(surnameUser);
+                    user.setEmail(emailUser);
+                    user.setPassword(passwordUser);
                     user.setExp(0);
                     user.setAvatar(avatarName);
+
                     userDao.insertUser(user);
+
                     userDao.destroy();
 
                     //TODO nell'iserimento dell'utente (da fare anche in signup) bisogna aggiungere na tupla dentro userlevel che indica che al momento della registrazione l'utente è al livello 0
 
                     break;
 
-                //altri case
+                case"game":
+
+                    //prelevo parametri POST per game
+                    String nameGame = request.getParameter("name");
+                    int expGame = Integer.parseInt(request.getParameter("exp"));
+                    String imageGame = request.getParameter("image");
+                    String descriptionGame = request.getParameter("description");
+
+                    //se i parametri in input non sono validi
+                    if (isNull(nameGame) || isNull(expGame) || isNull(imageGame) ||
+                            nameGame.equals("") || imageGame.equals("") || descriptionGame.equals("")) {
+
+                        Logger.getAnonymousLogger().log(Level.WARNING, "[doInsert: "+item+"] Parametri POST non validi "); // per stampare errori sul terminale al posto di System.Out
+                        //torno KO alla chiamata servlet
+                        response.getWriter().write("KO");
+                        return;
+                    }
+
+                    GameDao gameDao = new GameDaoImpl(ds);
+
+                    gameDao.init();
+                    //provo ad inserire il gioco
+
+                    Game game = gameDao.getGame();
+
+                    game.setName(nameGame);
+                    game.setExp(expGame);
+                    game.setImage(imageGame);
+                    game.setDescription(descriptionGame);
+
+                    //inserisco game nel db
+                    gameDao.insertGame(game);
+
+                    //chiudo gameDao
+                    gameDao.destroy();
+
+                    break;
+
+                case"usergame":
+
+                    //prelevo parametri POST per game
+                    int id_userUsergame = Integer.parseInt(request.getParameter("id_user"));
+                    int id_gameUsergame = Integer.parseInt(request.getParameter("id_game"));
+                    Timestamp dateUserGame = Timestamp.valueOf(request.getParameter("date"));
+
+                    //se i parametri in input non sono validi
+                    if (isNull(id_gameUsergame) || isNull(id_userUsergame) || isNull(dateUserGame) ||
+                            dateUserGame.equals("")) {
+
+                        Logger.getAnonymousLogger().log(Level.WARNING, "[doInsert: "+item+"] Parametri POST non validi "); // per stampare errori sul terminale al posto di System.Out
+                        //torno KO alla chiamata servlet
+                        response.getWriter().write("KO");
+                        return;
+                    }
+
+                    UserGameDao userGameDao = new UserGameDaoImpl(ds);
+
+                    userGameDao.init();
+                    //provo ad inserire il gioco
+
+                    UserGame userGame = userGameDao.getUserGame();
+
+                    userGame.setUserId(id_userUsergame);
+                    userGame.setGameId(id_gameUsergame);
+                    userGame.setDate(dateUserGame);
+
+                    //inserisco game nel db
+                    userGameDao.;
+
+                    //chiudo gameDao
+                    gameDao.destroy();
+
+                    break;
+
+
+                    //altri case
 
                 //default
                 default:

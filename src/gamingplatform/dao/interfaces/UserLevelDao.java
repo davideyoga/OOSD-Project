@@ -13,6 +13,16 @@ import java.util.Map;
 
 public interface UserLevelDao extends DaoData {
 
+    public UserLevel getUserLevel();
+
+    public void insertUserlevel( UserLevel userLevel) throws DaoException;
+
+    public UserLevel selectUserLevelById( int idUserLevel ) throws DaoException;
+
+    public void updateUserLevel( UserLevel userLevel) throws DaoException;
+
+    public void deleteUserLevel( UserLevel userLevel) throws DaoException;
+
     public List<List<Object>> getLastXItemsFromUserLevel(int userId, int n) throws DaoException;
 
 

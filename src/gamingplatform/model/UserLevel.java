@@ -30,7 +30,7 @@ public class UserLevel {
 
     public void setUserId(int id){ this.id_user=id;}
 
-    public void setGameId(int id){ this.id_level=id;}
+    public void setLevelId(int id){ this.id_level=id;}
 
     public Timestamp getDate() { return date; }
 

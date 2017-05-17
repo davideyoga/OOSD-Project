@@ -22,7 +22,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
     private PreparedStatement selectLastXItems;
     private PreparedStatement insertGameUser;
     private PreparedStatement updateGameUser;
-    private PreparedStatement deleteGameuser;
+    private PreparedStatement deleteGameUser;
 
     /**
      * Costruttore per inizializzare la connessione
@@ -56,11 +56,11 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
 
             this.updateGameUser = connection.prepareStatement("UPDATE usergame " +
                     "												SET id_user=?," +
-                    "													id_game," +
+                    "													id_game=?," +
                     "													date=?," +
                     "													WHERE id=?");
 
-            this.deleteGameuser = connection.prepareStatement("DELETE FROM usergame " +
+            this.deleteGameUser = connection.prepareStatement("DELETE FROM usergame " +
                     "												WHERE id=?");
 
         } catch (Exception e) {
@@ -149,6 +149,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
             this.updateGameUser.setInt(1, userGame.getUserId());
             this.updateGameUser.setInt(2, userGame.getGameId());
             this.updateGameUser.setTimestamp(3, userGame.getDate());
+            this.updateGameUser.setInt(4, userGame.getId());
 
             this.updateGameUser.executeUpdate();
 
@@ -168,9 +169,9 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
 
         try {
 
-            this.deleteGameuser.setInt(1, userGame.getId());
+            this.deleteGameUser.setInt(1, userGame.getId());
 
-            this.deleteGameuser.executeUpdate();
+            this.deleteGameUser.executeUpdate();
 
 
         } catch (SQLException e) {
