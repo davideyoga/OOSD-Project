@@ -1,8 +1,13 @@
 package gamingplatform.controller;
 
 import gamingplatform.dao.exception.DaoException;
-import gamingplatform.dao.implementation.UserDaoImpl;
+import gamingplatform.dao.implementation.*;
+import gamingplatform.dao.interfaces.GameDao;
+import gamingplatform.dao.interfaces.LevelDao;
+import gamingplatform.dao.interfaces.ReviewDao;
 import gamingplatform.dao.interfaces.UserDao;
+import gamingplatform.dao.interfaces.ServiceDao;
+import gamingplatform.dao.interfaces.GroupsDao;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -103,6 +108,40 @@ public class doDelete extends HttpServlet {
                     break;
 
                 //altri case
+                case "game":
+                    GameDao gameDao = new GameDaoImpl(ds);
+                    gameDao.init();
+                    gameDao.deleteGameById(itemId);
+                    gameDao.destroy();
+                    break;
+
+                case "level":
+                    LevelDao levelDao = new LevelDaoImpl(ds);
+                    levelDao.init();
+                    levelDao.deleteLevel(itemId);
+                    levelDao.destroy();
+                    break;
+
+                case "review":
+                    ReviewDao reviewDao = new ReviewDaoImpl(ds);
+                    reviewDao.init();
+                    reviewDao.deleteReview(idGame,idUser);
+                    reviewDao.destroy();
+                    break;
+
+                case "service"
+                    ServiceDao serviceDao = new ServiceDaoImpl(ds);
+                    serviceDao.init();
+                    serviceDao.deleteServiceById(itemId);
+                    serviceDao.destroy();
+                    break;
+
+                case "groups"
+                    GroupsDao groupsDao = new GroupsDaoImpl(ds);
+                    groupsDao.init();
+                    groupsDao.deleteGroupById(itemId);
+                    groupsDao.destroy();
+                    break;
 
                 //default
                 default:
