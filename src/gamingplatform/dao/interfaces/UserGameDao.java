@@ -16,6 +16,13 @@ public interface UserGameDao extends DaoData {
 
     public UserGame getUserGame();
 
+    public UserGame selectUserGameById( int idUserGame)throws DaoException;
+
+    public void insertUserGame(UserGame userGame)throws DaoException;
+
+    public void updateUserGame(UserGame userGame)throws DaoException;
+
+    public void deleteUserGame(UserGame userGame)throws DaoException;
 
     public List<List<Object>> getLastXItemsFromUserGame(int userId, int n) throws DaoException;
 

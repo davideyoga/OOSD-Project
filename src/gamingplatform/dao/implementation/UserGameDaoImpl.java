@@ -18,7 +18,11 @@ import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
 
 public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
 
+    private PreparedStatement selectUserGameById;
     private PreparedStatement selectLastXItems;
+    private PreparedStatement insertGameUser;
+    private PreparedStatement updateGameUser;
+    private PreparedStatement deleteGameuser;
 
     /**
      * Costruttore per inizializzare la connessione
@@ -39,18 +43,139 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
         try {
             super.init(); // connection initialization
 
+            this.selectUserGameById = connection.prepareStatement("SELECT * " +
+                    "												FROM usergame " +
+                    "												WHERE id=?");
+
             this.selectLastXItems = connection.prepareStatement("SELECT game.exp, game.name, usergame.date " +
                     "FROM usergame LEFT JOIN game ON game.id=usergame.id_game " +
                     "WHERE usergame.id_user = ? ORDER BY date DESC LIMIT ?");
+
+            this.insertGameUser = connection.prepareStatement("INSERT INTO usergame" +
+                    "										    VALUES(NULL,?,?,?)");
+
+            this.updateGameUser = connection.prepareStatement("UPDATE usergame " +
+                    "												SET id_user=?," +
+                    "													id_game," +
+                    "													date=?," +
+                    "													WHERE id=?");
+
+            this.deleteGameuser = connection.prepareStatement("DELETE FROM usergame " +
+                    "												WHERE id=?");
 
         } catch (Exception e) {
             throw new DaoException("Error initializing user game dao", e);
         }
     }
 
+    /**
+     * restituisce un UserGame vuoto
+     *
+     * @return UserGame vuoto
+     *
+     * @throws gamingplatform.dao.exception.DaoException
+     */
     @Override
     public UserGame getUserGame() {
         return new UserGame(this);
+    }
+
+    /**
+     * restituisce un UserGame secondo l'id passato
+     * @param idUserGame id dello UserGame desiderato
+     * @return userGame con id = idUserGame
+     * @throws gamingplatform.dao.exception.DaoException
+     */
+    @Override
+    public UserGame selectUserGameById(int idUserGame) throws DaoException {
+
+        UserGame userGame = this.getUserGame(); // diciaro lo UserGame da restituire
+
+        try {
+            selectUserGameById.setInt(1, idUserGame);
+
+            ResultSet rs = selectUserGameById.executeQuery();
+
+            userGame.setId(idUserGame);
+            userGame.setGameId( rs.getInt("id_game"));
+            userGame.setUserId( rs.getInt("id_user"));
+            userGame.setDate( rs.getTimestamp("date"));
+
+        } catch (SQLException e) {
+            throw new DaoException("Error dao user game", e);
+        }
+
+        return userGame;
+    }
+
+    /**
+     * inserisce uno UserGame nel db
+     *
+     * @param userGame da inserire nel db
+     * @throws DaoException
+     */
+    @Override
+    public void insertUserGame( UserGame userGame ) throws DaoException {
+
+        if( userGame.getId() >= 1){ // se lo UserGame possiede gia un id vado a fare un update
+            this.updateUserGame(userGame);
+        }else{
+
+            try {
+                this.insertGameUser.setInt(1, userGame.getUserId());
+                this.insertGameUser.setInt(2, userGame.getGameId());
+                this.insertGameUser.setTimestamp(3, userGame.getDate());
+
+                this.insertGameUser.executeUpdate();
+
+            } catch (SQLException e) {
+                throw new DaoException("Error get user game dao", e);
+            }
+        }
+
+    }
+
+    /**
+     * metodo per l'update di un UserGame nel db
+     * @param userGame su cui fare l'update
+     * @throws DaoException
+     */
+    @Override
+    public void updateUserGame(UserGame userGame) throws DaoException {
+
+
+        try {
+
+            this.updateGameUser.setInt(1, userGame.getUserId());
+            this.updateGameUser.setInt(2, userGame.getGameId());
+            this.updateGameUser.setTimestamp(3, userGame.getDate());
+
+            this.updateGameUser.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DaoException("Error update user game dao", e);
+        }
+
+    }
+
+    /**
+     * metodo per cancellare uno UserGame dal db
+     * @param userGame da cancellare dal db
+     * @throws DaoException
+     */
+    @Override
+    public void deleteUserGame(UserGame userGame) throws DaoException {
+
+        try {
+
+            this.deleteGameuser.setInt(1, userGame.getId());
+
+            this.deleteGameuser.executeUpdate();
+
+
+        } catch (SQLException e) {
+            throw new DaoException("Error delete user game dao", e);
+        }
     }
 
     /**
