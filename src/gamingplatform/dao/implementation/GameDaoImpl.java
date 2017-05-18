@@ -61,11 +61,7 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
 
             //query di inserimento di una nuova tupla nella tabella game
             insertGame=connection.prepareStatement("INSERT INTO game " +
-                    "                                           VALUES (NULL," +
-                    "                                                  name=?," +
-                    "                                                  exp=?," +
-                    "                                                  image=?," +
-                    "                                                  description=?)");
+                    "                                           VALUES (NULL,?,?,?,?)");
 
             //query di eliminazione di un gioco con id dato
             deleteGameById=connection.prepareStatement("DELETE FROM game WHERE id=?");
