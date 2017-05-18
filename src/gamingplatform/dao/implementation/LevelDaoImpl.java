@@ -40,7 +40,7 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
                     "                                                WHERE id=? ");
 
 
-            this.insertLevel = connection.prepareStatement("INSERT INTO level (id,name,trophy,icon,exp) " +
+            this.insertLevel = connection.prepareStatement("INSERT INTO level " +
                     "                                            VALUES(NULL,?,?,?,?)");
 
             this.deleteLevel=connection.prepareStatement("DELETE FROM level" +
