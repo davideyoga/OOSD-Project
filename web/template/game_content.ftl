@@ -16,9 +16,15 @@
             <#if average??>
                 <ul class="icon" id="starList" style="float:right;">
 
-                    <#list 1..(average?round) as i>
+                    <#assign floor=(average?floor)>
+                    <#list 1..(floor) as i>
                         <i class="post-file fa fa-star"></i>
                     </#list>
+
+                    <#assign decimal = average-floor>
+                    <#if (decimal > 0)>
+                        <i class="post-file fa fa-star-half"></i>
+                    </#if>
 
                     <i class="post-file">&nbsp&nbsp${average}&nbsp&nbsp<span style="font-size:65%;">/5</span></i>
 
