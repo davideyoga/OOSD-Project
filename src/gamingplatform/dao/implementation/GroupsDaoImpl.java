@@ -34,7 +34,9 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 							  removeUserFromGroup,
 							  addUserToGroup,
 							  removeServiceFromGroup,
-							  addServiceToGroup;
+							  addServiceToGroup,
+						      selectUsersNotInThisGroup,
+							  selectServicesNotInThisGroup;
 
 
 	/**
@@ -132,6 +134,25 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			//Query che consente di aggiungere un servizio al gruppo
 			this.addServiceToGroup=connection.prepareStatement("INSERT INTO groupsservice" +
 					"												 VALUES (?,?)");
+
+			//Query che mi restituisce gli user non appartenenti al gruppo dato
+			this.selectUsersNotInThisGroup=connection.prepareStatement("SELECT user.id AS id, user.username" +
+					"														FROM user " +
+					"														WHERE id NOT IN (" +
+					"																		SELECT user.id" +
+					"																		FROM user " +
+					"																		LEFT JOIN usergroups ON usergroups.id_user=user.id" +
+					"																		WHERE usergroups.id_groups=?)");
+
+
+			//Query che mi restituisce i services non appartenenti al gruppo dato
+			this.selectUsersNotInThisGroup=connection.prepareStatement("SELECT service.id AS id, service.name" +
+					"														FROM service " +
+					"														WHERE id NOT IN (" +
+					"																		SELECT service.id" +
+					"																		FROM service " +
+					"																		LEFT JOIN groupsservice ON groupsservice.id_service=service.id" +
+					"																		WHERE groupsservice.id_groups=?)");
 
 		} catch (Exception e) {
 			throw new DaoException("Error initializing group dao", e);
@@ -474,6 +495,70 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 	}
 
 
+	public List<User> getUsersNotInThisGroup(int idGroup) throws DaoException {
+		List<User> list = new ArrayList<>();
+
+		try {
+
+			this.selectUsersNotInThisGroup.setInt(1, idGroup);
+
+			ResultSet rs = this.selectUsersNotInThisGroup.executeQuery();
+
+			//scorro rs ed aggiungo alla lista
+			while (rs.next()) {
+
+				User u = new User(this);
+				u.setId(rs.getInt("id"));
+				u.setUsername(stripSlashes(rs.getString("username")));
+				u.setName(stripSlashes(rs.getString("name")));
+				u.setSurname(stripSlashes(rs.getString("surname")));
+				u.setEmail(stripSlashes(rs.getString("email")));
+				u.setPassword(rs.getString("password"));
+				u.setExp(rs.getInt("exp"));
+				u.setAvatar(stripSlashes(rs.getString("avatar")));
+
+				list.add(u);
+			}
+
+		} catch (Exception e) {
+			throw new DaoException("Error query  getUsersNotInThisGroup", e);
+		}
+
+		return list;
+	}
+
+
+
+	public List<Service> getServicesNotInThisGroup(int idGroup) throws DaoException {
+		List<Service> list = new ArrayList<>();
+
+		try {
+
+			this.selectServicesNotInThisGroup.setInt(1, idGroup);
+
+			ResultSet rs = this.selectServicesNotInThisGroup.executeQuery();
+
+			//scorro rs ed aggiungo alla lista
+			while (rs.next()) {
+
+				Service s=new Service(this);
+
+				s.setId(rs.getInt("id"));
+				s.setName(stripSlashes(rs.getString("name")));
+				s.setDescription(stripSlashes(rs.getString("description")));
+
+				list.add(s);
+			}
+
+		} catch (Exception e) {
+			throw new DaoException("Error query  getServicesNotInThisGroup", e);
+		}
+
+		return list;
+	}
+
+
+
 	/**
 	 * Metodo che chiude la connessione e le query preparate
 	 * @throws DaoException lancia eccezione in caso di errore
@@ -494,6 +579,9 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			this.addUserToGroup.close();
 			this.removeServiceFromGroup.close();
 			this.addServiceToGroup.close();
+			this.selectUsersNotInThisGroup.close();
+			this.selectServicesNotInThisGroup.close();
+
 
 
 		} catch (Exception e) {
