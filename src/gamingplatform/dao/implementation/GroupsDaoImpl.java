@@ -69,9 +69,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 
 			//Query che inserisce un nuovo gruppo nel DB
 			this.insertGroup = connection.prepareStatement("INSERT INTO groups"	 +
-					"											 VALUES (NULL," +
-					"													 name=?," +
-					"											 	     description=?)");
+					"											 VALUES (NULL,?,?)");
 			//Query di cancellazione di un gruppo
 			this.deleteGroupById= connection.prepareStatement("DELETE FROM groups WHERE id=?");
 
@@ -79,7 +77,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			//Query di  modifica di un gruppo
 			this.updateGroup=connection.prepareStatement("UPDATE groups" +
 					"										   SET name=?," +
-					"										       description=?" +
+					"										       description=? " +
 					"										   WHERE id=?");
 
 			//Query che restituisce i gruppi a cui appartiene un dato user
@@ -119,13 +117,12 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 					"													  WHERE groupsservice.id_groups=?");
 
 			//Query che consente di eliminare un utente da un gruppo
-			this.removeUserFromGroup=connection.prepareStatement("DELETE FROM usergroup" +
+			this.removeUserFromGroup=connection.prepareStatement("DELETE FROM usergroups" +
 					"												   WHERE id_groups=? AND id_user=?");
 
 			//Query che consente di aggiungere un utente a un gruppo
-			this.addUserToGroup=connection.prepareStatement("INSERT INTO usergroup" +
-					"												 VALUES (id_user=?," +
-					"														id_groups=?)");
+			this.addUserToGroup=connection.prepareStatement("INSERT INTO usergroups" +
+					"												 VALUES (?,?)");
 
 
 			//Query che consente di rimuovere un servizio da un gruppo
@@ -134,8 +131,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 
 			//Query che consente di aggiungere un servizio al gruppo
 			this.addServiceToGroup=connection.prepareStatement("INSERT INTO groupsservice" +
-					"												 VALUES (id_groups=?," +
-					"														id_service=?)");
+					"												 VALUES (?,?)");
 
 		} catch (Exception e) {
 			throw new DaoException("Error initializing group dao", e);
@@ -246,7 +242,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 			this.updateGroup.setString(2, addSlashes(group.getDescription()));
 			this.updateGroup.setInt(3, group.getId());
 
-			this.insertGroup.executeUpdate();
+			this.updateGroup.executeUpdate();
 
 		}catch (Exception e){
 			throw new DaoException("Error query updateGroup", e);

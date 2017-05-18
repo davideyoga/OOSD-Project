@@ -188,10 +188,10 @@ public class doInsert extends HttpServlet {
                     userGame.setDate(dateUserGame);
 
                     //inserisco game nel db
-                    userGameDao.;
+
 
                     //chiudo gameDao
-                    gameDao.destroy();
+
 
                     break;
 

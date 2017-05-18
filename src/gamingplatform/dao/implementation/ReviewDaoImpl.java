@@ -64,11 +64,7 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
 
             //query di inserimento di una nuova tupla nella tabella review
             insertReview=connection.prepareStatement("INSERT INTO review " +
-                    "                                           VALUES (id_user=?," +
-                    "                                                  id_game=?,"+
-                    "                                                  title=?," +
-                    "                                                  body=?," +
-                    "                                                  vote=?)");
+                    "                                           VALUES (?,?,?,?,?)");
 
             //query di eliminazione di una review
             deleteReview=connection.prepareStatement("DELETE FROM review WHERE id_user=? AND id_game=?");

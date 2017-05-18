@@ -163,7 +163,7 @@
                     <div class="form-group">
                         <label for="serviceToAdd" class="col-sm-2 control-label">Choose an user to add or remove</label>
                         <div class="col-sm-8" style="margin-top:10px;">
-                            <select name="serviceToAdd" id="serviceToAdd" class="form-control1">
+                            <select name="userToAddRemove" id="userToAddRemove" class="form-control1">
                                 <option value="-1">-</option>
                                 <#if usersList??>
                                     <#list usersList as user>
