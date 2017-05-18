@@ -136,7 +136,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 					"												 VALUES (?,?)");
 
 			//Query che mi restituisce gli user non appartenenti al gruppo dato
-			this.selectUsersNotInThisGroup=connection.prepareStatement("SELECT user.id AS id, user.username" +
+			this.selectUsersNotInThisGroup=connection.prepareStatement("SELECT user.id AS id, user.username, user.name, user.email, user.surname, user.exp, user.avatar, user.password" +
 					"														FROM user " +
 					"														WHERE id NOT IN (" +
 					"																		SELECT user.id" +
@@ -146,7 +146,7 @@ public class GroupsDaoImpl extends DaoDataMySQLImpl implements GroupsDao {
 
 
 			//Query che mi restituisce i services non appartenenti al gruppo dato
-			this.selectUsersNotInThisGroup=connection.prepareStatement("SELECT service.id AS id, service.name" +
+			this.selectServicesNotInThisGroup=connection.prepareStatement("SELECT service.id AS id, service.name, service.description" +
 					"														FROM service " +
 					"														WHERE id NOT IN (" +
 					"																		SELECT service.id" +

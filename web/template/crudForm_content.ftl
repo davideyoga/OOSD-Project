@@ -1,7 +1,6 @@
 <div class="content-main" xmlns="http://www.w3.org/1999/html">
 
 
-
     <!--content-->
     <div class="content-top" style="padding:5px 20px 20px 20px;">
 
@@ -109,7 +108,13 @@
                                            placeholder="Insert ${fields?api.get(i)?cap_first}"
 
                                         <#if item?? && item[fields?api.get(i)]?? && !type?starts_with("password")>
+                                            <#if type?starts_with("number")>
+                                           value="${item[fields?api.get(i)]?replace(",","")}"
+
+                                            <#else>
                                            value="${item[fields?api.get(i)]}"
+
+                                            </#if>
                                         </#if>>
                                 </div>
                             </div>
@@ -136,8 +141,8 @@
                         <div class="col-sm-8" style="margin-top:10px;">
                             <select name="serviceToAddRemove" id="serviceToAddRemove" class="form-control1">
                                 <option value="-1">-</option>
-                                <#if servicesList??>
-                                    <#list servicesList as service>
+                                <#if servicesNotInGroup??>
+                                    <#list servicesNotInGroup as service>
                                         <option value="${service.id}">${service.name?cap_first}</option>
                                     </#list>
                                 </#if>
@@ -150,11 +155,15 @@
                         <label for="radio1" class="col-sm-2 control-label"></label>
                         <div class="col-sm-8">
                             <div class="radio block" style="margin-top:-10px;">
-                                <label style="font-size: 80%; margin-right:50px;"><input type="radio"
-                                                                                         name="servicesRadio"
-                                                                                         value="add" checked="">
+                                <label style="font-size: 80%; margin-right:50px;" id="serviceRadioAdd"><input
+                                        type="radio"
+
+                                        name="servicesRadio"
+                                        value="add" checked="">
                                     Add</label>
-                                <label style="font-size: 80%;"><input type="radio" name="servicesRadio" value="remove">
+                                <label style="font-size: 80%;" id="serviceRadioRemove"><input type="radio"
+                                                                                              name="servicesRadio"
+                                                                                              value="remove">
                                     Remove</label>
                             </div>
                         </div>
@@ -165,8 +174,8 @@
                         <div class="col-sm-8" style="margin-top:10px;">
                             <select name="userToAddRemove" id="userToAddRemove" class="form-control1">
                                 <option value="-1">-</option>
-                                <#if usersList??>
-                                    <#list usersList as user>
+                                <#if usersNotInGroup??>
+                                    <#list usersNotInGroup as user>
                                         <option value="${user.id}">${user.username}</option>
                                     </#list>
                                 </#if>
@@ -178,10 +187,15 @@
                         <label for="radio2" class="col-sm-2 control-label"></label>
                         <div class="col-sm-8">
                             <div class="radio block" style="margin-top:-10px;">
-                                <label style="font-size: 80%; margin-right:50px;"><input type="radio" name="usersRadio"
-                                                                                         checked="" value="add">
+                                <label style="font-size: 80%; margin-right:50px;" id="usersRadioAdd"><input type="radio"
+                                                                                                            name="usersRadio"
+
+                                                                                                            checked=""
+                                                                                                            value="add">
                                     Add</label>
-                                <label style="font-size: 80%;"><input type="radio" name="usersRadio" value="remove">
+                                <label style="font-size: 80%;" id="usersRadioRemove"><input type="radio"
+                                                                                            name="usersRadio"
+                                                                                            value="remove">
                                     Remove</label>
                             </div>
                         </div>
@@ -415,20 +429,78 @@
 
     }
 
-
 </script>
-
 <script>
-    <#assign disable="true">
-    <#list services as service>
-        <#if service.name?starts_with("user")>
-            <#assign disable="false">
-        <#break>
-        </#if>
-    </#list>
+    <#if table?? && table?starts_with("user")>
+        <#assign disable="true">
+        <#list services as service>
+            <#if service.name?starts_with("user")>
+                <#assign disable="false">
+                <#break>
+            </#if>
+        </#list>
 
-    var username="${user.username}";
-    if(username === document.getElementById("id_username").getAttribute("value") && ${disable}){
-        document.getElementById("id_exp").setAttribute("readonly","true");
+    var username = "${user.username}";
+    if (username === document.getElementById("id_username").getAttribute("value") && ${disable}) {
+        document.getElementById("id_exp").setAttribute("readonly", "true");
     }
+    </#if>
 </script>
+
+<#if servicesInGroup?? && servicesNotInGroup?? && usersInGroup?? && usersNotInGroup??>
+<script>
+    function capFirst(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    var servicesNotInGroup = [<#list servicesNotInGroup as service>[${service.id}, "${service.name}"]<#if service?has_next>,</#if></#list>];
+
+    var usersInGroup = [<#list usersInGroup as user>[${user.id}, "${user.username}"]<#if user?has_next>,</#if></#list>];
+
+    var usersNotInGroup = [<#list usersNotInGroup as user>[${user.id}, "${user.username}"]<#if user?has_next>,</#if></#list>];
+
+    var servicesInGroup = [<#list servicesInGroup as service>[${service.id}, "${service.name}"]<#if service?has_next>,</#if></#list>];
+
+
+    $('#serviceRadioAdd').click(function () {
+        $('#serviceToAddRemove').find('option:not(:first)').remove();
+        $.each(servicesNotInGroup, function (key, value) {
+            $('#serviceToAddRemove')
+                    .append($("<option></option>")
+                            .attr("value", servicesNotInGroup[key][0])
+                            .text(capFirst(servicesNotInGroup[key][1])));
+        });
+    });
+
+    $('#serviceRadioRemove').click(function () {
+        $('#serviceToAddRemove').find('option:not(:first)').remove();
+        $.each(servicesInGroup, function (key, value) {
+            $('#serviceToAddRemove')
+                    .append($("<option></option>")
+                            .attr("value", servicesInGroup[key][0])
+                            .text(capFirst(servicesInGroup[key][1])));
+        });
+    });
+
+    $('#usersRadioAdd').click(function () {
+        $('#userToAddRemove').find('option:not(:first)').remove();
+        $.each(usersNotInGroup, function (key, value) {
+            $('#userToAddRemove')
+                    .append($("<option></option>")
+                            .attr("value", usersNotInGroup[key][0])
+                            .text(capFirst(usersNotInGroup[key][1])));
+        });
+    });
+
+    $('#usersRadioRemove').click(function () {
+        $('#userToAddRemove').find('option:not(:first)').remove();
+        $.each(usersInGroup, function (key, value) {
+            $('#userToAddRemove')
+                    .append($("<option></option>")
+                            .attr("value", usersInGroup[key][0])
+                            .text(capFirst(usersInGroup[key][1])));
+        });
+    });
+
+</script>
+</#if>

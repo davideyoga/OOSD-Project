@@ -134,21 +134,23 @@ public class Edit extends HttpServlet {
                     GroupsDao groupsDao = new GroupsDaoImpl(ds);
                     groupsDao.init();
                     Group groups = groupsDao.getGroup(id);
+
+
+                    List<Service> servicesInGroup = groupsDao.getServicesByGroupId(id);
+                    List<Service> servicesNotInGroup = groupsDao.getServicesNotInThisGroup(id);
+
+                    List<User> usersInGroup = groupsDao.getUsersByGroupId(id);
+                    List<User> usersNotInGroup = groupsDao.getUsersNotInThisGroup(id);
+
                     groupsDao.destroy();
 
-                    ServiceDao serviceDao1 = new ServiceDaoImpl(ds);
-                    serviceDao1.init();
-                    List<Service> servicesList = serviceDao1.getServices();
-                    serviceDao1.destroy();
-
-                    UserDao userDao1 = new UserDaoImpl(ds);
-                    userDao1.init();
-                    List<User> usersList = userDao1.getUsers();
-                    userDao1.destroy();
 
                     data.put("item", groups);
-                    data.put("servicesList",servicesList);
-                    data.put("usersList",usersList);
+                    data.put("servicesNotInGroup",servicesNotInGroup);
+                    data.put("servicesInGroup",servicesInGroup);
+
+                    data.put("usersNotInGroup",usersNotInGroup);
+                    data.put("usersInGroup",usersInGroup);
 
                     break;
 

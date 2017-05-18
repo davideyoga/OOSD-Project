@@ -170,6 +170,7 @@ public class ServiceDaoImpl extends DaoDataMySQLImpl implements ServiceDao {
         try{
             this.updateService.setString(1,addSlashes(service.getName()));
             this.updateService.setString(2,addSlashes(service.getDescription()));
+            this.updateService.setInt(3,service.getId());
 
             this.updateService.executeUpdate();
 

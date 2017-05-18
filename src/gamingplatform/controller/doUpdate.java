@@ -187,12 +187,11 @@ public class doUpdate extends HttpServlet {
                     String nameGame=request.getParameter("name");
                     int expgame=Integer.parseInt(request.getParameter("exp"));
                     Part image=request.getPart("image");
-                    String description=request.getParameter("description");
-
+                    String gameDescription=request.getParameter("description");
 
 
                     //Se i parametri di input non sono validi
-                    if(isNull(nameGame) || isNull(description) || nameGame.equals("") || description.equals("")){
+                    if(isNull(nameGame) || isNull(gameDescription) || nameGame.equals("") || gameDescription.equals("")){
                         Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: "+item+"] Parametri POST non validi ");
                         //torno KO alla chiamata servlet
                         response.getWriter().write("KO");
@@ -223,7 +222,7 @@ public class doUpdate extends HttpServlet {
                     game.setName(nameGame);
                     game.setExp(expgame);
                     game.setImage(imageName);
-                    game.setDescription(description);
+                    game.setDescription(gameDescription);
                     gameDao.updateGame(game);
 
                     gameDao.destroy();
@@ -297,10 +296,7 @@ public class doUpdate extends HttpServlet {
                     String serviceToAddRemove=request.getParameter("serviceToAddRemove");
                     String userToAddRemove=request.getParameter("userToAddRemove");
                     String radioService=request.getParameter("servicesRadio");
-                    System.out.println("radioService: "+radioService);
                     String radioUser=request.getParameter("usersRadio");
-                    System.out.println("radioUser: "+radioUser);
-
 
                     if(isNull(nameGroups) || isNull(descriptionGroups) || isNull(serviceToAddRemove) || isNull(userToAddRemove) ||
                         nameGroups.equals("") || descriptionGroups.equals("") || serviceToAddRemove.equals("") || userToAddRemove.equals("")){
@@ -337,7 +333,7 @@ public class doUpdate extends HttpServlet {
                             }
 
                             if (radioUser.equals("add")&& idUser>-1 ) {
-                                groupsDao.addUserToGroup(itemId, idUser);
+                                groupsDao.addUserToGroup(idUser, itemId);
                             } else if (radioUser.equals("remove") && idUser>-1) {
                                     groupsDao.removeUserFromGroup(itemId, idUser);
                             }

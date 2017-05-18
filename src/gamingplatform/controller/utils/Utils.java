@@ -35,6 +35,7 @@ public class Utils {
 
         String fileName = addSlashes(Paths.get(filePart.getSubmittedFileName()).getFileName().toString());
 
+        //TODO fare questo controllo lato servlet se no rimette sempre l'immagine di default a ogni update
         if(isNull(fileName) || fileName.equals("")){
             return "default.png";
         }
