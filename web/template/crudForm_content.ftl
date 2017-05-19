@@ -1,6 +1,5 @@
 <div class="content-main" xmlns="http://www.w3.org/1999/html">
 
-
     <!--content-->
     <div class="content-top" style="padding:5px 20px 20px 20px;">
 
@@ -214,7 +213,7 @@
                                     class="btn btn-lg btn-primary edit_btn_hover">Edit
                             </button>
 
-                            <button type="button" id="del_btn"
+                            <button type="submit" id="del_btn"
                                     style="float:right; background-color:#d95459; border-color:#d95459;"
                                     class="btn btn-lg btn-danger delete_btn_hover"
                                     onclick="this.style.display='none'; document.getElementById('confirm_btn').style.display='block';">
@@ -274,13 +273,17 @@
 
     $("#edit_btn").click(function (e) {
 
-        e.preventDefault();
-
         // Get form
         var pippoForm = $('#formPippo')[0];
 
         // Create an FormData object
         var pippoData = new FormData(pippoForm);
+
+        if (!pippoForm.checkValidity()) {
+            // If the form is invalid, submit it. The form won't actually submit;
+            // this will just cause the browser to display the native HTML5 error messages.
+            pippoForm.find(':submit').click()
+        }
 
         $.ajax({
             type: "POST",
@@ -292,26 +295,19 @@
             cache: false,
             timeout: 600000,
             success: function (data) {
-
                 ajaxFunction(data, "edit", "success");
-
-
             },
             error: function (data) {
                 ajaxFunction(data, "edit", "error");
-
             }
-
         });
-
+        e.preventDefault();
     });
 
 
     /*---------------------------------------------*/
 
     $("#confirm_btn").click(function (e) {
-
-        e.preventDefault();
 
         // Get form
         var pippoForm = $('#formPippo')[0];
@@ -329,30 +325,30 @@
             cache: false,
             timeout: 600000,
             success: function (data, textStatus) {
-
                 ajaxFunction(data, "del", textStatus, "success");
-
-
             },
             error: function (data, textStatus) {
                 ajaxFunction(data, "del", textStatus, "error");
-
             }
-
         });
+        e.preventDefault();
     });
 
     <#else>
     //ajax insert
     $("#insert_btn").click(function (e) {
 
-        e.preventDefault();
-
         // Get form
         var pippoForm = $('#formPippo')[0];
 
         // Create an FormData object
         var pippoData = new FormData(pippoForm);
+
+        if (!pippoForm.checkValidity()) {
+            // If the form is invalid, submit it. The form won't actually submit;
+            // this will just cause the browser to display the native HTML5 error messages.
+            pippoForm.find(':submit').click()
+        }
 
         $.ajax({
             type: "POST",
@@ -364,18 +360,13 @@
             cache: false,
             timeout: 600000,
             success: function (data, textStatus) {
-
                 ajaxFunction(data, "add", textStatus, "success");
-
-
             },
             error: function (data, textStatus) {
-
                 ajaxFunction(data, "add", textStatus, "error");
-
             }
-
         });
+        e.preventDefault();
 
     });
     </#if>
