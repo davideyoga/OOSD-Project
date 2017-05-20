@@ -227,7 +227,13 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
 
         //chiudo le quary precompilate
         try {
+
+            this.selectUserGameById.close();
             this.selectLastXItems.close();
+            this.insertGameUser.close();
+            this.updateGameUser.close();
+            this.deleteGameUser.close();
+
 
         } catch (Exception e) {
             throw new DaoException("Error destroy dao user", e);
