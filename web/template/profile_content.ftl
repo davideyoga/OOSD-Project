@@ -26,13 +26,13 @@
 
         <div class="horz-grid">
             <div class="row show-grid" style="margin :0; border:0px;">
-                <div class="col-md-3 my_hover_div">
+                <div class="col-md-4 my_hover_div">
 
                     <img src="${context}/avatars/${user.avatar}" style="width:100%; height: 100%; z-index:2;">
 
                 </div>
                 <!--container descrizione-->
-                <div class="col-md-9" style="background: #ffffff; border:0px; padding: 0 0 0 20px;">
+                <div class="col-md-8" style="background: #ffffff; border:0px; padding: 0 0 0 20px;">
                     <div class="well" style="width:100%; height: 100%; padding:10px;">
                         Name: <b>${user.name}</b>
                     </div>
@@ -43,9 +43,6 @@
                         Username: <b>${user.username}</b>
                     </div>
                     <div class="well" style="width:100%; height: 100%; padding:10px;">
-                        Email: <b>${user.email}</b>
-                    </div>
-                    <div class="well" style="width:100%; height: 100%; padding:10px; visibility:hidden">
                         Email: <b>${user.email}</b>
                     </div>
 
@@ -100,7 +97,7 @@
                                     data: [<#list userGameList as list>
 
 
-                                    ${list[2]}
+                                    ${list[3]}
                                         <#if list_has_next>,</#if>
 
                                     </#list>]
@@ -121,7 +118,7 @@
                         var lineChartData = {
                             labels: [<#list userLevelList as list>
 
-                                "${list[0]?string["dd/MM,hh:mm"]} (lvl. ${list[1]})"
+                                "${list[0]?string["dd/MM,hh:mm"]} (${list[1]})"
                                 <#if list_has_next>,</#if>
 
 
@@ -135,7 +132,7 @@
                                     data: [<#list userLevelList as list>
 
 
-                                    ${list[2]}
+                                    ${list[4]}
                                         <#if list_has_next>,</#if>
 
                                     </#list>]
@@ -175,6 +172,7 @@
                     <tr>
                         <th>Date</th>
                         <th>Game Name</th>
+                        <th>Game Cover</th>
                         <th>Exp Gained</th>
                     </tr>
                     </thead>
@@ -183,13 +181,22 @@
                     <#list userGameListFull as item>
                     <tr>
                         <#list item as i>
+                            <#if i?ends_with(".png") || i?ends_with(".jpg")>
+                            <td align="center">
+                            <#else>
                             <td>
-                                <#if i??>
-                                ${i}
+                            </#if>
+
+                            <#if i??>
+                                <#if i?ends_with(".png") || i?ends_with(".jpg")>
+                                    <img src="${context}/images/${i}" style=" width:50px; height:50px;">
                                 <#else>
-                                    null or not available
+                                ${i}
                                 </#if>
-                            </td>
+                            <#else>
+                                null or not available
+                            </#if>
+                        </td>
                         </#list>
                     </tr>
                     </#list>
@@ -203,7 +210,7 @@
 
             <div class="row" style="background-color: #337ab7; border-radius: 4px;">
                 <div class="col-sm-6" style="width:100%;">
-                    <div style="margin-top:6px; "><label style="color:white; float:left;">Full level history</label>
+                    <div style="margin-top:6px; "><label style="color:white; float:left;">Full levels/trophies history</label>
                         <label style="color:white; float:right; cursor:pointer;" id="showLevelsBtn">show</label>
                         <label style="color:white; float:right; display:none; cursor:pointer;"
                                id="hideLevelsBtn">hide</label>
@@ -220,7 +227,9 @@
                 <tr>
                     <th>Date</th>
                     <th>Level Name</th>
-                    <th>Exp Nedded</th>
+                    <th>Trophy Icon</th>
+                    <th>Trophy Name</th>
+                    <th>Exp Needed</th>
                 </tr>
                 </thead>
 
@@ -228,9 +237,18 @@
                 <#list userLevelListFull as item>
                 <tr>
                     <#list item as i>
+                        <#if i?ends_with(".png") || i?ends_with(".jpg")>
+                        <td align="center">
+                        <#else>
                         <td>
+                        </#if>
+
                             <#if i??>
-                            ${i}
+                                <#if i?ends_with(".png") || i?ends_with(".jpg")>
+                                    <img src="${context}/images/${i}" style=" width:50px; height:50px;">
+                                <#else>
+                                    ${i}
+                                </#if>
                             <#else>
                                 null or not available
                             </#if>
@@ -258,7 +276,9 @@
 <script>
     $(document).ready(function () {
         $('#reportGames').DataTable();
-        $('#reportLevels').DataTable();
+        $('#reportLevels').DataTable({
+            "order": [[3, "desc"]]
+        });
 
 
         $('#showGamesBtn').click(function () {

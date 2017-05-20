@@ -73,7 +73,6 @@ public class Game extends HttpServlet {
             gameDao.init();
             gamingplatform.model.Game game = gameDao.getGameById(gameId);
             data.put("game",game);
-            gameDao.destroy();
 
             //recupero recensioni relative a quel gioco
             ReviewDao reviewDao=new ReviewDaoImpl(ds);
@@ -105,12 +104,13 @@ public class Game extends HttpServlet {
             data.put("users",users);
             data.put("levels",levels);
 
-            //int average = reviewDao.getAverageByGameId(gameId);
-            double average = 3.33;
+            double average = gameDao.getAverageVote(game);
             data.put("average", average);
 
             reviewDao.destroy();
             userDao.destroy();
+            gameDao.destroy();
+
 
 
         }catch (DaoException e){

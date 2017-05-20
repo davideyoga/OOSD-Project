@@ -38,4 +38,11 @@ public interface GroupsDao extends DaoData{
 
 	public void addServiceToGroup(int idGroup, int idService)throws DaoException;
 
+	public List<User>  getUsersNotInThisGroup(int idGroup) throws DaoException;
+
+	public List<Service> getServicesNotInThisGroup(int idGroup)throws DaoException;
+
+
+
+
 }

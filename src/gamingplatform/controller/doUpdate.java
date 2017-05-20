@@ -2,8 +2,8 @@ package gamingplatform.controller;
 
 import gamingplatform.controller.utils.SessionManager;
 import gamingplatform.dao.exception.DaoException;
-import gamingplatform.dao.implementation.UserDaoImpl;
-import gamingplatform.dao.interfaces.UserDao;
+import gamingplatform.dao.implementation.*;
+import gamingplatform.dao.interfaces.*;
 import gamingplatform.model.User;
 
 import javax.annotation.Resource;
@@ -24,7 +24,6 @@ import static gamingplatform.controller.utils.SessionManager.getUser;
 import static gamingplatform.controller.utils.Utils.fileUpload;
 import static gamingplatform.controller.utils.Utils.getLastBitFromUrl;
 import static gamingplatform.controller.utils.Utils.getNlastBitFromUrl;
-import static gamingplatform.controller.utils.SessionManager.getUser;
 import static java.util.Objects.isNull;
 
 
@@ -60,31 +59,17 @@ public class doUpdate extends HttpServlet {
         String item = getNlastBitFromUrl(request.getRequestURI(), 1);
 
         String id="";
+        int itemId=0;
 
-        //per gestire il caso review abbiamo bisogno di 2 id, l'id utente e l'id del gioco per identificare la singola recensione
-        //l'uri è del tipo /doUpdate/review/idGioco&idUser in questo caso
-        String idGame="";
-        String idUser="";
-
-        if(item.equals("review")){
-
-            String idArray[]=getLastBitFromUrl(request.getRequestURI()).split("&");
-            idGame=idArray[0];
-            idUser=idArray[1];
-
-        }else{
             //caso base di qualsiasi altra tabella con id semplice
             id=getLastBitFromUrl(request.getRequestURI());
+            if(isNull(id) || id.equals("")){
+                Logger.getAnonymousLogger().log(Level.WARNING, "[doDelete: "+item+"] parametri post non validi");
+                response.getWriter().write("KO");
+                return;
+            }
 
-        }
-
-        if(isNull(id) || id.equals("")){
-            Logger.getAnonymousLogger().log(Level.WARNING, "[doDelete: "+item+"] parametri post non validi");
-            response.getWriter().write("KO");
-            return;
-        }
-
-        int itemId=Integer.parseInt(id);
+        itemId=Integer.parseInt(id);
 
         //controllo quì se l'utente è loggato e ha acesso a quella determinata tabella
         //se l'utente sta cercando di modificare il suo profilo, glielo permetto
@@ -101,7 +86,7 @@ public class doUpdate extends HttpServlet {
 
             switch (item) {
 
-                //caso inserimento user
+                //caso update user
                 case "user":
                     //prelevo parametri POST
                     String username = request.getParameter("username");
@@ -134,7 +119,7 @@ public class doUpdate extends HttpServlet {
                     UserDao userDao = new UserDaoImpl(ds);
 
                     userDao.init();
-                    //provo ad inserire l'utente
+                    //provo a modificare l'utente
 
                     User user = userDao.getUser();
                     user.setId(itemId); //differenza rispetto alla insert, devo fornire l'id!, è sempre dentro la variabile itemId
@@ -151,7 +136,214 @@ public class doUpdate extends HttpServlet {
 
                     break;
 
-                //altri case
+
+                //Caso update level
+                case "level":
+
+                    //Prelevo parametri POST
+                    int namelevel=Integer.parseInt(request.getParameter("name"));
+                    String trophy=request.getParameter("trophy");
+                    Part icon=request.getPart("icon");
+                    int explevel=Integer.parseInt(request.getParameter("exp"));
+
+                    //Se i parametri di input non sono validi
+                    if(isNull(trophy) || trophy.equals("")){
+                        Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: "+item+"] Parametri POST non validi ");
+                        //torno KO alla chiamata servlet
+                        response.getWriter().write("KO");
+                        return;
+                    }
+
+                    //provo ad effettuare l'upload del file (icon)
+                    String iconlevel = fileUpload(icon, "images", getServletContext());
+                    if (isNull(iconlevel)) {
+
+                        Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: "+item+"] Upload file fallito");
+                        //torno KO alla chiamata servlet
+                        response.getWriter().write("KO");
+                        return;
+                    }
+
+
+                    LevelDao levelDao= new LevelDaoImpl(ds);
+                    levelDao.init();
+
+                    //Provo a modificare il livello
+                    gamingplatform.model.Level level=levelDao.getLevel();
+                    level.setId(itemId);
+                    level.setName(namelevel);
+                    level.setTrophy(trophy);
+                    level.setIcon(iconlevel);
+                    level.setExp(explevel);
+                    levelDao.updateLevel(level);
+
+                    levelDao.destroy();
+                    break;
+
+                //Caso update game
+                case "game":
+
+                    //Prelevo parametri POST
+                    String nameGame=request.getParameter("name");
+                    int expgame=Integer.parseInt(request.getParameter("exp"));
+                    Part image=request.getPart("image");
+                    String gameDescription=request.getParameter("description");
+
+
+                    //Se i parametri di input non sono validi
+                    if(isNull(nameGame) || isNull(gameDescription) || nameGame.equals("") || gameDescription.equals("")){
+                        Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: "+item+"] Parametri POST non validi ");
+                        //torno KO alla chiamata servlet
+                        response.getWriter().write("KO");
+                        return;
+                    }
+
+                    if(expgame<1){
+                        expgame=1;
+                    }
+
+                    //provo ad effettuare l'upload del file (icon)
+                    String imageName = fileUpload(image, "images", getServletContext());
+                    if (isNull(imageName)) {
+
+                        Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: "+item+"] Upload file fallito");
+                        //torno KO alla chiamata servlet
+                        response.getWriter().write("KO");
+                        return;
+                    }
+
+
+                    GameDao gameDao= new GameDaoImpl(ds);
+                    gameDao.init();
+
+                    //Provo a modificare il livello
+                    gamingplatform.model.Game game=gameDao.getGame();
+                    game.setId(itemId);
+                    game.setName(nameGame);
+                    game.setExp(expgame);
+                    game.setImage(imageName);
+                    game.setDescription(gameDescription);
+                    gameDao.updateGame(game);
+
+                    gameDao.destroy();
+                    break;
+
+                //Caso update service
+                case "service" :
+                    //Prelevo parametri POST
+                    String nameService=request.getParameter("name");
+                    String descriptionService=request.getParameter("description");
+
+                    //Se i parametri in input non sono validi
+                    if(isNull(nameService) || isNull(descriptionService) || nameService.equals("") || descriptionService.equals("")){
+                        Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: "+item+"] Parametri POST non validi ");
+                        //torno KO alla chiamata servlet
+                        response.getWriter().write("KO");
+                        return;
+                    }
+
+                    ServiceDao serviceDao=new ServiceDaoImpl(ds);
+                    serviceDao.init();
+
+                    //Provo a modificare il servizio
+                    gamingplatform.model.Service service= serviceDao.getService();
+                    service.setId(itemId);
+                    service.setName(nameService);
+                    service.setDescription(descriptionService);
+                    serviceDao.updateSerivce(service);
+
+                    serviceDao.destroy();
+                    break;
+
+                //Caso update review
+                /*
+                case "review":
+                    int gameId=Integer.parseInt(idGame);
+                    int userId=Integer.parseInt(idUser);
+                    //Prelevo i parametri POST
+                    String title=request.getParameter("title");
+                    String body=request.getParameter("body");
+                    int vote=Integer.parseInt(request.getParameter("vote"));
+
+                    if(isNull(title) || isNull(body)|| title.equals("") || body.equals("") || vote==0 || vote>5){
+                        Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: "+item+"] Parametri POST non validi ");
+                        //torno KO alla chiamata servlet
+                        response.getWriter().write("KO");
+                        return;
+                    }
+
+                    ReviewDao reviewDao=new ReviewDaoImpl(ds);
+                    reviewDao.init();
+
+                    //Provo a modificare la review
+                    gamingplatform.model.Review review=reviewDao.getReview();
+                    review.setIdGame(gameId);
+                    review.setIdUser(userId);
+                    review.setTitle(title);
+                    review.setBody(body);
+                    review.setVote(vote);
+                    reviewDao.updateReview(review);
+
+                    reviewDao.destroy();
+                    break;
+                    */
+
+                case "groups":
+
+                    //Prelevo i parametri in POST
+                    String nameGroups=request.getParameter("name");
+                    String descriptionGroups=request.getParameter("description");
+                    String serviceToAddRemove=request.getParameter("serviceToAddRemove");
+                    String userToAddRemove=request.getParameter("userToAddRemove");
+                    String radioService=request.getParameter("servicesRadio");
+                    String radioUser=request.getParameter("usersRadio");
+
+                    if(isNull(nameGroups) || isNull(descriptionGroups) || isNull(serviceToAddRemove) || isNull(userToAddRemove) ||
+                        nameGroups.equals("") || descriptionGroups.equals("") || serviceToAddRemove.equals("") || userToAddRemove.equals("")){
+                        Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: "+item+"] Parametri POST non validi ");
+                        //torno KO alla chiamata servlet
+                        response.getWriter().write("KO");
+                        return;
+                    }
+
+                    GroupsDao groupsDao=new GroupsDaoImpl(ds);
+                    groupsDao.init();
+
+                    //Provo a modificare il gruppo
+                    gamingplatform.model.Group group=groupsDao.getGroup();
+                    group.setId(itemId);
+                    group.setName(nameGroups);
+                    group.setDescription(descriptionGroups);
+
+                    groupsDao.updateGroup(group);
+
+                    int idService=Integer.parseInt(serviceToAddRemove);
+
+                    int idUser=Integer.parseInt(userToAddRemove);
+
+
+
+                    if(idUser!=-1 || idService!=-1) {
+
+
+                        if (radioService.equals("add") && idService>-1) {
+                                groupsDao.addServiceToGroup(itemId, idService);
+                            } else if (radioService.equals("remove")&& idService>-1) {
+                                groupsDao.removeServiceFromGroup(itemId, idService);
+                            }
+
+                            if (radioUser.equals("add")&& idUser>-1 ) {
+                                groupsDao.addUserToGroup(idUser, itemId);
+                            } else if (radioUser.equals("remove") && idUser>-1) {
+                                    groupsDao.removeUserFromGroup(itemId, idUser);
+                            }
+
+                    }
+
+                    groupsDao.destroy();
+
+                    break;
+
 
                 //default
                 default:
@@ -163,13 +355,13 @@ public class doUpdate extends HttpServlet {
             }
 
 
+
         } catch (DaoException e) {
             Logger.getAnonymousLogger().log(Level.WARNING, "doUpdate: "+item+"]" + e.getMessage());
             //torno KO alla chiamata servlet
             response.getWriter().write("KO");
             return;
         }
-
         //torno OK alla chiamata servlet se arrivo alla fine senza problemi
         response.getWriter().write("OK");
 

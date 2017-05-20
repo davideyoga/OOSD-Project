@@ -25,13 +25,20 @@
                                 <#list items as item>
                                 <tr onclick="document.location = '/edit/${table}/${item.id}';">
                                     <#list fields as field>
-                                        <td>
-                                            <#if item[field]??>
+                                        <#if item[field]?? && item[field]?ends_with(".png") || item[field]?ends_with(".jpg")>
+                                            <td align="center">
+                                                <img src="${context}/<#if field=="avatar">avatars<#else>images</#if>/${item[field]}" style="width:50px; height=50px;">
+                                            </td>
+                                        <#else>
+                                            <td>
+                                                <#if item[field]??>
                                                 ${item[field]}
-                                            <#else>
-                                                null or not available
-                                            </#if>
-                                        </td>
+                                                <#else>
+                                                    null or not available
+                                                </#if>
+                                            </td>
+                                        </#if>
+
                                     </#list>
                                 </tr>
                                 </#list>

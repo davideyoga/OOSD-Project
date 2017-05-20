@@ -47,7 +47,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
                     "												FROM usergame " +
                     "												WHERE id=?");
 
-            this.selectLastXItems = connection.prepareStatement("SELECT game.exp, game.name, usergame.date " +
+            this.selectLastXItems = connection.prepareStatement("SELECT game.exp, game.name, game.image, usergame.date " +
                     "FROM usergame LEFT JOIN game ON game.id=usergame.id_game " +
                     "WHERE usergame.id_user = ? ORDER BY date DESC LIMIT ?");
 
@@ -203,6 +203,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
 
                 innerList.add(rs.getTimestamp("date")); //estraggo la data dal risultato della query
                 innerList.add(stripSlashes(rs.getString("name")));
+                innerList.add(stripSlashes(rs.getString("image")));
                 innerList.add((rs.getInt("exp")));
 
 
