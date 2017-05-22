@@ -3,18 +3,14 @@ package gamingplatform.dao.implementation;
 import gamingplatform.dao.data.DaoDataMySQLImpl;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.interfaces.UserLevelDao;
-import gamingplatform.model.Level;
 import gamingplatform.model.UserLevel;
 
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
 
@@ -226,6 +222,10 @@ public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
         //chiudo le quary precompilate
         try {
             this.selectLastXitems.close();
+            this.selectUserLevelById.close();
+            this.updateLevelUser.close();
+            this.insertLevelUser.close();
+            this.deleteLeveluser.close();
 
         } catch (Exception e) {
             throw new DaoException("Error destroy dao user", e);
