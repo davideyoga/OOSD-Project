@@ -1633,6 +1633,26 @@ label.control-label {
      -ms-transition:0.5s all;
  }
 
+.edit2_btn_hover:hover{
+    background-color: #31b0d5!important;
+    border-color: #31b0d5!important;
+    transition:0.5s all;
+    -webkit-transition:0.5s all;
+    -moz-transition:0.5s all;
+    -o-transition:0.5s all;
+    -ms-transition:0.5s all;
+}
+
+.search_btn_review:hover{
+    background-color: #285f8f!important;
+    border-color: #285f8f!important;
+    transition:0.5s all;
+    -webkit-transition:0.5s all;
+    -moz-transition:0.5s all;
+    -o-transition:0.5s all;
+    -ms-transition:0.5s all;
+}
+
 .delete_btn_hover:hover{
     background-color: #cd2d33!important;
     border-color: #cd2d33!important;
@@ -1644,6 +1664,16 @@ label.control-label {
 }
 
 .confirm_btn_hover:hover{
+    background-color: #ec971f!important;
+    border-color: #ec971f!important;
+    transition:0.5s all;
+    -webkit-transition:0.5s all;
+    -moz-transition:0.5s all;
+    -o-transition:0.5s all;
+    -ms-transition:0.5s all;
+}
+
+.edit_btn_hover:hover{
     background-color: #ec971f!important;
     border-color: #ec971f!important;
     transition:0.5s all;

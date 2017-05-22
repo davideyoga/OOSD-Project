@@ -96,7 +96,7 @@
                             </script>
                         </ul>
                         <form class="text-sub">
-                            <input type="submit" style="background-color:#337ab7" value="post">
+                            <input type="submit" style="background-color:#337ab7" class="search_btn_review" value="post">
                         </form>
                         <div class="clearfix"></div>
                     </div>
@@ -108,6 +108,7 @@
             <#list services as service>
                 <#if service.name?contains("review")>
                     <#assign authReview=1>
+                    <#break>
                 </#if>
             </#list>
 
@@ -118,7 +119,7 @@
                           style="margin-left:0em; width:33%; border-bottom:1px solid silver; margin-bottom: 20px;"
                           id="gameSearchForm">
                         <input type="text" class="search" style="float:left;" placeholder="Search through reviews">
-                        <input type="button" value="" style="float:right" class="fa fa-search search">
+                        <input type="button" value="" style="float:right" class="fa fa-search search ">
                     </form>
                     <table class="table">
                         <tbody class="list">
@@ -130,22 +131,46 @@
                                          style="height: 50px; width:50px;">
                                 </td>
 
-                                <td class="table-text" style="width: <#if authReview==1>65%<#else>75%</#if>;">
+                                <td class="table-text" style="width: <#if authReview==1>60%<#else>70%</#if>;">
                                     <h6 class="username">${users[i].username}</h6>
-                                    <p class="body">${reviews[i].body}</p>
+                                    <p class="body" id="review_body_${reviews[i].idUser}_${reviews[i].idGame}">${reviews[i].body}</p>
                                 </td>
 
                                 <td>
-                                    <span class="fam" style="width:10%;">lvl. ${levels[i].name}</span>
+                                    <span class="fam" style="width:15%;">lvl. ${levels[i].name}</span>
                                 </td>
 
                                 <td>
                                     <i class="fa fa-star-half-o icon-state-warning voteReview"
                                        style="width:5%;">${reviews[i].vote}</i>
                                 </td>
-                                <#if authReview==1>
+                                <#if authReview==1 || reviews[i].idUser == user.id>
 
                                     <td style="width:10%;">
+                                        <button type="submit" id="edit_btn_${reviews[i].idGame}_${reviews[i].idUser}" data-toggle="modal" data-target="#myModal"
+                                                onclick="document.getElementById('review_edit_body').value=document.getElementById('review_body_${reviews[i].idUser}_${reviews[i].idGame}').innerHTML;"
+                                                style="height:40px; width:70px; padding:10px; margin-bottom: 2px; font-size:90%; float:right; border-color:#46b8da; background-color:#5bc0de;"
+                                                class="btn btn-lg btn-info edit2_btn_hover">Edit
+                                        </button>
+
+                                        <!-- popup modale -->
+                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                        <h2 class="modal-title">Edit your review</h2>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <textarea style="height:100%; width:100%; resize: vertical;" id="review_edit_body"></textarea>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-info edit2_btn_hover">Save changes</button>
+                                                    </div>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal-dialog -->
+                                        </div>
+
                                         <button type="button" id="del_btn_${reviews[i].idGame}_${reviews[i].idUser}"
                                                 style="float:right; background-color:#d95459; height:40px; width:70px; padding:10px; font-size:90%; border-color:#d95459;"
                                                 class="btn btn-lg btn-danger delete_btn_hover"
@@ -157,6 +182,8 @@
                                                 style="height:40px; width:70px; padding:10px; font-size:90%; float:right; display:none; border-color:#f0ad4e; background-color:#f0ad4e;"
                                                 class="btn btn-lg btn-warning warning_11 confirm_btn_hover">Confirm
                                         </button>
+
+
                                     </td>
 
                                 </#if>
