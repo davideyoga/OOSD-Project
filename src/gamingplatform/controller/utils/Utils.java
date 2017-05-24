@@ -3,10 +3,13 @@ package gamingplatform.controller.utils;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.LevelDaoImpl;
 import gamingplatform.dao.implementation.UserDaoImpl;
+import gamingplatform.dao.implementation.UserLevelDaoImpl;
 import gamingplatform.dao.interfaces.LevelDao;
 import gamingplatform.dao.interfaces.UserDao;
+import gamingplatform.dao.interfaces.UserLevelDao;
 import gamingplatform.model.Level;
 import gamingplatform.model.User;
+import gamingplatform.model.UserLevel;
 import org.apache.commons.io.FileUtils;
 
 import javax.annotation.Resource;
@@ -121,31 +124,22 @@ public class Utils {
         LevelDao ld = new LevelDaoImpl(ds);
         UserDao ud = new UserDaoImpl(ds);
 
+        List<Level> livelliDaInserire = new ArrayList<>(); //lista dei livelli che l'user ha perso o ha guadagnato
+
         try {
 
 
             //dati attuali
             int esperienzaPrecedente = (ud.getLevelByUserId(user.getId())).getExp(); // livello a cui si trovava prima l'utente
-
             int esperienzaAttuale = user.getExp(); // esperienza a cui si trova attualmente l'utente
-
             List<Level> levelList = ld.getLevels(); // lista contenente TUTTI i livelli
 
-
-            /*
-
-             */
-
-
             int result = 0; //vaore che varra' restituito
-
 
             //l'utente ha meno esperienza di prima, ha perso livelli
             if( esperienzaAttuale < esperienzaPrecedente ){
 
-
                 for( Level l : levelList ){ // ciclo sulla lista dei livelli
-
 
                     if( esperienzaAttuale < l.getExp() && esperienzaPrecedente >= l.getExp()  ){
                         /* se l'esperieza del livello e' maggiore o uguale a quella precedente dell'utente e
@@ -154,14 +148,13 @@ public class Utils {
 
                        result = result - 1;
 
+                        livelliDaInserire.add(l); // aggiungo il livello alla lista di livelli persi
+
                     }
                 }
             }else {
-
-
                 //l'utente ha piu' esperienza di prima
                 if (esperienzaAttuale > esperienzaPrecedente) {
-
 
                     for (Level l : levelList) { // ciclo sulla lista dei livelli
 
@@ -172,17 +165,37 @@ public class Utils {
 
                             result = result + 1;
 
+                            livelliDaInserire.add(l); //aggiungo l alla lista dei livelli guadagnati
 
                         }
                     }
                 }else{
-                    return 0;
+                    return 0; // se non ha ne guadagnato livelli ne ne ha persi torno 0 e non faccio alcun inserimento in userlevel
                 }
             }
 
             } catch (DaoException e) {
             e.printStackTrace();
         }
+
+        UserLevelDao uld = new UserLevelDaoImpl(ds); // inizializzo un UserlevelDao per accedere al database
+
+        UserLevel ul = uld.getUserLevel(); // user level da inserire
+
+        for(Level l: livelliDaInserire  ){ // scorro i livelli raggiunti dall'utente
+
+            ul.setUserId(user.getId()); // inserisco l'utente dentro userLevel
+            ul.setLevelId(l.getId()); // inserisco il livello in userLevel
+
+            try {
+
+                uld.insertUserlevel(ul); // inserisco lo userLevel precedentemente creato
+
+            } catch (DaoException e) {
+                e.printStackTrace();
+            }//fine try
+        }//fine for di scorrimento di livelliDaInserire
+
 
 
         return 0;
