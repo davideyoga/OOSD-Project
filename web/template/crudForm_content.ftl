@@ -41,13 +41,14 @@
                                 </#if>
                                 <#assign pictureOldName="Current Avatar">
                                 <#assign pictureConstraints="style=\"width:125px; height:125px;\"">
+                                <#assign pictureOldNameValue= "${item[fields?api.get[i]]}">
 
                                 <!--caso varchar e image-->
                             <#elseif fields?api.get(i)?starts_with("image")>
                                 <#assign picture=true>
                                 <#if item?? && item[fields?api.get[i]]??>
                                     <#assign picturePath="${context}/images/${item[fields?api.get[i]]}">
-                                    <#assign pictureOldNameValue= item[fields?api.get[i]]>
+                                    <#assign pictureOldNameValue= "${item[fields?api.get[i]]}">
                                 </#if>
                                 <#assign pictureOldName="Current Image">
                                 <#assign pictureConstraints="style=\"width:200px; height:200px;\"">
@@ -56,7 +57,7 @@
                                 <#assign picture=true>
                                 <#if item?? && item[fields?api.get[i]]??>
                                     <#assign picturePath="${context}/images/${item[fields?api.get[i]]}">
-                                    <#assign pictureOldNameValue= item[fields?api.get[i]]>
+                                    <#assign pictureOldNameValue= "${item[fields?api.get[i]]}">
 
                                 </#if>
                                 <#assign pictureOldName="Current Icon">
@@ -80,7 +81,7 @@
                                 <div class="form-group">
                                     <label for="id_old_${fields?api.get(i)}" style="margin-right:15px;"
                                            class="col-sm-2 control-label hor-form">${pictureOldName}</label>
-                                    <input type="hidden" name="oldFile" value="${pictureOldNameValue}"
+                                    <input type="hidden" name="oldFile" value="${pictureOldNameValue}">
                                     <img ${pictureConstraints} src="<#if picturePath??>${picturePath}</#if>"
                                                                onerror="this.onerror=null;this.src='${context}/images/missing_image.png';">
                                 </div>
@@ -213,19 +214,19 @@
 
                         <#if itemId??>
 
-                            <button type="submit" id="edit_btn"
+                            <button type="button" id="edit_btn"
                                     style="float:left; background-color: #1abc9c; border-color: #1abc9c;"
                                     class="btn btn-lg btn-primary edit_btn_hover">Edit
                             </button>
 
-                            <button type="submit" id="del_btn"
+                            <button type="button" id="del_btn"
                                     style="float:right; background-color:#d95459; border-color:#d95459;"
                                     class="btn btn-lg btn-danger delete_btn_hover"
                                     onclick="this.style.display='none'; document.getElementById('confirm_btn').style.display='block';">
                                 Delete
                             </button>
 
-                            <button type="submit" id="confirm_btn"
+                            <button type="button" id="confirm_btn"
                                     style="float:right; display:none; border-color:#f0ad4e; background-color:#f0ad4e;"
                                     class="btn btn-lg btn-warning warning_11 confirm_btn_hover">Confirm
                             </button>

@@ -977,7 +977,7 @@ i.fa.fa-globe {
 .text-sub{
 	float: right;
 }
-.text-sub input[type="submit"]{
+.text-sub input[type="submit"], .text-sub input[type="button"]{
 	background-color: #D95459;
     font-size: 1em;
     color: #fff;
@@ -986,7 +986,7 @@ i.fa.fa-globe {
     padding: 0.5em 1.5em;
     border-radius: 4px;
 }
-.text-sub input[type="submit"]:hover {
+.text-sub input[type="submit"]:hover, .text-sub input[type="button"]:hover {
     background-color: #FBB03B;
 }
 .post-bottom-1 {
@@ -1672,7 +1672,7 @@ label.control-label {
     -o-transition:0.5s all;
     -ms-transition:0.5s all;
 }
-
+/*
 .edit_btn_hover:hover{
     background-color: #ec971f!important;
     border-color: #ec971f!important;
@@ -1682,7 +1682,7 @@ label.control-label {
     -o-transition:0.5s all;
     -ms-transition:0.5s all;
 }
-
+*/
 .login-do p{
 	font-size: 0.9em;
     color: #999;

@@ -241,10 +241,10 @@ public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
      * @param idGame è l'id del gioco recensito
      * @throws DaoException lancia eccezione in caso di errore
      */
-    public void deleteReview(int idUser, int idGame) throws DaoException{
+    public void deleteReview(int idGame, int idUser) throws DaoException{
         try{
             this.deleteReview.setInt(1,idUser);
-            this.deleteReview.setInt(1,idGame);
+            this.deleteReview.setInt(2,idGame);
             this.deleteReview.executeUpdate();
         }catch (Exception e){
             throw new DaoException("Error query deleteReview", e);

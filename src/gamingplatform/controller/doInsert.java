@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 
 import static gamingplatform.controller.utils.SecurityLayer.checkAuth;
 import static gamingplatform.controller.utils.SecurityLayer.sha1Encrypt;
+import static gamingplatform.controller.utils.SessionManager.verifySession;
 import static gamingplatform.controller.utils.Utils.fileUpload;
 import static gamingplatform.controller.utils.Utils.getLastBitFromUrl;
 import static java.util.Objects.isNull;
@@ -30,9 +31,9 @@ import static java.util.Objects.isNull;
  * risponde a url del tipo /doInser/tabella/
  */
 @MultipartConfig(
-        fileSizeThreshold=1024*1024,    // 1 MB
-        maxFileSize=1024*1024*5,        // 5 MB
-        maxRequestSize=1024*1024*5*5    // 25 MB
+        fileSizeThreshold = 1024 * 1024,    // 1 MB
+        maxFileSize = 1024 * 1024 * 5,        // 5 MB
+        maxRequestSize = 1024 * 1024 * 5 * 5    // 25 MB
 )
 public class doInsert extends HttpServlet {
 
@@ -44,6 +45,8 @@ public class doInsert extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+
 
         //se non è una chiamata ajax
         if (!"XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
@@ -56,12 +59,18 @@ public class doInsert extends HttpServlet {
         //carico la tabella in cui si vuole aggiungere la tupla (la url è della forma /doInsert/tabella
         String item = getLastBitFromUrl(request.getRequestURI());
 
-        //controllo quì se l'utente è loggato e ha acesso a quella determinata tabella
-        if (!checkAuth(request, item)) {
-            //se l'ultimo elemento dopo lo "/" (ovvero il servizio a cui si sta provando ad accedere)
-            //non è un servizio a cui l'utente ha accesso
-            response.getWriter().write("KO");
-            return;
+        //se devo aggiungere una review non controllo autorizzazioni,
+        //se l'utente chiama in qualche modo questa servlet tramite ajax non essendo
+        //registrato verrà lanciata eccezione nel caso review dello switch
+        if (!item.equals("review")) {
+
+            //controllo quì se l'utente è loggato e ha acesso a quella determinata tabella
+            if (!checkAuth(request, item)) {
+                //se l'ultimo elemento dopo lo "/" (ovvero il servizio a cui si sta provando ad accedere)
+                //non è un servizio a cui l'utente ha accesso
+                response.getWriter().write("KO");
+                return;
+            }
         }
 
         try {
@@ -82,7 +91,7 @@ public class doInsert extends HttpServlet {
                     if (isNull(usernameUser) || isNull(nameUser) || isNull(surnameUser) || isNull(emailUser) || isNull(passwordUser) ||
                             usernameUser.equals("") || nameUser.equals("") || surnameUser.equals("") || emailUser.equals("") || passwordUser.equals("")) {
 
-                        Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: "+item+"] Parametri POST non validi ");
+                        Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: " + item + "] Parametri POST non validi ");
                         //torno KO alla chiamata servlet
                         response.getWriter().write("KO");
                         return;
@@ -91,7 +100,7 @@ public class doInsert extends HttpServlet {
                     String avatarName = fileUpload(avatarUser, "avatars", getServletContext());
                     if (isNull(avatarName)) {
 
-                        Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: "+item+"] Upload file fallito");
+                        Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: " + item + "] Upload file fallito");
                         //torno KO alla chiamata servlet
                         response.getWriter().write("KO");
                         return;
@@ -119,7 +128,7 @@ public class doInsert extends HttpServlet {
                     UserLevel userLevel1 = userLevelDao1.getUserLevel();
                     userLevel1.setDate(new Timestamp(System.currentTimeMillis()));
                     userLevel1.setLevelId(0);
-                    userLevel1.setUserId(userDao.getUserByUsernamePassword(usernameUser,passwordUser).getId());
+                    userLevel1.setUserId(userDao.getUserByUsernamePassword(usernameUser, passwordUser).getId());
                     userLevelDao1.insertUserlevel(userLevel1);
 
                     userDao.destroy();
@@ -127,23 +136,24 @@ public class doInsert extends HttpServlet {
 
                     break;
 
-                case"game":
+                case "game":
 
                     //prelevo parametri POST per game
                     String nameGame = request.getParameter("name");
                     int expGame = Integer.parseInt(request.getParameter("exp"));
-                    String imageGame = request.getParameter("image");
+                    Part imageGame = request.getPart("image");
                     String descriptionGame = request.getParameter("description");
 
                     //se i parametri in input non sono validi
-                    if (isNull(nameGame) || isNull(expGame) || isNull(imageGame) ||
-                            nameGame.equals("") || imageGame.equals("") || descriptionGame.equals("")) {
+                    if (isNull(nameGame) || isNull(imageGame) || nameGame.equals("") || descriptionGame.equals("")) {
 
-                        Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: "+item+"] Parametri POST non validi "); // per stampare errori sul terminale al posto di System.Out
+                        Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: " + item + "] Parametri POST non validi "); // per stampare errori sul terminale al posto di System.Out
                         //torno KO alla chiamata servlet
                         response.getWriter().write("KO");
                         return;
                     }
+
+                    String imageName = fileUpload(imageGame,"images",getServletContext());
 
                     GameDao gameDao = new GameDaoImpl(ds);
 
@@ -154,7 +164,7 @@ public class doInsert extends HttpServlet {
 
                     game.setName(nameGame);
                     game.setExp(expGame);
-                    game.setImage(imageGame);
+                    game.setImage(imageName);
                     game.setDescription(descriptionGame);
 
                     //inserisco game nel db
@@ -165,7 +175,7 @@ public class doInsert extends HttpServlet {
 
                     break;
 
-                case"usergame":
+                case "usergame":
 
                     //prelevo parametri POST per game
                     int id_userUsergame = Integer.parseInt(request.getParameter("id_user"));
@@ -173,10 +183,9 @@ public class doInsert extends HttpServlet {
                     Timestamp dateUserGame = Timestamp.valueOf(request.getParameter("date"));
 
                     //se i parametri in input non sono validi
-                    if (isNull(id_gameUsergame) || isNull(id_userUsergame) || isNull(dateUserGame) ||
-                            dateUserGame.equals("")) {
+                    if (dateUserGame.equals("")) {
 
-                        Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: "+item+"] Parametri POST non validi "); // per stampare errori sul terminale al posto di System.Out
+                        Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: " + item + "] Parametri POST non validi "); // per stampare errori sul terminale al posto di System.Out
                         //torno KO alla chiamata servlet
                         response.getWriter().write("KO");
                         return;
@@ -195,28 +204,26 @@ public class doInsert extends HttpServlet {
 
                     //inserisco game nel db
                     userGameDao.insertUserGame(userGame);
-                    userGame = null;
 
                     //chiudo gameDao
                     userGameDao.destroy();
-                    userGameDao = null;
 
                     break;
 
-                case"review":
+                case "review":
 
                     //prelevo parametri POST per game
-                    int id_userReview = Integer.parseInt(request.getParameter("id_user"));
-                    int id_gameReview = Integer.parseInt(request.getParameter("id_game"));
+                    int id_gameReview = Integer.parseInt(request.getParameter("gameId"));
+                    int id_userReview = ((User) verifySession(request).getAttribute("user")).getId();
                     String titleReview = request.getParameter("title");
                     String bodyReview = request.getParameter("body");
+                    System.out.println(bodyReview);
                     int votereview = Integer.parseInt(request.getParameter("vote"));
 
                     //se i parametri in input non sono validi
-                    if (isNull(id_userReview) || isNull(id_gameReview) || isNull(titleReview) || isNull(bodyReview) || isNull(votereview)||
-                            titleReview.equals("") || bodyReview.equals("")) {
+                    if (isNull(bodyReview) || bodyReview.equals("")) {
 
-                        Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: "+item+"] Parametri POST non validi "); // per stampare errori sul terminale al posto di System.Out
+                        Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: " + item + "] Parametri POST non validi "); // per stampare errori sul terminale al posto di System.Out
                         //torno KO alla chiamata servlet
                         response.getWriter().write("KO");
                         return;
@@ -238,31 +245,30 @@ public class doInsert extends HttpServlet {
 
                     //inserisco game nel db
                     reviewDao.insertReview(review);
-                    review = null;
 
                     //chiudo gameDao
                     reviewDao.destroy();
-                    reviewDao = null;
 
                     break;
 
-                case"level":
+                case "level":
 
                     //prelevo parametri POST per game
                     int nameLevel = Integer.parseInt(request.getParameter("name"));
                     String trophyLevel = request.getParameter("trophy");
-                    String iconLevel = request.getParameter("icon");
-                    int expLevel =  Integer.parseInt(request.getParameter("exp"));
+                    Part iconLevel = request.getPart("icon");
+                    int expLevel = Integer.parseInt(request.getParameter("exp"));
 
                     //se i parametri in input non sono validi
-                    if (isNull(nameLevel) || isNull(trophyLevel) || isNull(iconLevel) || isNull(expLevel) ||
-                            trophyLevel.equals("") || iconLevel.equals("")) {
+                    if (isNull(trophyLevel) || isNull(iconLevel) || trophyLevel.equals("") || iconLevel.equals("")) {
 
-                        Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: "+item+"] Parametri POST non validi "); // per stampare errori sul terminale al posto di System.Out
+                        Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: " + item + "] Parametri POST non validi "); // per stampare errori sul terminale al posto di System.Out
                         //torno KO alla chiamata servlet
                         response.getWriter().write("KO");
                         return;
                     }
+
+                    String iconName=fileUpload(iconLevel,"images", getServletContext());
 
                     LevelDao levelDao = new LevelDaoImpl(ds);
 
@@ -272,20 +278,18 @@ public class doInsert extends HttpServlet {
 
                     level.setName(nameLevel);
                     level.setTrophy(trophyLevel);
-                    level.setIcon(iconLevel);
+                    level.setIcon(iconName);
                     level.setExp(expLevel);
 
                     //inserisco game nel db
                     levelDao.insertLevel(level);
-                    level = null;
 
                     //chiudo gameDao
                     levelDao.destroy();
-                    levelDao = null;
 
                     break;
 
-                case"groups":
+                case "groups":
 
                     //prelevo parametri POST per game
                     String nameGroups = request.getParameter("name");
@@ -296,7 +300,7 @@ public class doInsert extends HttpServlet {
                     if (isNull(nameGroups) || isNull(descriptionGroups) ||
                             nameGroups.equals("") || descriptionGroups.equals("")) {
 
-                        Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: "+item+"] Parametri POST non validi "); // per stampare errori sul terminale al posto di System.Out
+                        Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: " + item + "] Parametri POST non validi "); // per stampare errori sul terminale al posto di System.Out
                         //torno KO alla chiamata servlet
                         response.getWriter().write("KO");
                         return;
@@ -306,7 +310,7 @@ public class doInsert extends HttpServlet {
 
                     groupsDao.init();
 
-                    Group groups= groupsDao.getGroup();
+                    Group groups = groupsDao.getGroup();
 
                     groups.setName(nameGroups);
                     groups.setDescription(descriptionGroups);
@@ -321,7 +325,7 @@ public class doInsert extends HttpServlet {
 
                     break;
 
-                case"service":
+                case "service":
 
                     //prelevo parametri POST per game
                     String nameService = request.getParameter("name");
@@ -332,7 +336,7 @@ public class doInsert extends HttpServlet {
                     if (isNull(nameService) || isNull(descriptionService) ||
                             nameService.equals("") || descriptionService.equals("")) {
 
-                        Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: "+item+"] Parametri POST non validi "); // per stampare errori sul terminale al posto di System.Out
+                        Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: " + item + "] Parametri POST non validi "); // per stampare errori sul terminale al posto di System.Out
                         //torno KO alla chiamata servlet
                         response.getWriter().write("KO");
                         return;
@@ -342,7 +346,7 @@ public class doInsert extends HttpServlet {
 
                     serviceDao.init();
 
-                    Service service= serviceDao.getService();
+                    Service service = serviceDao.getService();
 
                     service.setName(nameService);
                     service.setDescription(descriptionService);
@@ -357,20 +361,20 @@ public class doInsert extends HttpServlet {
 
                     break;
 
-                    //altri casi
+                //altri casi
 
                 //default
                 default:
 
-                    Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: "+item+"] caso default nello switch");
+                    Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert: " + item + "] caso default nello switch");
                     //torno KO alla chiamata servlet
                     response.getWriter().write("KO");
                     return;
             }
 
 
-        } catch (DaoException e) {
-            Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "doInsert: "+item+"]" + e.getMessage());
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "doInsert: " + item + "]" + e.getMessage());
             //torno KO alla chiamata servlet
             response.getWriter().write("KO");
             return;

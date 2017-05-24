@@ -8,6 +8,7 @@ import gamingplatform.dao.interfaces.ReviewDao;
 import gamingplatform.dao.interfaces.UserDao;
 import gamingplatform.dao.interfaces.ServiceDao;
 import gamingplatform.dao.interfaces.GroupsDao;
+import gamingplatform.model.User;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -21,6 +22,7 @@ import java.util.logging.Logger;
 
 import static gamingplatform.controller.utils.SecurityLayer.checkAuth;
 import static gamingplatform.controller.utils.SessionManager.getUser;
+import static gamingplatform.controller.utils.SessionManager.verifySession;
 import static gamingplatform.controller.utils.Utils.getLastBitFromUrl;
 import static gamingplatform.controller.utils.Utils.getNlastBitFromUrl;
 import static java.util.Objects.isNull;
@@ -56,50 +58,56 @@ public class doDelete extends HttpServlet {
         String item = getNlastBitFromUrl(request.getRequestURI(), 1);
 
         String id = "";
-        int itemId=0;
+        int itemId = 0;
 
         //per gestire il caso review abbiamo bisogno di 2 id, l'id utente e l'id del gioco per identificare la singola recensione
         //l'uri è del tipo /doDelete/review/idGioco&idUser
         String idGame = "";
         String idUser = "";
-
-        if (item.equals("review")) {
-
-            String idArray[] = getLastBitFromUrl(request.getRequestURI()).split("&");
-            idGame = idArray[0];
-            idUser = idArray[1];
-
-        } else {
-            //caso base di qualsiasi altra tabella con id semplice
-            id = getLastBitFromUrl(request.getRequestURI());
-
-            if (isNull(id) || id.equals("")) {
-                Logger.getAnonymousLogger().log(Level.WARNING, "[doDelete: " + item + "] parametri POST non validi");
-                response.getWriter().write("KO");
-                return;
-            }
-
-            //gestire caso review a parte (è della forma /doDelete/review/idGame-idUser
-            itemId = Integer.parseInt(id);
-
-        }
-
-
-
-
-        //controllo quì se l'utente è loggato e ha acesso a quella determinata tabella
-        //se l'utente sta cercando di eliminare il suo profilo, glielo permetto
-        if (!(item.equals("user") && getUser(request).getId() == itemId)) {
-            if (!checkAuth(request, item)) {
-                //se  il servizio a cui si sta provando ad accedere
-                //non è un servizio a cui l'utente ha accesso
-                response.getWriter().write("KO");
-                return;
-            }
-        }
-
+        Boolean authReview=false;
 
         try {
+            if (item.equals("review")) {
+
+                String idArray[] = getLastBitFromUrl(request.getRequestURI()).split("&");
+                idGame = idArray[0];
+                idUser = idArray[1];
+
+                if (Integer.parseInt(idUser) == ((User) verifySession(request).getAttribute("user")).getId() || checkAuth(request,"review")){
+                    authReview=true;
+                }
+
+            } else {
+                //caso base di qualsiasi altra tabella con id semplice
+                id = getLastBitFromUrl(request.getRequestURI());
+
+                if (isNull(id) || id.equals("")) {
+                    Logger.getAnonymousLogger().log(Level.WARNING, "[doDelete: " + item + "] parametri POST non validi");
+                    response.getWriter().write("KO");
+                    return;
+                }
+
+                //gestire caso review a parte (è della forma /doDelete/review/idGame-idUser
+                itemId = Integer.parseInt(id);
+
+            }
+
+            //se ho autorizzazione per la review (vedi if sopra) non controllo le autorizzazioni
+            //ho auth review se ho il servizio review nei permessi oppure se sto cancellando la mia review
+            if(!authReview) {
+                //controllo quì se l'utente è loggato e ha acesso a quella determinata tabella
+                //se l'utente sta cercando di eliminare il suo profilo, glielo permetto
+                if (!(item.equals("user") && getUser(request).getId() == itemId)) {
+                    if (!checkAuth(request, item)) {
+                        //se  il servizio a cui si sta provando ad accedere
+                        //non è un servizio a cui l'utente ha accesso
+                        response.getWriter().write("KO");
+                        return;
+                    }
+                }
+            }
+
+
             switch (item) {
                 //caso eliminazione user
                 case "user":
@@ -130,7 +138,7 @@ public class doDelete extends HttpServlet {
                     int idU = Integer.parseInt(idUser);
                     ReviewDao reviewDao = new ReviewDaoImpl(ds);
                     reviewDao.init();
-                    reviewDao.deleteReview(idG,idU);
+                    reviewDao.deleteReview(idG, idU);
                     reviewDao.destroy();
                     break;
 

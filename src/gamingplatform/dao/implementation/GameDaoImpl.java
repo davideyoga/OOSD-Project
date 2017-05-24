@@ -179,8 +179,8 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
         try{
             this.insertGame.setString(1,addSlashes(game.getName()));
             this.insertGame.setInt(2,game.getExp());
-            this.insertGame.setString(3,addSlashes(game.getImage()));
-            this.insertGame.setString(4,addSlashes(game.getDescription()));
+            this.insertGame.setString(3,addSlashes(game.getDescription()));
+            this.insertGame.setString(4,addSlashes(game.getImage()));
 
             this.insertGame.executeUpdate();
 

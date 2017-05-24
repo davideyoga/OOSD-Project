@@ -13,7 +13,7 @@
         <div class="grid-hor" style="padding: 0; height: 35px;">
             <h2 style="float:left; width:70%;">${game.name?cap_first}</h2>
 
-            <#if average??>
+            <#if average?? && (average>1) >
                 <ul class="icon" id="starList" style="float:right;">
 
                     <#assign floor=(average?floor)>
@@ -59,10 +59,12 @@
             <div class="col-md-12 post-top" style="background:#fff; border:0; padding:20px 0 0 0;">
                 <div class="post">
                     <form class="text-area" id="formReview">
-                        <textarea placeholder="Leave a review"></textarea>
+                        <textarea placeholder="Leave a review" name="body" class="toEncode" required></textarea>
                         <input type="hidden" name="vote" id="star" value="1">
+                        <input type="hidden" name="title" value=" ">
 
-                    </form>
+
+
                     <div class="post-at">
                         <ul class="icon" id="starList" style="cursor: pointer;">
 
@@ -95,8 +97,11 @@
 
                             </script>
                         </ul>
-                        <form class="text-sub">
-                            <input type="submit" style="background-color:#337ab7" class="search_btn_review" value="post">
+                        <div class="text-sub" onsubmit="return false">
+                            <input type="submit" style="background-color:#337ab7" id="add_review"
+                                   class="search_btn_review"
+                                   value="post">
+                        </div>
                         </form>
                         <div class="clearfix"></div>
                     </div>
@@ -131,9 +136,10 @@
                                          style="height: 50px; width:50px;">
                                 </td>
 
-                                <td class="table-text" style="width: <#if authReview==1>60%<#else>70%</#if>;">
+                                <td class="table-text" style="word-break: break-all; white-space: normal; width: <#if authReview==1>60%<#else>70%</#if>;">
                                     <h6 class="username">${users[i].username}</h6>
-                                    <p class="body" id="review_body_${reviews[i].idUser}_${reviews[i].idGame}">${reviews[i].body}</p>
+                                    <p class="body toDecode" style="word-break: break-all; white-space: normal;"
+                                       id="review_body_${reviews[i].idUser}_${reviews[i].idGame}">${reviews[i].body}</p>
                                 </td>
 
                                 <td>
@@ -142,35 +148,43 @@
 
                                 <td>
                                     <i class="fa fa-star-half-o icon-state-warning voteReview"
-                                       style="width:5%;" id="review_vote_${reviews[i].idUser}_${reviews[i].idGame}">${reviews[i].vote}</i>
+                                       style="width:5%;"
+                                       id="review_vote_${reviews[i].idUser}_${reviews[i].idGame}">${reviews[i].vote}</i>
                                 </td>
                                 <#if authReview==1 || reviews[i].idUser == user.id>
 
                                     <td style="width:10%;">
-                                        <button type="submit" id="edit_btn_${reviews[i].idGame}_${reviews[i].idUser}" data-toggle="modal" data-target="#myModal"
+                                        <button type="submit" id="edit_btn_${reviews[i].idGame}_${reviews[i].idUser}"
+                                                data-toggle="modal" data-target="#myModal"
                                                 onclick="document.getElementById('review_edit_body').value=document.getElementById('review_body_${reviews[i].idUser}_${reviews[i].idGame}').innerHTML;
-                                                         document.getElementById('starEdit').value=document.getElementById('review_vote_${reviews[i].idUser}_${reviews[i].idGame}').innerHTML;"
+                                                         document.getElementById('starEdit').value=document.getElementById('review_vote_${reviews[i].idUser}_${reviews[i].idGame}').innerHTML;
+                                                         document.getElementById('edit_review').setAttribute('userId','${reviews[i].idUser}');"
                                                 style="height:40px; width:70px; padding:10px; margin-bottom: 2px; font-size:90%; float:right; border-color:#46b8da; background-color:#5bc0de;"
                                                 class="btn btn-lg btn-info edit2_btn_hover">Edit
                                         </button>
 
                                         <!-- popup modale -->
-                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                                             aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-hidden="true">×
+                                                        </button>
                                                         <h2 class="modal-title">Edit your review</h2>
                                                     </div>
                                                     <div class="modal-body" style="height:auto">
                                                         <form id="editReviewForm">
-                                                            <input type="hidden" name="title" value="">
-                                                            <textarea style="height:auto; width:100%; resize: vertical;" id="review_edit_body" name="body"></textarea>
-                                                            <input type="hidden" name="vote" value="" id="starEdit">
+                                                            <input type="hidden" name="title" value=" ">
+                                                            <textarea style="height:auto; width:100%; resize: vertical;" class="toEncode"
+                                                                      id="review_edit_body" name="body"></textarea>
+                                                            <input type="hidden" name="vote" value="1" id="starEdit">
                                                         </form>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <ul class="icon" id="starList" style="cursor: pointer; margin-top:5px;">
+                                                        <ul class="icon" id="starList"
+                                                            style="cursor: pointer; margin-top:5px;">
 
 
                                                             <i class="post-file1 fa fa-star-o" id="star1.1"></i>
@@ -201,7 +215,10 @@
 
                                                             </script>
                                                         </ul>
-                                                        <button type="button" class="btn btn-info edit2_btn_hover">Save changes</button>
+                                                        <button type="button" id="edit_review"
+                                                                class="btn btn-info edit2_btn_hover">Save
+                                                            changes
+                                                        </button>
                                                     </div>
                                                 </div><!-- /.modal-content -->
                                             </div><!-- /.modal-dialog -->
@@ -215,8 +232,9 @@
                                         </button>
 
                                         <button type="submit" id="confirm_btn_${reviews[i].idGame}_${reviews[i].idUser}"
-                                                style="height:40px; width:70px; padding:10px; font-size:90%; float:right; display:none; border-color:#f0ad4e; background-color:#f0ad4e;"
-                                                class="btn btn-lg btn-warning warning_11 confirm_btn_hover">Confirm
+                                                style="height:40px; width:70px; padding:10px; font-size:90%; float:right; display:none; border-color:#f0ad4e; background-color:#f0ad4e;" userid="${reviews[i].idUser}"
+                                                class="btn btn-lg btn-warning warning_11 confirm_btn_hover delete_btn_pippo">
+                                            Confirm
                                         </button>
 
 
@@ -277,5 +295,205 @@
     };
 
     var reviews = new List('reviewList', options);
+
+</script>
+
+<script>
+
+    //chiamata ajax gioco
+    $("#play_button").click(function (e) {
+
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: "/Game/${game.id}",
+            data: "",
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                ajaxFunction(data, "game", "success");
+            },
+            error: function (data) {
+                ajaxFunction(data, "game", "error");
+            }
+        });
+        e.preventDefault();
+    });
+
+
+    /*---------------------------------------------*/
+
+    //chiamata ajax aggiunta recensione
+    $("#add_review").click(function (e) {
+
+
+
+        // Get form
+        var pippoForm = $('#formReview')[0];
+
+        // Create an FormData object
+        var pippoData = new FormData(pippoForm);
+
+
+
+
+        if (!pippoForm.checkValidity()) {
+            // If the form is invalid, submit it. The form won't actually submit;
+            // this will just cause the browser to display the native HTML5 error messages.
+            pippoForm.find(':submit').click()
+        }
+
+        pippoData.append("gameId","${game.id}");
+
+        // Display the key/value pairs
+        for (var pair of pippoData.entries()) {
+            console.log(pair[0]+ ', ' + pair[1]);
+        }
+
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: "/doInsert/review",
+            data: pippoData,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                ajaxFunction(data, "review+", "success");
+            },
+            error: function (data) {
+                ajaxFunction(data, "review+", "error");
+            }
+        });
+        e.preventDefault();
+    });
+
+
+    /*---------------------------------------------*/
+
+    //chiamata ajax rimozione review
+    $(".delete_btn_pippo").click(function (e) {
+
+        var userId=this.getAttribute("userId");
+
+
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: "/doDelete/review/${game.id}&"+userId,
+            data: "",
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                ajaxFunction(data, "review-", "success");
+            },
+            error: function (data) {
+                ajaxFunction(data, "review-", "error");
+            }
+        });
+        e.preventDefault();
+    });
+
+    /*--------------------------------------------*/
+
+    //chiamata ajax modifica recensione
+    $("#edit_review").click(function (e) {
+
+        var userId2=this.getAttribute("userId");
+
+        // Get form
+        var pippoForm = $('#editReviewForm')[0];
+
+        // Create an FormData object
+        var pippoData = new FormData(pippoForm);
+
+        if (!pippoForm.checkValidity()) {
+            // If the form is invalid, submit it. The form won't actually submit;
+            // this will just cause the browser to display the native HTML5 error messages.
+            pippoForm.find(':submit').click()
+        }
+
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: "/doUpdate/review/${game.id}&"+userId2,
+            data: pippoData,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                ajaxFunction(data, "review/", "success");
+            },
+            error: function (data) {
+                ajaxFunction(data, "review/", "error");
+            }
+        });
+        e.preventDefault();
+    });
+
+
+    /*---------------------------------------------*/
+
+
+    function ajaxFunction(data, type, outcome) {
+        var fade_outAjax = function () {
+            $("#messageAjax").fadeOut();
+        };
+        //durata per la quale il messaggio è visibile
+        setTimeout(fade_outAjax, 2750);
+
+        var divClass = "warning";
+        var divTitle = "Warning!";
+        var divText = "There was a problem with your request";
+
+        if ((outcome == "success") && (data.substring(0,2)=="OK")) {
+            divClass = "success";
+            divTitle = "Success!";
+
+
+            switch (type) {
+                case "review+":
+                    divText = "The review has been added, refresh the page to see the changes";
+                    break;
+                case "review-":
+                    divText = "The review has been deleted, refresh the page to see the changes";
+                    break;
+                case "review/":
+                    divText = "The review has been modified, refresh the page to see the changes";
+                    break;
+                case "game":
+                    //switch vari casi game, con eventuale level up
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //inietto il messaggio
+        $("body").prepend("<div id='messageAjax' class='div_message_top div_message_top_" + divClass + "'" + "><div>");
+        var messageAjax;
+        messageAjax = '<strong>' + divTitle + '</strong><br><br>' + divText;
+
+        //mostro il messaggio
+        $('#messageAjax')
+                .html(messageAjax)
+                .hide()
+                .fadeIn()
+                .click(function () {
+                    $(this).fadeOut();
+                });
+        //scrollo al top con animazione
+        $("html, body").animate({scrollTop: 0}, "fast");
+
+    }
+
+
+    /*--------------------------------------------_*/
 
 </script>
