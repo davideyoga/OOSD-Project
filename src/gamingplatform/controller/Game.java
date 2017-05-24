@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static gamingplatform.controller.utils.SecurityLayer.checkAuth;
 import static gamingplatform.controller.utils.SecurityLayer.redirect;
 import static gamingplatform.controller.utils.SessionManager.*;
 import static gamingplatform.controller.utils.Utils.getLastBitFromUrl;
@@ -122,5 +124,45 @@ public class Game extends HttpServlet {
         //processo template
         process("game.ftl", data, response, getServletContext());
     }
+
+    // Metodo doPost
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        response.setContentType("text/html;charset=UTF-8");
+
+        //se non è una chiamata ajax
+        if (!"XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+            Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "[doInsert] non è una chiamata ajax");
+            //torno KO alla chiamata servlet
+            response.getWriter().write("KO");
+            return;
+        }
+
+        String id= getLastBitFromUrl(request.getRequestURI());
+
+        if(isNull(id) || id.equals("") || !isNumeric(id)){
+            Logger.getAnonymousLogger().log(Level.WARNING,"[Game] gameId non valido.");
+            response.getWriter().write("KO");
+            return;
+        }
+        // Verifica la sessione
+        HttpSession session = verifySession(request);
+
+        if(isNull(session)){
+            Logger.getAnonymousLogger().log(Level.WARNING,"[Game] Sessione non valida.");
+            response.getWriter().write("KO");
+            return;
+        }
+        User user = (User)session.getAttribute("user");
+        Game game = (Game)session.getAttribute("game");
+
+        // Per avere l'id di User e Game
+        int gameId=Integer.parseInt(id);
+        int userId=Integer.parseInt(id);
+
+        user.setExp(Integer.parseInt("exp"));
+        // TODO: elaborazione della checklevel che mi servirá per tornare un valore positivo/negativo
+    }
+
 
 }
