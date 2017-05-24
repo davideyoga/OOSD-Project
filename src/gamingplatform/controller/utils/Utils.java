@@ -1,5 +1,12 @@
 package gamingplatform.controller.utils;
 
+import gamingplatform.dao.exception.DaoException;
+import gamingplatform.dao.implementation.LevelDaoImpl;
+import gamingplatform.dao.implementation.UserDaoImpl;
+import gamingplatform.dao.interfaces.LevelDao;
+import gamingplatform.dao.interfaces.UserDao;
+import gamingplatform.model.Level;
+import gamingplatform.model.User;
 import org.apache.commons.io.FileUtils;
 
 import javax.annotation.Resource;
@@ -13,7 +20,6 @@ import java.lang.reflect.Field;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
@@ -35,6 +41,7 @@ public class Utils {
 
         String fileName = addSlashes(Paths.get(filePart.getSubmittedFileName()).getFileName().toString());
 
+        //TODO fare questo controllo lato servlet se no rimette sempre l'immagine di default a ogni update
         if(isNull(fileName) || fileName.equals("")){
             return "default.png";
         }
@@ -107,6 +114,80 @@ public class Utils {
         //System.out.println("return: "+segment);
         return segment;
     }
+
+
+    public static int checkLevel( User user ){
+
+        LevelDao ld = new LevelDaoImpl(ds);
+        UserDao ud = new UserDaoImpl(ds);
+
+        try {
+
+
+            //dati attuali
+            int esperienzaPrecedente = (ud.getLevelByUserId(user.getId())).getExp(); // livello a cui si trovava prima l'utente
+
+            int esperienzaAttuale = user.getExp(); // esperienza a cui si trova attualmente l'utente
+
+            List<Level> levelList = ld.getLevels(); // lista contenente TUTTI i livelli
+
+
+            /*
+
+             */
+
+
+            int result = 0; //vaore che varra' restituito
+
+
+            //l'utente ha meno esperienza di prima, ha perso livelli
+            if( esperienzaAttuale < esperienzaPrecedente ){
+
+
+                for( Level l : levelList ){ // ciclo sulla lista dei livelli
+
+
+                    if( esperienzaAttuale < l.getExp() && esperienzaPrecedente >= l.getExp()  ){
+                        /* se l'esperieza del livello e' maggiore o uguale a quella precedente dell'utente e
+                           minore o uguale a quella dell'esperienza successiva
+                        */
+
+                       result = result - 1;
+
+                    }
+                }
+            }else {
+
+
+                //l'utente ha piu' esperienza di prima
+                if (esperienzaAttuale > esperienzaPrecedente) {
+
+
+                    for (Level l : levelList) { // ciclo sulla lista dei livelli
+
+                        if (esperienzaAttuale >= l.getExp() && esperienzaPrecedente < l.getExp()) {
+                        /* se l'esperieza del livello e' maggiore o uguale a quella precedente dell'utente e
+                           minore o uguale a quella dell'esperienza successiva
+                        */
+
+                            result = result + 1;
+
+
+                        }
+                    }
+                }else{
+                    return 0;
+                }
+            }
+
+            } catch (DaoException e) {
+            e.printStackTrace();
+        }
+
+
+        return 0;
+    }
+
 
 
 
