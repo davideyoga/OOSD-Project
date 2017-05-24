@@ -142,13 +142,14 @@
 
                                 <td>
                                     <i class="fa fa-star-half-o icon-state-warning voteReview"
-                                       style="width:5%;">${reviews[i].vote}</i>
+                                       style="width:5%;" id="review_vote_${reviews[i].idUser}_${reviews[i].idGame}">${reviews[i].vote}</i>
                                 </td>
                                 <#if authReview==1 || reviews[i].idUser == user.id>
 
                                     <td style="width:10%;">
                                         <button type="submit" id="edit_btn_${reviews[i].idGame}_${reviews[i].idUser}" data-toggle="modal" data-target="#myModal"
-                                                onclick="document.getElementById('review_edit_body').value=document.getElementById('review_body_${reviews[i].idUser}_${reviews[i].idGame}').innerHTML;"
+                                                onclick="document.getElementById('review_edit_body').value=document.getElementById('review_body_${reviews[i].idUser}_${reviews[i].idGame}').innerHTML;
+                                                         document.getElementById('starEdit').value=document.getElementById('review_vote_${reviews[i].idUser}_${reviews[i].idGame}').innerHTML;"
                                                 style="height:40px; width:70px; padding:10px; margin-bottom: 2px; font-size:90%; float:right; border-color:#46b8da; background-color:#5bc0de;"
                                                 class="btn btn-lg btn-info edit2_btn_hover">Edit
                                         </button>
@@ -161,10 +162,45 @@
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                         <h2 class="modal-title">Edit your review</h2>
                                                     </div>
-                                                    <div class="modal-body">
-                                                        <textarea style="height:100%; width:100%; resize: vertical;" id="review_edit_body"></textarea>
+                                                    <div class="modal-body" style="height:auto">
+                                                        <form id="editReviewForm">
+                                                            <input type="hidden" name="title" value="">
+                                                            <textarea style="height:auto; width:100%; resize: vertical;" id="review_edit_body" name="body"></textarea>
+                                                            <input type="hidden" name="vote" value="" id="starEdit">
+                                                        </form>
                                                     </div>
                                                     <div class="modal-footer">
+                                                        <ul class="icon" id="starList" style="cursor: pointer; margin-top:5px;">
+
+
+                                                            <i class="post-file1 fa fa-star-o" id="star1.1"></i>
+                                                            <i class="post-file1 fa fa-star-o" id="star2.2"></i>
+                                                            <i class="post-file1 fa fa-star-o" id="star3.3"></i>
+                                                            <i class="post-file1 fa fa-star-o" id="star4.4"></i>
+                                                            <i class="post-file1 fa fa-star-o" id="star5.5"></i>
+
+
+                                                            <script>
+                                                                $('.post-file1').click(function () {
+
+                                                                    $(this).removeClass("fa-star-o")
+                                                                            .addClass("fa-star");
+
+                                                                    $(this).siblings()
+                                                                            .removeClass("fa-star")
+                                                                            .addClass("fa-star-o");
+
+                                                                    $(this).prevAll()
+                                                                            .removeClass("fa-star-o")
+                                                                            .addClass("fa-star");
+
+                                                                    var value = $(this).attr("id").charAt(6);
+
+                                                                    $("#starEdit").val(value);
+                                                                });
+
+                                                            </script>
+                                                        </ul>
                                                         <button type="button" class="btn btn-info edit2_btn_hover">Save changes</button>
                                                     </div>
                                                 </div><!-- /.modal-content -->

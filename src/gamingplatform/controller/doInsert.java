@@ -98,8 +98,10 @@ public class doInsert extends HttpServlet {
                     }
 
                     UserDao userDao = new UserDaoImpl(ds);
+                    UserLevelDao userLevelDao1 = new UserLevelDaoImpl(ds);
 
                     userDao.init();
+                    userLevelDao1.init();
                     //provo ad inserire l'utente
 
                     User user = userDao.getUser();
@@ -113,9 +115,15 @@ public class doInsert extends HttpServlet {
 
                     userDao.insertUser(user);
 
-                    userDao.destroy();
+                    //metto l'user al livello 0
+                    UserLevel userLevel1 = userLevelDao1.getUserLevel();
+                    userLevel1.setDate(new Timestamp(System.currentTimeMillis()));
+                    userLevel1.setLevelId(0);
+                    userLevel1.setUserId(userDao.getUserByUsernamePassword(usernameUser,passwordUser).getId());
+                    userLevelDao1.insertUserlevel(userLevel1);
 
-                    //TODO nell'iserimento dell'utente (da fare anche in signup) bisogna aggiungere na tupla dentro userlevel che indica che al momento della registrazione l'utente è al livello 0
+                    userDao.destroy();
+                    userLevelDao1.destroy();
 
                     break;
 

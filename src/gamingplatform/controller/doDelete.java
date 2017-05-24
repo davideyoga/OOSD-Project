@@ -56,6 +56,7 @@ public class doDelete extends HttpServlet {
         String item = getNlastBitFromUrl(request.getRequestURI(), 1);
 
         String id = "";
+        int itemId=0;
 
         //per gestire il caso review abbiamo bisogno di 2 id, l'id utente e l'id del gioco per identificare la singola recensione
         //l'uri è del tipo /doDelete/review/idGioco&idUser
@@ -72,17 +73,19 @@ public class doDelete extends HttpServlet {
             //caso base di qualsiasi altra tabella con id semplice
             id = getLastBitFromUrl(request.getRequestURI());
 
+            if (isNull(id) || id.equals("")) {
+                Logger.getAnonymousLogger().log(Level.WARNING, "[doDelete: " + item + "] parametri POST non validi");
+                response.getWriter().write("KO");
+                return;
+            }
+
+            //gestire caso review a parte (è della forma /doDelete/review/idGame-idUser
+            itemId = Integer.parseInt(id);
+
         }
 
 
-        if (isNull(id) || id.equals("")) {
-            Logger.getAnonymousLogger().log(Level.WARNING, "[doDelete: " + item + "] parametri POST non validi");
-            response.getWriter().write("KO");
-            return;
-        }
 
-        //gestire caso review a parte (è della forma /doDelete/review/idGame-idUser
-        int itemId = Integer.parseInt(id);
 
         //controllo quì se l'utente è loggato e ha acesso a quella determinata tabella
         //se l'utente sta cercando di eliminare il suo profilo, glielo permetto

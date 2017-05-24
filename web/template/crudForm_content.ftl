@@ -47,6 +47,7 @@
                                 <#assign picture=true>
                                 <#if item?? && item[fields?api.get[i]]??>
                                     <#assign picturePath="${context}/images/${item[fields?api.get[i]]}">
+                                    <#assign pictureOldNameValue= item[fields?api.get[i]]>
                                 </#if>
                                 <#assign pictureOldName="Current Image">
                                 <#assign pictureConstraints="style=\"width:200px; height:200px;\"">
@@ -55,6 +56,8 @@
                                 <#assign picture=true>
                                 <#if item?? && item[fields?api.get[i]]??>
                                     <#assign picturePath="${context}/images/${item[fields?api.get[i]]}">
+                                    <#assign pictureOldNameValue= item[fields?api.get[i]]>
+
                                 </#if>
                                 <#assign pictureOldName="Current Icon">
                                 <#assign pictureConstraints="style=\"width:125px; height:125px;\"">
@@ -77,6 +80,7 @@
                                 <div class="form-group">
                                     <label for="id_old_${fields?api.get(i)}" style="margin-right:15px;"
                                            class="col-sm-2 control-label hor-form">${pictureOldName}</label>
+                                    <input type="hidden" name="oldFile" value="${pictureOldNameValue}"
                                     <img ${pictureConstraints} src="<#if picturePath??>${picturePath}</#if>"
                                                                onerror="this.onerror=null;this.src='${context}/images/missing_image.png';">
                                 </div>
@@ -94,6 +98,7 @@
                             <#assign picturePath="">
                             <#assign pictureOldName="">
                             <#assign pictureConstraints="">
+                            <#assign pictureOldNameValue="">
                         <#else>
                             <div class="form-group">
 

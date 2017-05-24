@@ -7,6 +7,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.*;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -14,8 +15,11 @@ import java.util.logging.Logger;
 
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.UserDaoImpl;
+import gamingplatform.dao.implementation.UserLevelDaoImpl;
 import gamingplatform.dao.interfaces.UserDao;
+import gamingplatform.dao.interfaces.UserLevelDao;
 import gamingplatform.model.User;
+import gamingplatform.model.UserLevel;
 
 import static gamingplatform.controller.utils.Utils.fileUpload;
 import static gamingplatform.controller.utils.SecurityLayer.*;
@@ -84,6 +88,8 @@ public class Signup extends HttpServlet {
             //provo ad inserire l'utente
 
             User user=userDao.getUser();
+            UserLevelDao userLevelDao1 = new UserLevelDaoImpl(ds);
+            userLevelDao1.init();
 
             user.setUsername(username);
             user.setName(name);
@@ -91,11 +97,20 @@ public class Signup extends HttpServlet {
             user.setEmail(email);
             user.setPassword(password);
             user.setExp(0);
-            //TODO nell'iserimento dell'utente (da fare anche in doInsert/user) bisogna aggiungere na tupla dentro userlevel che indica che al momento della registrazione l'utente è al livello 0
-
             user.setAvatar(avatarName);
 
             userDao.insertUser(user);
+
+
+            //metto l'user al livello 0
+            UserLevel userLevel1 = userLevelDao1.getUserLevel();
+            userLevel1.setDate(new Timestamp(System.currentTimeMillis()));
+            userLevel1.setLevelId(0);
+            userLevel1.setUserId(userDao.getUserByUsernamePassword(username,password).getId());
+            userLevelDao1.insertUserlevel(userLevel1);
+
+            userDao.destroy();
+            userLevelDao1.destroy();
 
             userDao.destroy();
         }catch(DaoException e){

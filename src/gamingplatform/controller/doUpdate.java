@@ -1,6 +1,5 @@
 package gamingplatform.controller;
 
-import gamingplatform.controller.utils.SessionManager;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.*;
 import gamingplatform.dao.interfaces.*;
@@ -58,18 +57,34 @@ public class doUpdate extends HttpServlet {
         //carico la tabella in cui si vuole modificare la tupla (la url è della forma /doUpdate/tabella/idElemento
         String item = getNlastBitFromUrl(request.getRequestURI(), 1);
 
-        String id="";
+        String id = "";
         int itemId=0;
 
+        //per gestire il caso review abbiamo bisogno di 2 id, l'id utente e l'id del gioco per identificare la singola recensione
+        //l'uri è del tipo /doUpdate/review/idGioco&idUser
+        String idGame = "";
+        String idUser = "";
+
+        if (item.equals("review")) {
+
+            String idArray[] = getLastBitFromUrl(request.getRequestURI()).split("&");
+            idGame = idArray[0];
+            idUser = idArray[1];
+
+        } else {
             //caso base di qualsiasi altra tabella con id semplice
-            id=getLastBitFromUrl(request.getRequestURI());
-            if(isNull(id) || id.equals("")){
-                Logger.getAnonymousLogger().log(Level.WARNING, "[doDelete: "+item+"] parametri post non validi");
+            id = getLastBitFromUrl(request.getRequestURI());
+
+            if (isNull(id) || id.equals("")) {
+                Logger.getAnonymousLogger().log(Level.WARNING, "[doDelete: " + item + "] parametri POST non validi");
                 response.getWriter().write("KO");
                 return;
             }
 
-        itemId=Integer.parseInt(id);
+            //gestire caso review a parte (è della forma /doUpdate/review/idGame-idUser
+            itemId = Integer.parseInt(id);
+
+        }
 
         //controllo quì se l'utente è loggato e ha acesso a quella determinata tabella
         //se l'utente sta cercando di modificare il suo profilo, glielo permetto
@@ -94,6 +109,7 @@ public class doUpdate extends HttpServlet {
                     String surname = request.getParameter("surname");
                     String email = request.getParameter("email");
                     String password = sha1Encrypt(request.getParameter("password"));
+                    String oldAvatar = request.getParameter("oldFile");
                     int exp = Integer.parseInt(request.getParameter("exp"));
                     Part avatar = request.getPart("avatar"); // recupera <input type="file" name="avatar">
 
@@ -106,15 +122,25 @@ public class doUpdate extends HttpServlet {
                         response.getWriter().write("KO");
                         return;
                     }
-                    //provo ad effettuare l'upload del file
-                    String avatarName = fileUpload(avatar, "avatars", getServletContext());
-                    if (isNull(avatarName)) {
 
-                        Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: "+item+"] Upload file fallito");
-                        //torno KO alla chiamata servlet
-                        response.getWriter().write("KO");
-                        return;
+                    String avatarName="";
+
+                    //se l'utente ha cricato un nuovo avatar
+                    if (!isNull(avatar)){
+                        //provo ad effettuare l'upload del file
+                        avatarName = fileUpload(avatar, "avatars", getServletContext());
+                        if (isNull(avatarName)) {
+
+                            Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: "+item+"] Upload file fallito");
+                            //torno KO alla chiamata servlet
+                            response.getWriter().write("KO");
+                            return;
+                        }
+                        //se vuole mantenere quello vecchio
+                    }else{
+                        avatarName=oldAvatar;
                     }
+
 
                     UserDao userDao = new UserDaoImpl(ds);
 
@@ -143,6 +169,7 @@ public class doUpdate extends HttpServlet {
                     //Prelevo parametri POST
                     int namelevel=Integer.parseInt(request.getParameter("name"));
                     String trophy=request.getParameter("trophy");
+                    String oldIcon = request.getParameter("oldFile");
                     Part icon=request.getPart("icon");
                     int explevel=Integer.parseInt(request.getParameter("exp"));
 
@@ -154,14 +181,19 @@ public class doUpdate extends HttpServlet {
                         return;
                     }
 
-                    //provo ad effettuare l'upload del file (icon)
-                    String iconlevel = fileUpload(icon, "images", getServletContext());
-                    if (isNull(iconlevel)) {
+                    String iconlevel="";
+                    if(!isNull(icon)) {
+                        //provo ad effettuare l'upload del file (icon)
+                        iconlevel = fileUpload(icon, "images", getServletContext());
+                        if (isNull(iconlevel)) {
 
-                        Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: "+item+"] Upload file fallito");
-                        //torno KO alla chiamata servlet
-                        response.getWriter().write("KO");
-                        return;
+                            Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: " + item + "] Upload file fallito");
+                            //torno KO alla chiamata servlet
+                            response.getWriter().write("KO");
+                            return;
+                        }
+                    }else{
+                        iconlevel=oldIcon;
                     }
 
 
@@ -186,6 +218,7 @@ public class doUpdate extends HttpServlet {
                     //Prelevo parametri POST
                     String nameGame=request.getParameter("name");
                     int expgame=Integer.parseInt(request.getParameter("exp"));
+                    String oldImage=request.getParameter("oldFile");
                     Part image=request.getPart("image");
                     String gameDescription=request.getParameter("description");
 
@@ -202,14 +235,20 @@ public class doUpdate extends HttpServlet {
                         expgame=1;
                     }
 
-                    //provo ad effettuare l'upload del file (icon)
-                    String imageName = fileUpload(image, "images", getServletContext());
-                    if (isNull(imageName)) {
+                    String imageName="";
 
-                        Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: "+item+"] Upload file fallito");
-                        //torno KO alla chiamata servlet
-                        response.getWriter().write("KO");
-                        return;
+                    if(!isNull(image)) {
+                        //provo ad effettuare l'upload del file (icon)
+                        imageName = fileUpload(image, "images", getServletContext());
+                        if (isNull(imageName)) {
+
+                            Logger.getAnonymousLogger().log(Level.WARNING, "[doUpdate: " + item + "] Upload file fallito");
+                            //torno KO alla chiamata servlet
+                            response.getWriter().write("KO");
+                            return;
+                        }
+                    }else{
+                        imageName=oldImage;
                     }
 
 
@@ -256,7 +295,7 @@ public class doUpdate extends HttpServlet {
                     break;
 
                 //Caso update review
-                /*
+
                 case "review":
                     int gameId=Integer.parseInt(idGame);
                     int userId=Integer.parseInt(idUser);
@@ -286,7 +325,7 @@ public class doUpdate extends HttpServlet {
 
                     reviewDao.destroy();
                     break;
-                    */
+
 
                 case "groups":
 
@@ -319,11 +358,11 @@ public class doUpdate extends HttpServlet {
 
                     int idService=Integer.parseInt(serviceToAddRemove);
 
-                    int idUser=Integer.parseInt(userToAddRemove);
+                    int idUser2=Integer.parseInt(userToAddRemove);
 
 
 
-                    if(idUser!=-1 || idService!=-1) {
+                    if(idUser2!=-1 || idService!=-1) {
 
 
                         if (radioService.equals("add") && idService>-1) {
@@ -332,10 +371,10 @@ public class doUpdate extends HttpServlet {
                                 groupsDao.removeServiceFromGroup(itemId, idService);
                             }
 
-                            if (radioUser.equals("add")&& idUser>-1 ) {
-                                groupsDao.addUserToGroup(idUser, itemId);
-                            } else if (radioUser.equals("remove") && idUser>-1) {
-                                    groupsDao.removeUserFromGroup(itemId, idUser);
+                            if (radioUser.equals("add")&& idUser2>-1 ) {
+                                groupsDao.addUserToGroup(idUser2, itemId);
+                            } else if (radioUser.equals("remove") && idUser2>-1) {
+                                    groupsDao.removeUserFromGroup(itemId, idUser2);
                             }
 
                     }
