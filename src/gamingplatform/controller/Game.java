@@ -29,6 +29,7 @@ import static gamingplatform.controller.utils.SecurityLayer.checkAuth;
 import static gamingplatform.controller.utils.SecurityLayer.redirect;
 import static gamingplatform.controller.utils.SessionManager.*;
 import static gamingplatform.controller.utils.Utils.getLastBitFromUrl;
+import static gamingplatform.controller.utils.Utils.checkLevel;
 import static gamingplatform.view.FreemarkerHelper.process;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isNumeric;
@@ -161,7 +162,9 @@ public class Game extends HttpServlet {
         int userId=Integer.parseInt(id);
 
         user.setExp(Integer.parseInt("exp"));
+        checkLevel(User user);
         // TODO: elaborazione della checklevel che mi servirá per tornare un valore positivo/negativo
+        // Chiedi a Davide una cosa
     }
 
 
