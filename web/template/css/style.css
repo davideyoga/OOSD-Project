@@ -514,7 +514,7 @@ th.sorting_asc, th.sorting_desc, th.sorting{
 	outline: none;
 	font-size: 0.9em;
 }
-.navbar-left-right input[type="submit"], input[type="button"]{
+.navbar-left-right input[type="submit"]{
 	background: url(../images/search.png) 0px 2px no-repeat;
 	width:16px;
 	height:16px;

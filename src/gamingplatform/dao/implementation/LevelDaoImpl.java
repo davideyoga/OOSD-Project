@@ -23,6 +23,7 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
                               insertLevel,
                               deleteLevel,
                               selectNextLevel,
+                              selectLevelsOrdered,
                               updateLevel;
 
     // Costruttore
@@ -55,6 +56,9 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
                     "                                          WHERE id=?");
 
             this.selectLevels=connection.prepareStatement("SELECT * FROM level");
+
+            this.selectLevelsOrdered=connection.prepareStatement("SELECT * FROM level ORDER BY exp ASC");
+
 
             this.selectNextLevel = connection.prepareStatement("SELECT level.id, level.name, level.trophy, level.icon, level.exp" +
                     "                                                FROM level " +
@@ -181,12 +185,35 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
         return lista;
     }
 
+    public List<Level> getLevelsOrdered() throws DaoException{
+        List<Level> lista=new ArrayList<>();
+        try{
+            ResultSet rs=this.selectLevelsOrdered.executeQuery();
+
+            while (rs.next()) {
+                Level level=new Level(this);
+                level.setId(rs.getInt("id"));
+                level.setName(rs.getInt("name"));
+                level.setTrophy(stripSlashes(rs.getString("trophy")));
+                level.setIcon(stripSlashes(rs.getString("icon")));
+                level.setExp(rs.getInt("exp"));
+
+                lista.add(level);
+            }
+        } catch (Exception e) {
+            throw new DaoException("Error query getLevels", e);
+        }
+
+        return lista;
+    }
+
     @Override
     public void destroy() throws DaoException {
         //chiudo le quary precompilate
         try {
             this.selectLevelById.close();
             this.insertLevel.close();
+            this.selectLevelsOrdered.close();
             this.deleteLevel.close();
             this.updateLevel.close();
             this.selectLevels.close();

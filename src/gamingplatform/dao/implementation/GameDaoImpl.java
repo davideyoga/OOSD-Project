@@ -14,6 +14,7 @@ import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.interfaces.GameDao;
 import gamingplatform.model.Game;
 import gamingplatform.model.Review;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
 import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
@@ -99,21 +100,28 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
      */
     public Game getGameById(int idGame) throws DaoException{
         Game g=new Game(this);
+
         try{
             this.selectGameById.setInt(1,idGame);
+
             ResultSet rs=this.selectGameById.executeQuery();
+
             while(rs.next()){
-                g.setId(rs.getInt("id"));
+                g.setId(idGame);
                 g.setName(stripSlashes(rs.getString("name")));
                 g.setExp(rs.getInt("exp"));
-                g.setImage(stripSlashes(rs.getString("image")));
                 g.setDescription(stripSlashes(rs.getString("description")));
+                g.setImage(stripSlashes(rs.getString("image")));
+
             }
+
+
         }catch (Exception e){
             throw new DaoException("Error game getGameById", e);
-
         }
+
         return g;
+
     }
 
     /**

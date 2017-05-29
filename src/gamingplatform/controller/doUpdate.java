@@ -21,9 +21,7 @@ import static gamingplatform.controller.utils.SecurityLayer.checkAuth;
 import static gamingplatform.controller.utils.SecurityLayer.sha1Encrypt;
 import static gamingplatform.controller.utils.SessionManager.getUser;
 import static gamingplatform.controller.utils.SessionManager.verifySession;
-import static gamingplatform.controller.utils.Utils.fileUpload;
-import static gamingplatform.controller.utils.Utils.getLastBitFromUrl;
-import static gamingplatform.controller.utils.Utils.getNlastBitFromUrl;
+import static gamingplatform.controller.utils.Utils.*;
 import static java.util.Objects.isNull;
 
 
@@ -168,6 +166,8 @@ public class doUpdate extends HttpServlet {
                     user.setExp(exp);
                     user.setAvatar(avatarName);
                     userDao.updateUser(user);
+
+                    checkLevel(user);
 
                     userDao.destroy();
 

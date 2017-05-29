@@ -98,9 +98,10 @@
                             </script>
                         </ul>
                         <div class="text-sub" onsubmit="return false">
-                            <input type="submit" style="background-color:#337ab7" id="add_review"
+                            <input type="button" style="background-color:#337ab7; width:84px; height: 35px;" id="add_review"
                                    class="search_btn_review"
                                    value="post">
+                            <input type="submit" id="formReviewBtn" style="display: none; ">
                         </div>
                         </form>
                         <div class="clearfix"></div>
@@ -177,6 +178,7 @@
                                                     <div class="modal-body" style="height:auto">
                                                         <form id="editReviewForm">
                                                             <input type="hidden" name="title" value=" ">
+                                                            <input type="submit" id="submit_btn_edit" style="display: none;">
                                                             <textarea style="height:auto; width:100%; resize: vertical;" class="toEncode"
                                                                       id="review_edit_body" name="body"></textarea>
                                                             <input type="hidden" name="vote" value="1" id="starEdit">
@@ -306,7 +308,7 @@
         $.ajax({
             type: "POST",
             enctype: 'multipart/form-data',
-            url: "/Game/${game.id}",
+            url: "/game/${game.id}",
             data: "",
             processData: false,
             contentType: false,
@@ -328,8 +330,6 @@
     //chiamata ajax aggiunta recensione
     $("#add_review").click(function (e) {
 
-
-
         // Get form
         var pippoForm = $('#formReview')[0];
 
@@ -337,20 +337,14 @@
         var pippoData = new FormData(pippoForm);
 
 
-
-
         if (!pippoForm.checkValidity()) {
             // If the form is invalid, submit it. The form won't actually submit;
             // this will just cause the browser to display the native HTML5 error messages.
-            pippoForm.find(':submit').click()
+            $("#formReviewBtn").click();
+            return;
         }
 
         pippoData.append("gameId","${game.id}");
-
-        // Display the key/value pairs
-        for (var pair of pippoData.entries()) {
-            console.log(pair[0]+ ', ' + pair[1]);
-        }
 
         $.ajax({
             type: "POST",
@@ -378,7 +372,6 @@
     $(".delete_btn_pippo").click(function (e) {
 
         var userId=this.getAttribute("userId");
-
 
         $.ajax({
             type: "POST",
@@ -415,7 +408,8 @@
         if (!pippoForm.checkValidity()) {
             // If the form is invalid, submit it. The form won't actually submit;
             // this will just cause the browser to display the native HTML5 error messages.
-            pippoForm.find(':submit').click()
+            $("#submit_btn_edit").click();
+            return;
         }
 
         $.ajax({
@@ -438,8 +432,7 @@
     });
 
 
-    /*---------------------------------------------*/
-
+    /*--------------------------------------------*/
 
     function ajaxFunction(data, type, outcome) {
         var fade_outAjax = function () {
@@ -468,9 +461,32 @@
                     divText = "The review has been modified, refresh the page to see the changes";
                     break;
                 case "game":
-                    //switch vari casi game, con eventuale level up
+                    dataArray=data.split("_");
+                    switch(dataArray[1]){
+                        case "0":
+                            divTitle="YAY!";
+                            divText="You gained ${game.exp} exp points!";
+                            break;
+                        case "-1":
+                            divClass="warning";
+                            divTitle="Ooops!";
+                            divText="Something went wrong :(";
+                            break;
+                        case "1":
+                            divTitle="YAY!";
+                            divText="You leveled up!";
+                            break;
+                        default:
+                            divClass="warning";
+                            divTitle="Ooops!";
+                            divText="Something went wrong :(";
+                            break;
+                    }
                     break;
                 default:
+                    divClass="warning";
+                    divTitle="Ooops!";
+                    divText="Something went wrong :(";
                     break;
             }
         }

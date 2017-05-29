@@ -211,13 +211,11 @@ public class doInsert extends HttpServlet {
                     break;
 
                 case "review":
-
                     //prelevo parametri POST per game
                     int id_gameReview = Integer.parseInt(request.getParameter("gameId"));
                     int id_userReview = ((User) verifySession(request).getAttribute("user")).getId();
                     String titleReview = request.getParameter("title");
                     String bodyReview = request.getParameter("body");
-                    System.out.println(bodyReview);
                     int votereview = Integer.parseInt(request.getParameter("vote"));
 
                     //se i parametri in input non sono validi

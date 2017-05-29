@@ -11,6 +11,8 @@
 
             <form class="form-horizontal" method="POST" enctype="multipart/form-data" id="formPippo">
 
+                <input type="submit" id="submit_button" style="display:none">
+
                 <#if itemId??>
                     <input type="hidden" name="id" value="${itemId}">
                 </#if>
@@ -242,6 +244,7 @@
 
                     </div>
                 </div>
+
             </form>
 
 
@@ -288,7 +291,9 @@
         if (!pippoForm.checkValidity()) {
             // If the form is invalid, submit it. The form won't actually submit;
             // this will just cause the browser to display the native HTML5 error messages.
-            pippoForm.find(':submit').click()
+            $('#submit_button').click();
+            return;
+
         }
 
         $.ajax({
@@ -338,6 +343,7 @@
             }
         });
         e.preventDefault();
+
     });
 
     <#else>
@@ -353,7 +359,8 @@
         if (!pippoForm.checkValidity()) {
             // If the form is invalid, submit it. The form won't actually submit;
             // this will just cause the browser to display the native HTML5 error messages.
-            pippoForm.find(':submit').click()
+            $('#submit_button').click();
+            return;
         }
 
         $.ajax({
@@ -373,6 +380,8 @@
             }
         });
         e.preventDefault();
+
+        $("#insert_btn").prop("disabled",false);
 
     });
     </#if>

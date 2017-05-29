@@ -4,11 +4,14 @@ import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.GameDaoImpl;
 import gamingplatform.dao.implementation.ReviewDaoImpl;
 import gamingplatform.dao.implementation.UserDaoImpl;
+import gamingplatform.dao.implementation.UserGameDaoImpl;
 import gamingplatform.dao.interfaces.GameDao;
 import gamingplatform.dao.interfaces.ReviewDao;
 import gamingplatform.dao.interfaces.UserDao;
+import gamingplatform.dao.interfaces.UserGameDao;
 import gamingplatform.model.Review;
 import gamingplatform.model.User;
+import gamingplatform.model.UserGame;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -18,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +68,7 @@ public class Game extends HttpServlet {
 
         String id= getLastBitFromUrl(request.getRequestURI());
 
-        if(id==null || id.equals("") || !isNumeric(id)){
+        if(isNull(id) || id.equals("") || !isNumeric(id)){
             Logger.getAnonymousLogger().log(Level.WARNING,"[Game] gameId non valido.");
             redirect("/", "KO", response, request);
             return;
@@ -143,7 +147,7 @@ public class Game extends HttpServlet {
 
         String id= getLastBitFromUrl(request.getRequestURI());
 
-        if(id==null || id.equals("") || !isNumeric(id)){
+        if(isNull(id) || id.equals("") || !isNumeric(id)){
             Logger.getAnonymousLogger().log(Level.WARNING,"[Game] gameId non valido.");
             response.getWriter().write("KO");
             return;
@@ -151,20 +155,69 @@ public class Game extends HttpServlet {
         // Verifica la sessione
         HttpSession session = verifySession(request);
 
-        if((session)==null){
-            Logger.getAnonymousLogger().log(Level.WARNING,"[Game] Sessione non valida.");
+        if(isNull(session)){
+            Logger.getAnonymousLogger().log(Level.WARNING,"[Game] Sessione non valida." );
             response.getWriter().write("KO");
             return;
         }
         User user = (User)session.getAttribute("user");
-        Game game = (Game)session.getAttribute("game");
+        String responseStr ="OK";
 
-        // Per avere l'id di User e Game
-        int gameId=Integer.parseInt(id);
-        int userId=Integer.parseInt(id);
+        try{
+            //recuper l'exp data da gioco
+            GameDao gameDao = new GameDaoImpl(ds);
+            gameDao.init();
+            gamingplatform.model.Game game = gameDao.getGameById(Integer.parseInt(id));
+            gameDao.destroy();
 
-        user.setExp(Integer.parseInt("exp"));
-        response.getWriter().write(checkLevel(user));
+            int exp = game.getExp();
+
+            //aggiungo exp all'user
+            user.setExp(user.getExp()+exp);
+
+            UserDao userDao = new UserDaoImpl(ds);
+            userDao.init();
+            userDao.updateUser(user);
+            userDao.destroy();
+
+            //aggiorno il livello
+            int esit = checkLevel(user);
+
+
+            //controllo esito aggiornamento livello
+            switch(esit){
+                case 0:
+                    responseStr+="_0";
+                    break;
+                case 1:
+                    responseStr+="_1";
+                    break;
+                case -1:
+                    responseStr+="_-1";
+                    break;
+                default:
+                    responseStr="KO";
+                    break;
+            }
+
+            UserGameDao userGameDao = new UserGameDaoImpl(ds);
+            userGameDao.init();
+
+            UserGame userGame = userGameDao.getUserGame();
+            userGame.setUserId(user.getId());
+            userGame.setGameId(Integer.parseInt(id));
+            userGame.setDate(new Timestamp(System.currentTimeMillis()));
+            userGameDao.insertUserGame(userGame);
+
+            userGameDao.destroy();
+        }catch(Exception e){
+            Logger.getAnonymousLogger().log(Level.WARNING,"[Game] Eccezione " +e.getMessage());
+            response.getWriter().write("KO");
+        }
+
+        //torno la risposta
+        response.getWriter().write(responseStr);
+
     }
 
 

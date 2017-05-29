@@ -275,9 +275,11 @@
 
 <script>
     $(document).ready(function () {
-        $('#reportGames').DataTable();
+        $('#reportGames').DataTable({
+            "order": [[0, "desc"]]
+        });
         $('#reportLevels').DataTable({
-            "order": [[3, "desc"]]
+            "order": [[0, "desc"]]
         });
 
 

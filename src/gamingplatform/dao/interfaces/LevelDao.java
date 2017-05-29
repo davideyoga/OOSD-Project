@@ -27,5 +27,8 @@ public interface LevelDao extends DaoData {
 
     public List<Level> getLevels () throws DaoException;
 
+    public List<Level> getLevelsOrdered () throws DaoException;
+
+
 }
 

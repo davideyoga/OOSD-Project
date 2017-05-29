@@ -3,7 +3,6 @@ package gamingplatform.dao.interfaces;
 import gamingplatform.dao.data.DaoData;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.model.Game;
-import gamingplatform.model.Review;
 
 import java.util.List;
 
