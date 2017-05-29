@@ -30,6 +30,7 @@ import static gamingplatform.controller.utils.SecurityLayer.redirect;
 import static gamingplatform.controller.utils.SessionManager.*;
 import static gamingplatform.controller.utils.Utils.checkLevel;
 import static gamingplatform.controller.utils.Utils.getLastBitFromUrl;
+import static gamingplatform.controller.utils.Utils.checkLevel;
 import static gamingplatform.view.FreemarkerHelper.process;
 import static java.util.Objects.*;
 import static java.util.Objects.isNull;
