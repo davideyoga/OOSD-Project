@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
-import static java.util.Objects.isNull;
+import static java.util.Objects.*;
 
 public class Utils {
 
@@ -53,7 +53,7 @@ public class Utils {
         if(!(fileName.substring(fileName.length()-4).equals(".jpg") ||
              fileName.substring(fileName.length()-4).equals(".png"))){
 
-            Logger.getAnonymousLogger().log(Level.WARNING,"[Utils] fileUpload fallito, formato non corretto: "+fileName+" - formato: "+fileName.substring(fileName.length()-4));
+            Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING,"[Utils] fileUpload fallito, formato non corretto: "+fileName+" - formato: "+fileName.substring(fileName.length()-4));
             return null;
         }
 
@@ -65,7 +65,7 @@ public class Utils {
             File targetFile = new File(svc.getRealPath("template/"+directory+"/"+fileName));
             FileUtils.copyInputStreamToFile(fileContent, targetFile);
         } catch (IOException e) {
-            Logger.getAnonymousLogger().log(Level.WARNING,"[Utils] fileUpload IOException "+e.getMessage());
+            Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING,"[Utils] fileUpload IOException "+e.getMessage());
             return null;
         }
 

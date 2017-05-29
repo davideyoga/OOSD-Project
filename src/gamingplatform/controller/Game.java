@@ -28,8 +28,10 @@ import java.util.logging.Logger;
 import static gamingplatform.controller.utils.SecurityLayer.checkAuth;
 import static gamingplatform.controller.utils.SecurityLayer.redirect;
 import static gamingplatform.controller.utils.SessionManager.*;
+import static gamingplatform.controller.utils.Utils.checkLevel;
 import static gamingplatform.controller.utils.Utils.getLastBitFromUrl;
 import static gamingplatform.view.FreemarkerHelper.process;
+import static java.util.Objects.*;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isNumeric;
 
@@ -53,15 +55,15 @@ public class Game extends HttpServlet {
         data.put("services", getServices(request));
 
         //se l'ultimo elemento dopo "/" non è numerico oppure se l'utente non è loggato
-        if(isNull(verifySession(request))){
-            Logger.getAnonymousLogger().log(Level.WARNING,"[Game] user non loggato");
+        if(verifySession(request)==null){
+            Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING,"[Game] user non loggato");
             redirect("/", "KO-not-logged", response, request);
             return;
         }
 
         String id= getLastBitFromUrl(request.getRequestURI());
 
-        if(isNull(id) || id.equals("") || !isNumeric(id)){
+        if(id==null || id.equals("") || !isNumeric(id)){
             Logger.getAnonymousLogger().log(Level.WARNING,"[Game] gameId non valido.");
             redirect("/", "KO", response, request);
             return;
@@ -140,7 +142,7 @@ public class Game extends HttpServlet {
 
         String id= getLastBitFromUrl(request.getRequestURI());
 
-        if(isNull(id) || id.equals("") || !isNumeric(id)){
+        if(id==null || id.equals("") || !isNumeric(id)){
             Logger.getAnonymousLogger().log(Level.WARNING,"[Game] gameId non valido.");
             response.getWriter().write("KO");
             return;
@@ -148,7 +150,7 @@ public class Game extends HttpServlet {
         // Verifica la sessione
         HttpSession session = verifySession(request);
 
-        if(isNull(session)){
+        if((session)==null){
             Logger.getAnonymousLogger().log(Level.WARNING,"[Game] Sessione non valida.");
             response.getWriter().write("KO");
             return;
@@ -161,7 +163,7 @@ public class Game extends HttpServlet {
         int userId=Integer.parseInt(id);
 
         user.setExp(Integer.parseInt("exp"));
-        // TODO: elaborazione della checklevel che mi servirá per tornare un valore positivo/negativo
+        response.getWriter().write(checkLevel(user));
     }
 
 
