@@ -99,6 +99,7 @@ public class Profile extends HttpServlet {
             double temp= ((z-x)/(y-x));
             data.put("percentage", temp*100);
 
+
         }catch (DaoException e){
             Logger.getAnonymousLogger().log(Level.WARNING, "[Profile] DaoException: "+e.getMessage());
             redirect("/", "KO", response, request);

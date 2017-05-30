@@ -10,7 +10,7 @@
 
                     <form class="navbar-left-right" style="margin-left:1.1em; width:33%; border-bottom:1px solid silver" id="gameSearchForm">
                         <input type="text" class="search" style="float:left;" placeholder="Search...">
-                        <input type="button" value="" style="float:right" class="fa fa-search search">
+                        <input type="button" value="" style="float:right" class="search_icon fa fa-search search">
                     </form>
 
 

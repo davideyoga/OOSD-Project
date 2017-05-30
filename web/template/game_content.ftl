@@ -133,7 +133,7 @@
                           style="margin-left:0em; width:33%; border-bottom:1px solid silver; margin-bottom: 20px;"
                           id="gameSearchForm">
                         <input type="text" class="search" style="float:left;" placeholder="Search through reviews">
-                        <input type="button" value="" style="float:right" class="fa fa-search search ">
+                        <input type="button" value="" style="float:right" class="search_icon fa fa-search search ">
                     </form>
                     <table class="table">
                         <tbody class="list">

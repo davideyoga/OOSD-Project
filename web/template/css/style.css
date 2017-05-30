@@ -543,7 +543,7 @@ th.sorting_asc, th.sorting_desc, th.sorting{
 	outline: none;
 	font-size: 0.9em;
 }
-.navbar-left-right input[type="submit"], input[type="button"]{
+.navbar-left-right input[type="submit"], .search_icon{
 	background: url(../images/search.png) 0px 2px no-repeat;
 	width:16px;
 	height:16px;
@@ -551,8 +551,19 @@ th.sorting_asc, th.sorting_desc, th.sorting{
 	outline: none;
 	color:#B3AEAE;
 	font-size: 0.9em;
-	
+
 }
+
+.navbar-left-right input[type="button"]{
+    width:16px;
+    height:16px;
+    border: none;
+    outline: none;
+    color:#B3AEAE;
+    font-size: 0.9em;
+
+}
+
 .drop-men {
     float: right;
     margin-right:1%;
