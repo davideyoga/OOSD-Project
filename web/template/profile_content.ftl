@@ -28,7 +28,9 @@
             <div class="row show-grid" style="margin :0; border:0px;">
                 <div class="col-md-4 my_hover_div">
 
-                    <img src="${context}/avatars/${user.avatar}" style="width:100%; height: 100%; z-index:2;">
+                    <img src="${context}/avatars/${user.avatar}"
+                         onerror="this.onerror=null;this.src='${context}/avatars/default.png';"
+                         style="width:100%; height: 100%; z-index:2;">
 
                 </div>
                 <!--container descrizione-->
@@ -189,7 +191,9 @@
 
                             <#if i??>
                                 <#if i?ends_with(".png") || i?ends_with(".jpg")>
-                                    <img src="${context}/images/${i}" style=" width:50px; height:50px;">
+                                    <img src="${context}/images/${i}"
+                                         onerror="this.onerror=null;this.src='${context}/images/default.png';"
+                                         style=" width:50px; height:50px;">
                                 <#else>
                                 ${i}
                                 </#if>
@@ -245,7 +249,9 @@
 
                             <#if i??>
                                 <#if i?ends_with(".png") || i?ends_with(".jpg")>
-                                    <img src="${context}/images/${i}" style=" width:50px; height:50px;">
+                                    <img src="${context}/images/${i}"
+                                         onerror="this.onerror=null;this.src='${context}/images/default.png';"
+                                         style=" width:50px; height:50px;">
                                 <#else>
                                     ${i}
                                 </#if>

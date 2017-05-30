@@ -34,7 +34,7 @@
                     <li class="dropdown" style="padding-top:5px;">
                         <a href="#" class="dropdown-toggle dropdown-at" data-toggle="dropdown">
                             <span class=" name-caret" style="margin-top:5px;">${user.username}<i class="caret"></i></span>
-                            <img style="width:50px; height: 50px;" src="${context}/avatars/${user.avatar}" onerror="this.onerror=null;this.src='${context}/images/missing_image.png';"></a>
+                            <img style="width:50px; height: 50px;" src="${context}/avatars/${user.avatar}" onerror="this.onerror=null;this.src='${context}/images/default.png';"></a>
                         <ul class="dropdown-menu " role="menu">
                             <li><a href="/profile"><i class="fa fa-user"></i>&nbspProfile</a></li>
                             <li><a href="/edit/user/${user.id}"><i class="fa fa-cogs"></i>Edit Profile</a></li>

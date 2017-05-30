@@ -19,6 +19,35 @@ tbody{
     font-size:90%;
 }
 
+button:focus {outline:0;!important;}
+
+
+
+.my_modal_loading {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    opacity:    0.85;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, 1)
+        url('../images/loading.gif')
+        50% 50%
+        no-repeat;
+    background-size: 200px 150px;
+
+}
+
+body.loading {
+    overflow: hidden;
+}
+
+body.loading .my_modal_loading {
+    display: block;
+}
+
 
 #report_filter > label, #report_length > label, #reportGames_filter > label, #reportGames_length > label, #reportLevels_filter > label, #reportLevels_length > label{
     margin-bottom: -10px!important;
@@ -514,7 +543,7 @@ th.sorting_asc, th.sorting_desc, th.sorting{
 	outline: none;
 	font-size: 0.9em;
 }
-.navbar-left-right input[type="submit"]{
+.navbar-left-right input[type="submit"], input[type="button"]{
 	background: url(../images/search.png) 0px 2px no-repeat;
 	width:16px;
 	height:16px;

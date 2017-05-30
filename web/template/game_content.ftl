@@ -51,7 +51,15 @@
             <!--container descrizione-->
             <div class="col-md-7" style="background: #ffffff; border:0px; padding: 0 0 0 20px;">
                 <div class="well" style="width:100%; height: 100%; padding:10px;">
-                ${game.description}
+                    <b>Hover your mouse on the game's image to play!</b>
+                </div>
+                <div class="well" style="width:100%; height: 100%; padding:10px;">
+                    <b>Description:</b>
+                    <br><br>
+                    ${game.description}
+                </div>
+                <div class="well" style="width:100%; height: 100%; padding:10px;">
+                    <b>Exp per play:</b> ${game.exp}
                 </div>
             </div>
 
@@ -155,7 +163,7 @@
                                 <#if authReview==1 || reviews[i].idUser == user.id>
 
                                     <td style="width:10%;">
-                                        <button type="submit" id="edit_btn_${reviews[i].idGame}_${reviews[i].idUser}"
+                                        <button type="button" id="edit_btn_${reviews[i].idGame}_${reviews[i].idUser}"
                                                 data-toggle="modal" data-target="#myModal"
                                                 onclick="document.getElementById('review_edit_body').value=document.getElementById('review_body_${reviews[i].idUser}_${reviews[i].idGame}').innerHTML;
                                                          document.getElementById('starEdit').value=document.getElementById('review_vote_${reviews[i].idUser}_${reviews[i].idGame}').innerHTML;
@@ -173,13 +181,13 @@
                                                         <button type="button" class="close" data-dismiss="modal"
                                                                 aria-hidden="true">×
                                                         </button>
-                                                        <h2 class="modal-title">Edit your review</h2>
+                                                        <h2 class="modal-title">Edit review</h2>
                                                     </div>
                                                     <div class="modal-body" style="height:auto">
                                                         <form id="editReviewForm">
                                                             <input type="hidden" name="title" value=" ">
                                                             <input type="submit" id="submit_btn_edit" style="display: none;">
-                                                            <textarea style="height:auto; width:100%; resize: vertical;" class="toEncode"
+                                                            <textarea style="height:auto; width:100%; resize: vertical;" class="toEncode" required
                                                                       id="review_edit_body" name="body"></textarea>
                                                             <input type="hidden" name="vote" value="1" id="starEdit">
                                                         </form>
@@ -233,7 +241,7 @@
                                             Delete
                                         </button>
 
-                                        <button type="submit" id="confirm_btn_${reviews[i].idGame}_${reviews[i].idUser}"
+                                        <button type="button" id="confirm_btn_${reviews[i].idGame}_${reviews[i].idUser}"
                                                 style="height:40px; width:70px; padding:10px; font-size:90%; float:right; display:none; border-color:#f0ad4e; background-color:#f0ad4e;" userid="${reviews[i].idUser}"
                                                 class="btn btn-lg btn-warning warning_11 confirm_btn_hover delete_btn_pippo">
                                             Confirm

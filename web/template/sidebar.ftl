@@ -12,6 +12,19 @@
             </li>
 
             <#if services?? && (services?size>0)>
+                <li>
+                    <div style="height:45px; background-color: #1abc9c; width:100%;">
+                        <div class="nav-label" style="color:white;
+                                                        width: 116px;
+                                                        height: 100%;
+                                                        margin:0 auto;
+                                                        background-color: #1abc9c;
+                                                        padding:12px 0;">
+                            <b>BACKOFFICE</b>
+                        </div>
+                    </div>
+                </li>
+
 
                 <#list services as service>
                 <#if service.name?starts_with("review") || !(service.name?has_content)>
