@@ -15,8 +15,10 @@ import javax.sql.DataSource;
 import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.GroupsDaoImpl;
 import gamingplatform.dao.implementation.ServiceDaoImpl;
+import gamingplatform.dao.implementation.UserDaoImpl;
 import gamingplatform.dao.interfaces.GroupsDao;
 import gamingplatform.dao.interfaces.ServiceDao;
+import gamingplatform.dao.interfaces.UserDao;
 import gamingplatform.model.Group;
 import gamingplatform.model.Service;
 import gamingplatform.model.User;
@@ -146,7 +148,14 @@ public class SessionManager {
                 }
             }
 
-        } catch (SecurityException ex) {
+            //se non ci sono errori torno la sessione aggiornata
+            int id=((User)session.getAttribute("user")).getId();
+            UserDao ud = new UserDaoImpl(ds);
+            ud.init();
+            User updatedUser = ud.getUser(id);
+            return initSession(request, updatedUser);
+
+        } catch (Exception ex) {
             //distruggo la sessione e setto header 401 nella risposta html
             destroySession(request);
             //loggo l'errore
@@ -154,9 +163,6 @@ public class SessionManager {
 
             return null;
         }
-
-        //se non ci sono errori torno la sessione
-        return session;
     }
 
     /**
