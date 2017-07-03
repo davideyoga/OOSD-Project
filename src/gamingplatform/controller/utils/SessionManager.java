@@ -1,7 +1,6 @@
 package gamingplatform.controller.utils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,10 +25,8 @@ import gamingplatform.model.User;
 import static java.util.Objects.isNull;
 
 
-
-
 /**
- * classe package-private atta alla gestione delle sessioni e di tutto quello che le riguarda
+ * classe atta alla gestione delle sessioni e di tutto quello che le riguarda
  */
 public class SessionManager {
 
@@ -41,8 +38,7 @@ public class SessionManager {
 
 
     /**
-     * inizializza la sessione, eliminandola se esiste, tramite i template freemarker si accede alla sessione
-     * tramite Session.<attribute>
+     * inizializza la sessione, eliminandola se esiste
      *
      * @param request richiesta servlet
      * @param user oggetto user da inserire in sessione
@@ -90,7 +86,7 @@ public class SessionManager {
     }
 
     /**
-     * distrugge la sessione se esiste
+     * distrugge la sessione
      *
      * @param request richiesta servlet
      */
@@ -156,7 +152,7 @@ public class SessionManager {
             return initSession(request, updatedUser);
 
         } catch (Exception ex) {
-            //distruggo la sessione e setto header 401 nella risposta html
+
             destroySession(request);
             //loggo l'errore
             Logger.getAnonymousLogger().log(Level.INFO, "SecurityException: " + ex.getMessage());
@@ -166,7 +162,7 @@ public class SessionManager {
     }
 
     /**
-     * crea la sessione se non esiste e la riempie con il message
+     * crea la sessione se non esiste e la riempie con il message (push)
      * @param request richiesta servlet
      * @param message messaggio da inserire
      */
@@ -216,7 +212,7 @@ public class SessionManager {
     }
 
     /**
-     * recupera i servizi in sessione se la sessione è valida
+     * recupera i servizi relativi all'user in sessione se la sessione è valida
      * @param request richiesta servlet
      * @return la lista dei servizi se presenti opure null su errorre
      */
@@ -232,6 +228,12 @@ public class SessionManager {
         return services;
     }
 
+    /**
+     * controlla se l'utente è già loggato, se si lo redireziona alla home
+     *
+     * @param request
+     * @param response
+     */
     public static void redirectIfLogged(HttpServletRequest request, HttpServletResponse response){
         //selesiste già una sessione valida redirect a index senza messaggi
         HttpSession session = verifySession(request);

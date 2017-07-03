@@ -29,6 +29,8 @@ import static java.util.Objects.isNull;
  * classe atta al processamento di richieste ajax post per la modifica di elementi nel db
  * risponde a url del tipo /doUpdate/tabella/idElemento
  */
+
+//imposto i paramentri per l'upload di files
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024,    // 1 MB
         maxFileSize = 1024 * 1024 * 5,        // 5 MB
@@ -39,7 +41,13 @@ public class doUpdate extends HttpServlet {
     @Resource(name = "jdbc/gamingplatform")
     private static DataSource ds;
 
-
+    /**
+     * servlet che gestisce chiamate POST alla servlet
+     * @param request richiesta servlet
+     * @param response risposta servlet
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -68,6 +76,7 @@ public class doUpdate extends HttpServlet {
 
 
         try {
+            //caso particolare di review gestito a parte
             if (item.equals("review")) {
 
                 String idArray[] = getLastBitFromUrl(request.getRequestURI()).split("&");
@@ -337,7 +346,7 @@ public class doUpdate extends HttpServlet {
                     reviewDao.destroy();
                     break;
 
-
+                //caso update group
                 case "groups":
 
                     //Prelevo i parametri in POST

@@ -1,6 +1,5 @@
 package gamingplatform.controller.utils;
 
-import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.LevelDaoImpl;
 import gamingplatform.dao.implementation.UserDaoImpl;
 import gamingplatform.dao.implementation.UserLevelDaoImpl;
@@ -23,20 +22,22 @@ import java.lang.reflect.Field;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
 import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
 import static java.util.Objects.*;
 
+/**
+ * contiene metodi utility di appoggio all'applicativo
+ */
 public class Utils {
 
     @Resource(name = "jdbc/gamingplatform")
     private static DataSource ds;
 
     /**
-     * dato un filePart (file proveniente da una form), controlla se il file è un .jpg
+     * dato un filePart (file proveniente da una form), controlla se il file è un .jpg o .png
      * se si lo copia nella directory specificata e torna il nome del file salvato
      *
      * @param filePart  oggetto Part contenente dati del file
@@ -47,7 +48,7 @@ public class Utils {
 
         String fileName = addSlashes(Paths.get(filePart.getSubmittedFileName()).getFileName().toString());
 
-        //TODO fare questo controllo lato servlet se no rimette sempre l'immagine di default a ogni update
+        //se il file è null o vuoto imposto il file di default
         if (isNull(fileName) || fileName.equals("")) {
             return "default.png";
         }
@@ -61,7 +62,7 @@ public class Utils {
         }
 
         try {
-            //aggiungo il tempo in millisecondi prima del nome (così mantengo il .jpg) per evitare conflitti
+            //aggiungo il tempo in millisecondi prima del nome (così mantengo il form) per evitare conflitti
             fileName = System.currentTimeMillis() + fileName;
             InputStream fileContent = filePart.getInputStream();
             //salvo il file nella directory specificata
@@ -76,6 +77,12 @@ public class Utils {
     }
 
 
+    /**
+     * torna la lista degli attributi di una classe
+     *
+     * @param o classe
+     * @return lista degli attributi della classe
+     */
     public static List<String> getClassFields(Object o) {
         Class<?> clazz = o.getClass();
         List<String> list = new ArrayList<>();
@@ -124,6 +131,16 @@ public class Utils {
     }
 
 
+    /**
+     * dato un user controlla che sia al livello giusto rispetto ai punti exp che ha, in caso in cui il
+     * livello attuale dell'utente non sia quello giusto (a seguito di una retrocessione o promozione)
+     * viene identificato il livello a cui dovrebbe essere (X) e vengono aggiunti allo storico dell'utente
+     * tutti i livelli dal livello attuale a cui si trova l'utente fino ad X
+     *
+     * @param user
+     * @return 1 se vengono aggiunti livelli in promozione, -1 se vengono aggiunti livelli in retrocessione,
+     *         0 se non vengono aggiunti livelli, 500 se c'è un errore
+     */
     public static int checkLevel(User user) {
 
         LevelDao ld = new LevelDaoImpl(ds);
@@ -144,8 +161,8 @@ public class Utils {
             int esperienzaAttuale = user.getExp(); // esperienza a cui si trova attualmente l'utente
             List<Level> levelList = ld.getLevelsOrdered(); // lista contenente TUTTI i livelli
 
-            System.out.println("espPrec: "+ esperienzaPrecedente);
-            System.out.println("espAtt: "+ esperienzaAttuale);
+            System.out.println("espPrec: " + esperienzaPrecedente);
+            System.out.println("espAtt: " + esperienzaAttuale);
 
 
             //l'utente ha meno esperienza di prima, ha perso livelli
@@ -162,11 +179,11 @@ public class Utils {
                         */
 
                         livelliDaInserire.add(levelList.get(i)); // aggiungo il livello alla lista di livelli persi
-                        System.out.println("livello da inserire("+i+") "+  levelList.get(i).getName()+" "+levelList.get(i).getExp());
+                        System.out.println("livello da inserire(" + i + ") " + levelList.get(i).getName() + " " + levelList.get(i).getExp());
 
                     } else {
                         livelliDaInserire.add(levelList.get(i)); // aggiungo il livello effettivo a cui sono arrivato alla lista di livelli persi
-                        System.out.println("livello da inserire("+i+") "+  levelList.get(i).getName()+" "+levelList.get(i).getExp());
+                        System.out.println("livello da inserire(" + i + ") " + levelList.get(i).getName() + " " + levelList.get(i).getExp());
                         break;
                     }
                 }
@@ -192,7 +209,7 @@ public class Utils {
                     }
                 }
                 result = 1;
-            }else {
+            } else {
                 System.out.println("pippo");
                 ld.destroy();
                 ud.destroy();
@@ -207,14 +224,14 @@ public class Utils {
             UserLevel ul = uld.getUserLevel(); // user level da inserire
 
 
-            if(livelliDaInserire.size()==0){
+            if (livelliDaInserire.size() == 0) {
                 return 0;
             }
 
 
             for (Level l : livelliDaInserire) { // scorro i livelli raggiunti dall'utente
 
-                System.out.println("livello che inserisco in user level: "+  l.getName()+" "+l.getExp());
+                System.out.println("livello che inserisco in user level: " + l.getName() + " " + l.getExp());
 
                 ul.setUserId(user.getId()); // inserisco l'utente dentro userLevel
                 ul.setLevelId(l.getId()); // inserisco il livello in userLevel
@@ -237,6 +254,4 @@ public class Utils {
         return result;
     }
 
-//se giochi subito dopo non funziona!!!
-    //controlla
 }

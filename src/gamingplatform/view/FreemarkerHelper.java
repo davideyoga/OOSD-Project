@@ -10,9 +10,10 @@ import java.util.logging.Logger;
 
 import freemarker.template.*;
 
-
+/**
+ * classe utilizzata per processare le template freemarker
+ */
 public class FreemarkerHelper {
-
 
     /**
      * prepara l'ambiente di Freemarker e processa della template

@@ -38,7 +38,13 @@ public class doDelete extends HttpServlet {
     @Resource(name = "jdbc/gamingplatform")
     private static DataSource ds;
 
-
+    /**
+     * gestisce richieste POST alla servlet
+     * @param request richiesta servlet
+     * @param response risposta servlet
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -67,6 +73,7 @@ public class doDelete extends HttpServlet {
         Boolean authReview=false;
 
         try {
+            //gestione a parte del caso particolare di review
             if (item.equals("review")) {
 
                 String idArray[] = getLastBitFromUrl(request.getRequestURI()).split("&");
@@ -107,7 +114,7 @@ public class doDelete extends HttpServlet {
                 }
             }
 
-
+            //gestisco i vari casi
             switch (item) {
                 //caso eliminazione user
                 case "user":
@@ -118,21 +125,21 @@ public class doDelete extends HttpServlet {
                     userDao.destroy();
                     break;
 
-                //altri case
+                //caso eliminazione user
                 case "game":
                     GameDao gameDao = new GameDaoImpl(ds);
                     gameDao.init();
                     gameDao.deleteGameById(itemId);
                     gameDao.destroy();
                     break;
-
+                //caso eliminazione level
                 case "level":
                     LevelDao levelDao = new LevelDaoImpl(ds);
                     levelDao.init();
                     levelDao.deleteLevel(itemId);
                     levelDao.destroy();
                     break;
-
+                //caso eliminazione review
                 case "review":
                     int idG = Integer.parseInt(idGame);
                     int idU = Integer.parseInt(idUser);
@@ -141,21 +148,20 @@ public class doDelete extends HttpServlet {
                     reviewDao.deleteReview(idG, idU);
                     reviewDao.destroy();
                     break;
-
+                //caso eliminazione service
                 case "service":
                     ServiceDao serviceDao = new ServiceDaoImpl(ds);
                     serviceDao.init();
                     serviceDao.deleteServiceById(itemId);
                     serviceDao.destroy();
                     break;
-
+                //caso eliminazione group
                 case "groups":
                     GroupsDao groupsDao = new GroupsDaoImpl(ds);
                     groupsDao.init();
                     groupsDao.deleteGroupById(itemId);
                     groupsDao.destroy();
                     break;
-
                 //default
                 default:
 

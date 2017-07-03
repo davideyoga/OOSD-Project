@@ -1,14 +1,12 @@
 package gamingplatform.controller;
 
 import javax.annotation.Resource;
-import javax.print.DocFlavor;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,14 +17,15 @@ import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.GameDaoImpl;
 import gamingplatform.dao.interfaces.GameDao;
 import gamingplatform.model.Game;
-import static gamingplatform.controller.utils.Utils.getNlastBitFromUrl;
 
 import static gamingplatform.controller.utils.SessionManager.getServices;
 import static gamingplatform.controller.utils.SessionManager.getUser;
 import static gamingplatform.controller.utils.SessionManager.popMessage;
 import static gamingplatform.view.FreemarkerHelper.process;
 
-
+/**
+ * classe servlet che presenta la home dell'applicativo
+ */
 public class Index extends HttpServlet {
 
     @Resource(name = "jdbc/gamingplatform")
@@ -35,6 +34,13 @@ public class Index extends HttpServlet {
     //container dati che sarà processato da freemarker
     private Map<String, Object> data = new HashMap<>();
 
+    /**
+     * gestisce richieste GET alla servlet (presenta la home dell'applicativo)
+     * @param request richiesta servlet
+     * @param response risposta servlet
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

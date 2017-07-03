@@ -30,7 +30,9 @@ import static gamingplatform.controller.utils.SessionManager.getUser;
 import static gamingplatform.controller.utils.SessionManager.popMessage;
 import static gamingplatform.view.FreemarkerHelper.process;
 
-
+/**
+ * servlet che si occupa di presentare la form di modifica
+ */
 public class Edit extends HttpServlet {
 
     @Resource(name = "jdbc/gamingplatform")
@@ -39,6 +41,13 @@ public class Edit extends HttpServlet {
     //container dati che sarà processato da freemarker
     private Map<String, Object> data = new HashMap<>();
 
+    /**
+     * gestisce richieste GET alla servlet (presenta la form di modifica)
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -85,6 +94,7 @@ public class Edit extends HttpServlet {
 
             dbsDao.init(item);
             DBTableStructure dbs = dbsDao.getDBTableStructure();
+            //recupero la struttura della tabella dell'entità in esame sul database
             dbs = dbsDao.getTableStructure();
             dbsDao.destroy();
             data.put("fields", dbs.getFields());
@@ -95,9 +105,10 @@ public class Edit extends HttpServlet {
             data.put("extras", dbs.getExtras());
             data.put("arity", dbs.getArity());
 
-
+            //switch sui vari casi entità
             switch (item) {
 
+                //caso modifica user
                 case "user":
 
                     UserDao userDao = new UserDaoImpl(ds);
@@ -108,6 +119,7 @@ public class Edit extends HttpServlet {
 
                     break;
 
+                //caso modifica game
                 case "game":
 
                     GameDao gameDao = new GameDaoImpl(ds);
@@ -118,6 +130,7 @@ public class Edit extends HttpServlet {
 
                     break;
 
+                //caso modifica service
                 case "service":
 
                     ServiceDao serviceDao = new ServiceDaoImpl(ds);
@@ -129,22 +142,28 @@ public class Edit extends HttpServlet {
                     break;
 
 
+                //caso modifica gruppo
                 case "groups":
 
                     GroupsDao groupsDao = new GroupsDaoImpl(ds);
                     groupsDao.init();
                     Group groups = groupsDao.getGroup(id);
 
-
+                    //recupero l'elenco dei servizi associati al gruppo
                     List<Service> servicesInGroup = groupsDao.getServicesByGroupId(id);
+
+                    //recupero l'elenco dei servizi NON associati al gruppo
                     List<Service> servicesNotInGroup = groupsDao.getServicesNotInThisGroup(id);
 
+                    //recupero l'elenco degli utenti appartenenti al gruppo
                     List<User> usersInGroup = groupsDao.getUsersByGroupId(id);
+
+                    //recupero l'elenco degli utenti NON appartneneti al gruppo
                     List<User> usersNotInGroup = groupsDao.getUsersNotInThisGroup(id);
 
                     groupsDao.destroy();
 
-
+                    //carico i dati nella map di freemarker
                     data.put("item", groups);
                     data.put("servicesNotInGroup",servicesNotInGroup);
                     data.put("servicesInGroup",servicesInGroup);
@@ -154,7 +173,7 @@ public class Edit extends HttpServlet {
 
                     break;
 
-
+                //caso level
                 case "level":
 
                     LevelDao levelDao = new LevelDaoImpl(ds);

@@ -6,7 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,6 +25,9 @@ import static gamingplatform.controller.utils.SessionManager.*;
 import static gamingplatform.view.FreemarkerHelper.process;
 import static java.util.Objects.isNull;
 
+/**
+ * classe servlet che gestisce la presentazione della form e il processo di login
+ */
 public class Login extends HttpServlet {
 
 
