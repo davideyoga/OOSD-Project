@@ -1,6 +1,5 @@
 package gamingplatform.controller;
 
-import gamingplatform.dao.exception.DaoException;
 import gamingplatform.dao.implementation.*;
 import gamingplatform.dao.interfaces.*;
 import gamingplatform.model.Game;
@@ -30,6 +29,8 @@ import static java.util.Objects.isNull;
  * classe atta al processamento di richieste ajax post per l'inserimento di elementi nel db
  * risponde a url del tipo /doInser/tabella/
  */
+
+//configurazione upload files
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024,    // 1 MB
         maxFileSize = 1024 * 1024 * 5,        // 5 MB
@@ -41,6 +42,13 @@ public class doInsert extends HttpServlet {
     private static DataSource ds;
 
 
+    /**
+     * metodo che processa chiamatte POST ajax alla servlet
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -135,7 +143,7 @@ public class doInsert extends HttpServlet {
                     userLevelDao1.destroy();
 
                     break;
-
+                //caso inserimento Game
                 case "game":
 
                     //prelevo parametri POST per game
@@ -175,6 +183,7 @@ public class doInsert extends HttpServlet {
 
                     break;
 
+                //caso usergame
                 case "usergame":
 
                     //prelevo parametri POST per game
@@ -210,7 +219,9 @@ public class doInsert extends HttpServlet {
 
                     break;
 
+                //caso inserimento review
                 case "review":
+
                     //prelevo parametri POST per game
                     int id_gameReview = Integer.parseInt(request.getParameter("gameId"));
                     int id_userReview = ((User) verifySession(request).getAttribute("user")).getId();
@@ -248,7 +259,7 @@ public class doInsert extends HttpServlet {
                     reviewDao.destroy();
 
                     break;
-
+                //caso inserimento level
                 case "level":
 
                     //prelevo parametri POST per game
@@ -286,7 +297,7 @@ public class doInsert extends HttpServlet {
                     levelDao.destroy();
 
                     break;
-
+                //caso inserimento group
                 case "groups":
 
                     //prelevo parametri POST per game
@@ -322,7 +333,7 @@ public class doInsert extends HttpServlet {
                     groupsDao = null;
 
                     break;
-
+                //caso inserimento service
                 case "service":
 
                     //prelevo parametri POST per game

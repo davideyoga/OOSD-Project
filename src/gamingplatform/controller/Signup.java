@@ -1,6 +1,5 @@
 package gamingplatform.controller;
 
-
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -28,6 +27,12 @@ import static gamingplatform.controller.utils.SessionManager.redirectIfLogged;
 import static gamingplatform.view.FreemarkerHelper.process;
 import static java.util.Objects.isNull;
 
+
+
+/**
+ * classe servlet che gestisce la registrazione di un utente
+ */
+//impostazioni caricamento files
 @MultipartConfig(
         fileSizeThreshold=1024*1024,    // 1 MB
         maxFileSize=1024*1024*5,        // 5 MB
@@ -41,7 +46,13 @@ public class Signup extends HttpServlet {
     //container dati che sarà processato da freemarker
     private Map<String, Object> data = new HashMap<>();
 
-
+    /**
+     * gestisce richieste GET ala servlet, nello specifico mostra la form di registrazione
+     * @param request richiesta servlet
+     * @param response risposta servlet
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -54,6 +65,14 @@ public class Signup extends HttpServlet {
 
     }
 
+    /**
+     * gestisce richieste POST alla servlet, nello specifico effettua la
+     * registrazione dell'utente in base ai dati inseriti nella form
+     * @param request richiesta servlet
+     * @param response risposta servlet
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 

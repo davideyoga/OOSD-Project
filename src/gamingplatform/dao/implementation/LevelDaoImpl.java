@@ -15,7 +15,9 @@ import gamingplatform.model.Level;
 import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
 import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
 
-
+/**
+ * Classe per la gestione dei livelli nel database
+ */
 public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
 
     private PreparedStatement selectLevelById,
@@ -31,6 +33,10 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
         super(datasource);
     }
 
+    /**
+     * Inizializza connessione e query precompilate
+     * @throws DaoException
+     */
     @Override
     public void init() throws DaoException{
         try {
@@ -71,7 +77,12 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
     }
 
 
-
+    /**
+     * Metodo per estrarre il livello successivo del livello passato dal db
+     * @param level
+     * @return Level successivo a quello passato
+     * @throws DaoException
+     */
     @Override
     public Level getNextLevel ( Level level) throws DaoException{
         Level l=new Level(this);
@@ -94,8 +105,18 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
         return l;
     }
 
+    /**
+     * Torna level vuoto
+     * @return
+     */
     public Level getLevel() {return new Level(this);}
 
+    /**
+     * Torna il Level con tale id nel database
+     * @param keyLevel
+     * @return
+     * @throws DaoException
+     */
     @Override
     public Level getLevelById ( int keyLevel) throws DaoException{
         Level l=new Level(this);
@@ -118,8 +139,11 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
     }
 
 
-
-
+    /**
+     * Inserisce nel database il livello passato
+     * @param level
+     * @throws DaoException
+     */
     public void insertLevel(Level level) throws DaoException {
         try{
             this.insertLevel.setInt(1,level.getName());
@@ -133,7 +157,11 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
     }
 
 
-
+    /**
+     * Cancella dal database il livello passato
+     * @param idLevel
+     * @throws DaoException
+     */
     public void deleteLevel(int idLevel) throws DaoException {
         try{
             this.deleteLevel.setInt(1,idLevel);
@@ -145,7 +173,11 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
     }
 
 
-
+    /**
+     * Esegue un update del livello con l'id del livello passato
+     * @param level
+     * @throws DaoException
+     */
     public void updateLevel(Level level) throws DaoException {
         try{
             this.updateLevel.setInt(1,level.getName());
@@ -160,9 +192,11 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
     }
 
 
-
-
-
+    /**
+     * Estrae la lista dei livelli presenti nel database
+     * @return lista dei livelli presenti nel database
+     * @throws DaoException
+     */
     public List<Level> getLevels() throws DaoException{
         List<Level> lista=new ArrayList<>();
         try{
@@ -185,6 +219,11 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
         return lista;
     }
 
+    /**
+     * Torna la lista dei Livelli ordinati per esperienza
+     * @return
+     * @throws DaoException
+     */
     public List<Level> getLevelsOrdered() throws DaoException{
         List<Level> lista=new ArrayList<>();
         try{
@@ -207,6 +246,10 @@ public class LevelDaoImpl extends DaoDataMySQLImpl implements LevelDao {
         return lista;
     }
 
+    /**
+     * Chiusura delle query precompilate e della connessione
+     * @throws DaoException
+     */
     @Override
     public void destroy() throws DaoException {
         //chiudo le quary precompilate

@@ -16,6 +16,9 @@ import java.util.*;
 
 import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
 
+/**
+ * Per gestire la tabella del database usergame che rappresenta la relazione tra user e game
+ */
 public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
 
     private PreparedStatement selectUserGameById;
@@ -34,7 +37,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
     }
 
     /**
-     * per connessione al database e precompilazione query
+     * Connessione al database e precompilazione query
      *
      * @throws gamingplatform.dao.exception.DaoException
      */
@@ -51,7 +54,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
                     "FROM usergame LEFT JOIN game ON game.id=usergame.id_game " +
                     "WHERE usergame.id_user = ? ORDER BY date DESC LIMIT ?");
 
-            this.insertGameUser = connection.prepareStatement("INSERT INTO usergame" +
+                this.insertGameUser = connection.prepareStatement("INSERT INTO usergame" +
                     "										    VALUES(NULL,?,?,?)");
 
             this.updateGameUser = connection.prepareStatement("UPDATE usergame " +
@@ -69,7 +72,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
     }
 
     /**
-     * restituisce un UserGame vuoto
+     * Restituisce un UserGame vuoto
      *
      * @return UserGame vuoto
      *
@@ -81,7 +84,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
     }
 
     /**
-     * restituisce un UserGame secondo l'id passato
+     * Restituisce un UserGame secondo l'id passato
      * @param idUserGame id dello UserGame desiderato
      * @return userGame con id = idUserGame
      * @throws gamingplatform.dao.exception.DaoException
@@ -109,7 +112,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
     }
 
     /**
-     * inserisce uno UserGame nel db
+     * Inserisce uno UserGame nel db
      *
      * @param userGame da inserire nel db
      * @throws DaoException
@@ -136,7 +139,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
     }
 
     /**
-     * metodo per l'update di un UserGame nel db
+     * Metodo per l'update di un UserGame nel db
      * @param userGame su cui fare l'update
      * @throws DaoException
      */
@@ -160,7 +163,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
     }
 
     /**
-     * metodo per cancellare uno UserGame dal db
+     * Metodo per cancellare uno UserGame dal db
      * @param userGame da cancellare dal db
      * @throws DaoException
      */
@@ -191,11 +194,10 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
         List<List<Object>> list = new ArrayList<>();
 
         try {
+
             this.selectLastXItems.setInt(1, userId); //setto la query
             this.selectLastXItems.setInt(2, n);
             ResultSet rs = this.selectLastXItems.executeQuery(); //eseguo la query
-
-
 
             while (rs.next()) { //ciclo ogni tupla del risultato
 
@@ -206,11 +208,8 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
                 innerList.add(stripSlashes(rs.getString("image")));
                 innerList.add((rs.getInt("exp")));
 
-
                 list.add(innerList);
-
             }
-
         } catch (Exception e) {
             throw new DaoException("Error get games by user id in user games dao", e);
         }
@@ -218,7 +217,7 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
     }
 
     /**
-     * chiudo la connessione e le query precompilate
+     * Chiudo la connessione e le query precompilate
      *
      * @throws gamingplatform.dao.exception.DaoException
      */
@@ -233,7 +232,6 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
             this.insertGameUser.close();
             this.updateGameUser.close();
             this.deleteGameUser.close();
-
 
         } catch (Exception e) {
             throw new DaoException("Error destroy dao user", e);

@@ -21,7 +21,9 @@ import static gamingplatform.controller.utils.SessionManager.*;
 import static gamingplatform.view.FreemarkerHelper.process;
 import static java.util.Objects.isNull;
 
-
+/**
+ * classe servlet atta alla presentazione dei dati relativi al profilo utente
+ */
 public class Profile extends HttpServlet {
 
     @Resource(name = "jdbc/gamingplatform")
@@ -31,6 +33,14 @@ public class Profile extends HttpServlet {
     private Map<String, Object> data = new HashMap<>();
 
 
+    /**
+     * gestisce richieste GET alla servlet, nello specifico presenta i dati relativi al profilo utente
+     * ovvero i dati dell'utente e lo storico delle giocate e dei livelli raggiunti
+     * @param request richiesta servlet
+     * @param response richiesta servlet
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -63,6 +73,7 @@ public class Profile extends HttpServlet {
 
             data.put("user", userDao.getUser(userId));
 
+            //prelevo la lista degli ultimi 5 livelli raggiunti e delle ultime 5 giocate
             gamingplatform.model.Level currentLevel = userDao.getLevelByUserId(userId);
             List<List<Object>> userGameList = userGameDao.getLastXItemsFromUserGame(userId,5);
             List<List<Object>> userLevelList = userLevelDao.getLastXItemsFromUserLevel(userId,5);
@@ -70,13 +81,14 @@ public class Profile extends HttpServlet {
             Collections.reverse(userGameList);
             Collections.reverse(userLevelList);
 
-
+            //recupero la lista di tutte le giocate e di tutti i livelli raggiunti
             List<List<Object>> userGameListFull = userGameDao.getLastXItemsFromUserGame(userId,100000);
             List<List<Object>> userLevelListFull = userLevelDao.getLastXItemsFromUserLevel(userId,100000);
 
             Collections.reverse(userGameListFull);
             Collections.reverse(userLevelListFull);
 
+            //calcolo quanto manca a raggiungere il livello successivo
             gamingplatform.model.Level nextLevel = levelDao.getNextLevel(currentLevel);
 
             userDao.destroy();
@@ -85,6 +97,7 @@ public class Profile extends HttpServlet {
             userGameDao.destroy();
             userLevelDao.destroy();
 
+            //carico i dati nella map di freemarker
             data.put("userGameList", userGameList);
             data.put("userLevelList", userLevelList);
             data.put("userGameListFull", userGameListFull);
@@ -93,6 +106,8 @@ public class Profile extends HttpServlet {
 
             data.put("level", currentLevel);
             data.put("nextLevel", nextLevel);
+
+            //calcolo la percentuale di exp necessaria al raggiungimento del livello succesivo
             double z = user.getExp();
             double x = currentLevel.getExp();
             double y = nextLevel.getExp();

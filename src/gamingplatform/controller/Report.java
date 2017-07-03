@@ -31,9 +31,10 @@ import static gamingplatform.controller.utils.Utils.getClassFields;
 
 import gamingplatform.view.FreemarkerHelper;
 
-
-
-
+/**
+ * classe servlet atta alla presentazione del report dei dati del database
+ * per avere un overview prima delle operazioni di backoffice
+ */
 public class Report extends HttpServlet {
 
     @Resource(name = "jdbc/gamingplatform")
@@ -42,6 +43,13 @@ public class Report extends HttpServlet {
     //container dati che sarà processato da freemarker
     private Map<String, Object> data = new HashMap<>();
 
+    /**
+     * si occupa di mostrare tutte le tuple di una tabella
+     * @param request richiesta servlet
+     * @param response risposta servlet
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         //pop dell'eventuale messaggio in sessione
@@ -69,8 +77,6 @@ public class Report extends HttpServlet {
         }
         data.put("table",item);
 
-
-
         //disambiguo la tabella di cui l'utente vuole il report
         try {
 
@@ -81,6 +87,7 @@ public class Report extends HttpServlet {
                 //le review vengono eliminate direttamente dalla pagina del gioco, non rendiamo possibile modificarle
                 //gli user possono essere solo eliminati, non possono essere modificati
 
+                //caso report user
                 case "user":
 
                     UserDao userDao = new UserDaoImpl(ds);
@@ -92,6 +99,7 @@ public class Report extends HttpServlet {
 
                     break;
 
+                //caso report game
                 case "game":
 
                     GameDao gameDao = new GameDaoImpl(ds);
@@ -101,9 +109,9 @@ public class Report extends HttpServlet {
                     data.put("fields",getClassFields(gameDao.getGame()));
                     gameDao.destroy();
 
-
                     break;
 
+                //caso report service
                 case "service":
 
                     ServiceDao serviceDao = new ServiceDaoImpl(ds);
@@ -115,7 +123,7 @@ public class Report extends HttpServlet {
 
                     break;
 
-
+                //caso report groups
                 case "groups":
 
                     GroupsDao groupsDao = new GroupsDaoImpl(ds);
@@ -127,6 +135,7 @@ public class Report extends HttpServlet {
 
                     break;
 
+                //caso report level
                 case "level":
 
                     LevelDao levelDao = new LevelDaoImpl(ds);
@@ -153,13 +162,27 @@ public class Report extends HttpServlet {
         //processo template
         FreemarkerHelper.process("report.ftl", data, response, getServletContext());
     }
-    
 
+
+    /**
+     * gestisce richieste GET alla servlet
+     * @param request richiesta servlet
+     * @param response risposta servlet
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         process(request,response);
     }
 
+    /**
+     * gestisce richieste POST alla servlet
+     * @param request richiesta servlet
+     * @param response risposta servlet
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         process(request,response);

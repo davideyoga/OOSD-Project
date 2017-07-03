@@ -23,7 +23,9 @@ import static gamingplatform.controller.utils.SessionManager.*;
 import static gamingplatform.controller.utils.Utils.getLastBitFromUrl;
 import static gamingplatform.view.FreemarkerHelper.process;
 
-
+/**
+ * classe Servlet che si occupa di presentare l'interfaccia di aggiunta elementi al db
+ */
 public class Add extends HttpServlet {
 
     @Resource(name = "jdbc/gamingplatform")
@@ -32,6 +34,13 @@ public class Add extends HttpServlet {
     //container dati che sarà processato da freemarker
     private Map<String, Object> data = new HashMap<>();
 
+    /**
+     * gestisce richieste GET, nello specifico mostra la form di inserimento per un data entità
+     * @param request richiesta servlet
+     * @param response risposta servlet
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -64,13 +73,16 @@ public class Add extends HttpServlet {
 
 
         try {
-
+            //prelevo la struttura della tabella sul db
             DBTableStructureDao dbsDao = new DBTableStructureDaoImpl(ds);
 
             dbsDao.init(item);
             DBTableStructure dbs = dbsDao.getDBTableStructure();
             dbs = dbsDao.getTableStructure();
             dbsDao.destroy();
+            //carico i dati della struttura della tabella nella map di freemarker
+            //così poi da freemarker posso generare la form in modo generale a prescindere
+            //dalla tabella del db in esame
             data.put("fields", dbs.getFields());
             data.put("keys", dbs.getKeys());
             data.put("nulls", dbs.getNulls());

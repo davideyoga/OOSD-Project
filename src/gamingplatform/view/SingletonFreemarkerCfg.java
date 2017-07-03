@@ -6,7 +6,9 @@ import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
 import freemarker.template.Version;
 
-
+/**
+ * classe singleton che si occupa di gestire la configurazione di freemarker
+ */
 public enum SingletonFreemarkerCfg {
 
     INSTANCE;

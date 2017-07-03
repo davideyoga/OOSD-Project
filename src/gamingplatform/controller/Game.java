@@ -29,18 +29,17 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static gamingplatform.controller.utils.SecurityLayer.checkAuth;
 import static gamingplatform.controller.utils.SecurityLayer.redirect;
 import static gamingplatform.controller.utils.SessionManager.*;
 import static gamingplatform.controller.utils.Utils.checkLevel;
 import static gamingplatform.controller.utils.Utils.getLastBitFromUrl;
-import static gamingplatform.controller.utils.Utils.checkLevel;
 import static gamingplatform.view.FreemarkerHelper.process;
-import static java.util.Objects.*;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isNumeric;
 
-
+/**
+ * classe servlet che si occupa di presentare i dati relativi al gioco
+ */
 public class Game extends HttpServlet {
 
     @Resource(name = "jdbc/gamingplatform")
@@ -49,7 +48,13 @@ public class Game extends HttpServlet {
     //container dati che sarà processato da freemarker
     private Map<String, Object> data = new HashMap<>();
 
-
+    /**
+     * gestische richieste GET alla servlet (presenta i dati relativi l gioco)
+     * @param request richiesta servlet
+     * @param response risposta servlet
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -109,10 +114,11 @@ public class Game extends HttpServlet {
                 levels.add(tempLevel);
             }
 
-
+            //carico dati sulla map di freemarker
             data.put("users",users);
             data.put("levels",levels);
 
+            //calcolo la media dei voti del gioco
             double average = gameDao.getAverageVote(game);
             data.put("average", average);
 
@@ -132,7 +138,14 @@ public class Game extends HttpServlet {
         process("game.ftl", data, response, getServletContext());
     }
 
-    // Metodo doPost
+    /**
+     * gestische richieste POST alla servlet, nello specifico gestisce
+     * l'assegnamento di punti exp a seguito di una giocata
+     * @param request richiesta servlet
+     * @param response risposta servlet
+     * @throws ServletException
+     * @throws IOException
+     */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("text/html;charset=UTF-8");
@@ -180,9 +193,8 @@ public class Game extends HttpServlet {
             userDao.updateUser(user);
             userDao.destroy();
 
-            //aggiorno il livello
+            //aggiorno il livello se necessario
             int esit = checkLevel(user);
-
 
             //controllo esito aggiornamento livello
             switch(esit){
@@ -203,6 +215,8 @@ public class Game extends HttpServlet {
             UserGameDao userGameDao = new UserGameDaoImpl(ds);
             userGameDao.init();
 
+            //carico la giocata un usergame, ovvero faccio il log dell'evento così può
+            //essere mostrato nella pagina del profilo utente
             UserGame userGame = userGameDao.getUserGame();
             userGame.setUserId(user.getId());
             userGame.setGameId(Integer.parseInt(id));

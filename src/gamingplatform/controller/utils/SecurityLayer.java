@@ -22,7 +22,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
+/**
+ * Classe che contiene i metodi dedicati alla sicurezza dell'applicativo
+ */
 public class SecurityLayer {
 
 
@@ -114,8 +116,6 @@ public class SecurityLayer {
 
 
     //--------- DATA SECURITY ------------//
-
-
 
 
     /**

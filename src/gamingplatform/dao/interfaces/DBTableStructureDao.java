@@ -8,9 +8,23 @@ import gamingplatform.model.DBTableStructure;
 
 public interface DBTableStructureDao extends DaoData {
 
-    public void init(String table) throws DaoException;
+    /**
+     * Inizializzazione query precompilate e connessione
+     * @param table
+     * @throws DaoException
+     */
+    void init(String table) throws DaoException;
 
-    public DBTableStructure getDBTableStructure();
+    /**
+     * Restituisce un DBTableStructure vuoto
+     * @return
+     */
+    DBTableStructure getDBTableStructure();
 
-    public DBTableStructure getTableStructure() throws DaoException;
+    /**
+     * Restituisce la struttura delle tabelle del db
+     * @return
+     * @throws DaoException
+     */
+    DBTableStructure getTableStructure() throws DaoException;
 }

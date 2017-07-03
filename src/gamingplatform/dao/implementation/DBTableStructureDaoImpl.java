@@ -13,7 +13,9 @@ import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
 import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
 
 
-
+/**
+ * Classe per gestire le tabelle del database
+ */
 public class DBTableStructureDaoImpl extends DaoDataMySQLImpl implements DBTableStructureDao {
 
     //Variabili di appoggio per preparazione query
@@ -22,7 +24,11 @@ public class DBTableStructureDaoImpl extends DaoDataMySQLImpl implements DBTable
 
     public DBTableStructureDaoImpl (DataSource dataSource){ super (dataSource);}
 
-
+    /**
+     * inizializzazzione connessione e query precompilate
+     * @param table
+     * @throws DaoException
+     */
     public void init(String table) throws DaoException {
         try{
             super.init();
@@ -38,6 +44,7 @@ public class DBTableStructureDaoImpl extends DaoDataMySQLImpl implements DBTable
 
     /**
      * Metodo che restituisce un DBTableStructure vuoto
+     * @return DBTableStructure vuoto
      */
     @Override
     public DBTableStructure getDBTableStructure() {
@@ -83,7 +90,10 @@ public class DBTableStructureDaoImpl extends DaoDataMySQLImpl implements DBTable
     }
 
 
-
+    /**
+     * Chiude le query precompialte e l connessione
+     * @throws DaoException
+     */
     public void destroy() throws DaoException{
 
         //chiudo le quary precompilate
