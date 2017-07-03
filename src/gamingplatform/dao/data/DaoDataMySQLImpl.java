@@ -24,7 +24,11 @@ public class DaoDataMySQLImpl implements DaoData{
         this.datasource = datasource;
         this.connection = null;
 	}
-	
+
+	/**
+	 * Inizializzazzione della connessione
+	 * @throws DaoException
+	 */
 	@Override
 	public void init() throws DaoException {
         
@@ -38,8 +42,11 @@ public class DaoDataMySQLImpl implements DaoData{
         }
 		
 	}
-	
 
+	/**
+	 * Chiusura della connessione
+	 * @throws DaoException
+	 */
 	@Override
 	public void destroy() throws DaoException {
 		try {
@@ -52,7 +59,11 @@ public class DaoDataMySQLImpl implements DaoData{
         }
 		
 	}
-	
+
+	/**
+	 * Sovrascrizione del metodo close, si rimanda al metodo destroy
+	 * @throws Exception
+	 */
 	@Override
 	public void close() throws Exception {
 		destroy();

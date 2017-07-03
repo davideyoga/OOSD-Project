@@ -22,8 +22,11 @@ public class Game{
 
          //Getter and Setter
 
-
-         public int getId() {
+    /**
+     *
+     * @return the {@link #name}
+     */
+    public int getId() {
              return id;
          }
 

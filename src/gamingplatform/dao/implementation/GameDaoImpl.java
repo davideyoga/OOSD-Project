@@ -19,6 +19,9 @@ import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
 import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
 
+/**
+ * Classe per la gestione dei giochi nel database
+ */
 public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
 
     //Variabili di appoggio per preparare le query
@@ -88,6 +91,10 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
         }
     }
 
+    /**
+     * Ritorna un Game vuoto
+     * @return Game vuoto
+     */
     @Override
     public Game getGame() {
         return new Game(this);
@@ -252,6 +259,12 @@ public class GameDaoImpl extends DaoDataMySQLImpl implements GameDao {
         }
     }
 
+    /**
+     * Torna la media dei voti del gioco passato
+     * @param game
+     * @return
+     * @throws DaoException
+     */
     public double getAverageVote (Game game) throws DaoException{
         double avg=0;
         try {

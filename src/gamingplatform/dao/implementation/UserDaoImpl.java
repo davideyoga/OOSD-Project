@@ -16,7 +16,9 @@ import gamingplatform.model.Level;
 import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
 import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
 
-
+/**
+ * Classe per la gestione dell'untente nel database
+ */
 public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 	
 	private PreparedStatement insertUser,
@@ -100,7 +102,11 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 		}
 	}
 
-
+	/**
+	 * Inserisce nle database l'user passato
+	 * @param user
+	 * @throws DaoException
+	 */
 	@Override
 	public void insertUser(User user) throws DaoException {
 
@@ -171,6 +177,11 @@ public class UserDaoImpl extends DaoDataMySQLImpl implements UserDao{
 		return lista;
 	}
 
+	/**
+	 * Esegue l'update del' user con l'id dell'user passato
+	 * @param user
+	 * @throws DaoException
+	 */
 	@Override
 	public void updateUser(User user) throws DaoException {
 
