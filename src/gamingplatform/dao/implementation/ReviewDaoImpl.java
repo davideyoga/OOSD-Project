@@ -18,6 +18,9 @@ import gamingplatform.model.Review;
 import static gamingplatform.controller.utils.SecurityLayer.addSlashes;
 import static gamingplatform.controller.utils.SecurityLayer.stripSlashes;
 
+/**
+ * Classe per la gestione delle review nel database
+ */
 public class ReviewDaoImpl extends DaoDataMySQLImpl implements ReviewDao {
 
     //Variabili di appoggio per preparare le query
