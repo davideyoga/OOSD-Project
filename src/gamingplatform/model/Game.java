@@ -2,6 +2,9 @@ package gamingplatform.model;
 
 import gamingplatform.dao.data.DaoData;
 
+/**
+ * Classe che rappresenta l'entita' gioco
+ */
 public class Game{
 
       //Attributes
@@ -11,7 +14,11 @@ public class Game{
       private String image;
       private String description;
 
-      public Game(DaoData d) {
+    /**
+     * Costrutture vuoto
+     * @param ds
+     */
+    public Game(DaoData ds) {
           this.id = 0;
           this.name = null;
           this.exp = 0;
@@ -23,46 +30,81 @@ public class Game{
          //Getter and Setter
 
     /**
-     *
-     * @return the {@link #name}
+     * @return Id corrente
      */
     public int getId() {
              return id;
          }
 
-         public void setId(int id) {
+    /**
+     * setta l'id
+     * @param id
+     */
+    public void setId(int id) {
              this.id = id;
          }
 
-         public String getName() {
+    /**
+     *
+     * @return Nome corrente
+     */
+    public String getName() {
              return name;
          }
 
-         public void setName(String name) {
+    /**
+     * setta il nome
+     * @param name
+     */
+    public void setName(String name) {
              this.name = name;
          }
 
-         public int getExp() {
+    /**
+     *
+     * @return Esperienza corrente
+     */
+    public int getExp() {
              return exp;
          }
 
-         public void setExp(int exp) {
+    /**
+     * Setta il parametro exp
+     * @param exp
+     */
+    public void setExp(int exp) {
              this.exp = exp;
          }
 
-         public String getImage() {
+    /**
+     * Torna immagine corrente
+     * @return
+     */
+    public String getImage() {
              return image;
          }
 
-         public void setImage(String image) {
+    /**
+     * Setta l'immagine
+     * @param image
+     */
+    public void setImage(String image) {
              this.image = image;
          }
 
-         public String getDescription() {
+    /**
+     * Torna descrizione corrente
+     * @return
+     */
+    public String getDescription() {
              return description;
          }
 
-         public void setDescription(String description) {
+    /**
+     * Setta descrizione
+     * @param description
+     */
+    public void setDescription(String description) {
              this.description = description;
          }
  }

@@ -4,6 +4,9 @@ package gamingplatform.model;
 import gamingplatform.dao.data.DaoData;
 import java.util.HashMap;
 
+/**
+ *
+ */
 public class DBTableStructure {
 
     //Attributi
