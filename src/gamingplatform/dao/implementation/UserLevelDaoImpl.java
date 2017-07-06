@@ -68,8 +68,6 @@ public class UserLevelDaoImpl extends DaoDataMySQLImpl implements UserLevelDao {
      * restituisce un UserLevel vuoto
      *
      * @return UserLevel vuoto
-     *
-     * @throws gamingplatform.dao.exception.DaoException
      */
     @Override
     public UserLevel getUserLevel() {

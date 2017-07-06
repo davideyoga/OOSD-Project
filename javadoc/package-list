@@ -1,0 +1,8 @@
+gamingplatform.controller
+gamingplatform.controller.utils
+gamingplatform.dao.data
+gamingplatform.dao.exception
+gamingplatform.dao.implementation
+gamingplatform.dao.interfaces
+gamingplatform.model
+gamingplatform.view

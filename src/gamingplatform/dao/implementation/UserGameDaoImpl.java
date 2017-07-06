@@ -75,8 +75,6 @@ public class UserGameDaoImpl extends DaoDataMySQLImpl implements UserGameDao {
      * Restituisce un UserGame vuoto
      *
      * @return UserGame vuoto
-     *
-     * @throws gamingplatform.dao.exception.DaoException
      */
     @Override
     public UserGame getUserGame() {

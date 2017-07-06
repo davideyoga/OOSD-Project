@@ -175,7 +175,7 @@ public class SessionManager {
     /**
      * preleva il messaggio dalla sessione, eliminandolo dalla stessa (pop)
      * @param request richiesta servlet
-     * @ il messaggio in sessione se c'è, oppure null
+     * @return il messaggio in sessione se c'è, oppure null
      */
     public static String popMessage(HttpServletRequest request){
         String message=null;
