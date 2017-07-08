@@ -10,7 +10,6 @@ import freemarker.template.Version;
  * classe singleton che si occupa di gestire la configurazione di freemarker
  */
 public enum SingletonFreemarkerCfg {
-
     INSTANCE;
 
     private Configuration cfg = null;
@@ -18,7 +17,6 @@ public enum SingletonFreemarkerCfg {
     SingletonFreemarkerCfg() {}
 
     public Configuration init(ServletContext servlet_context, String path) {
-
         if (cfg == null) {
             //istanzio oggetto configuration
             cfg = new Configuration(new Version("2.3.26"));
@@ -39,9 +37,7 @@ public enum SingletonFreemarkerCfg {
 
             //permette operazioni avanzate su hashmap
             cfg.setAPIBuiltinEnabled(true);
-
         }
-
         return cfg;
     }
 }
